@@ -1,2 +1,2 @@
-# AuraVindexAPI
-API for AuraVindex
+# AURAVINDEXAPI
+API for AURA VINDEX
