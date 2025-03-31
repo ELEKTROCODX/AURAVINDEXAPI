@@ -38,7 +38,7 @@ app.use(passport.session());
 app.use('/v1/', main_router);
 // Default route
 app.use('/', (req , res) => {
-    res.json({"app": "Aura Vindex"});
+    res.json({"app": "AURA VINDEX"});
 } );
 
 // Middleware from error handler

@@ -1,5 +1,5 @@
-# Aura Vindex (FOR WEB PROJECT)
-**Aura Vindex** is a full-stack web application designed to streamline library management. It provides tools for libraries to efficiently handle:
+# AURA VINDEX (FOR WEB PROJECT)
+**AURA VINDEX** is a full-stack web application designed to streamline library management. It provides tools for libraries to efficiently handle:
 
 - Books: Catalog and manage book inventory.
 - Meeting Rooms: Track availability and manage reservations.
@@ -8,15 +8,15 @@
 
 This application offers a user-friendly interface for both administrators and library users, with robust authentication, role-based authorization, and CRUD functionality to meet modern library needs.
 
-## Aura Vindex Backend
-This repository contains the backend API for the **Aura Vindex** application. The backend is responsible for handling all server-side operations, including:
+## AURA VINDEX Backend
+This repository contains the backend API for the **AURA VINDEX** application. The backend is responsible for handling all server-side operations, including:
 - Managing user authentication and role-based authorization.
 - Providing RESTful endpoints for books, meeting rooms, reservations, and book loans.
 - Enabling CRUD functionality for library resources.
 - Interfacing with the database to store and retrieve data efficiently.
 - The backend is built with Node.js and Express, using MongoDB as the database. It is fully containerized with Docker for seamless deployment, ensuring scalability and easy maintenance.
 
-This API serves as the core of the **Aura Vindex** system, providing all the necessary functionality for the frontend to deliver a smooth user experience.
+This API serves as the core of the **AURA VINDEX** system, providing all the necessary functionality for the frontend to deliver a smooth user experience.
 
 You can access our API on [https://api.auravindex.me/v1/](https://api.auravindex.me/v1/)
 
