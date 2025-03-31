@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: server_docker
+    ports:
+      - "44000:44000"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb  # Start MongoDB before
+    volumes:
+      - ./public/images:/app/public/images # Data persistance
+    networks:
+      - app-network
+  mongodb:
+    image: mongo:6
+    container_name: mongo_db_docker
+    ports:
+      - "127.0.0.1:27017:27017"  # MongoDB port
+    volumes:
+      - mongodb_data:/data/db  # Data persistance
+    networks:
+      - app-network
+volumes:
+  mongodb_data:
+networks:
+  app-network:
