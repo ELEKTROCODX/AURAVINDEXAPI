@@ -1,5 +1,5 @@
 //  Import scheme from mongoose
-import {Schema, model} from 'mongoose';
+import {Schema, SchemaType, model} from 'mongoose';
 
 // Create schema
 const fee_type_schema = new Schema({
@@ -10,6 +10,10 @@ const fee_type_schema = new Schema({
     },
     message: {
         type: String,
+        required: true
+    },
+    cost: {
+        type: Schema.Types.Decimal128,
         required: true
     }
 }, {timestamps : true});

@@ -26,6 +26,12 @@ const message = body("message")
     `Fee message cannot be longer than ${app_config.FEE_TYPE_MESSAGE_MAX_LENGTH} characters`
   );
 
+// Default cost validation
+const cost = body("cost")
+  .isDecimal()
+  .notEmpty()
+  .withMessage("Fee cost is required")
+
 // ID validation rules
 export const fee_type_validation_rules_get_id = [id];
 
@@ -42,4 +48,4 @@ export const fee_type_validation_rules_get_code = [
 export const fee_type_validation_rules_post = [code, message];
 
 // PUT validation rules
-export const fee_type_validation_rules_update = [id, code, message];
+export const fee_type_validation_rules_update = [id, code, message, cost];

@@ -10,10 +10,10 @@ import * as audit_log_service from '../audit_log/audit_log.service.js';
  * @returns {void} - The response will indicate whether the creation was successful or if an error occurred.
  */
 export const create_fee_type = async (req, res) => {
-    const {fee_code, message} = req.body;
+    const {fee_code, message, cost} = req.body;
     try {
-        await fee_type_service.create_new_fee_type(fee_code, message);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.UPDATE_ALERT, fee_code);
+        await fee_type_service.create_new_fee_type(fee_code, message, cost);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_ALERT, fee_code);
         res.status(201).json({message: 'Fee type registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {

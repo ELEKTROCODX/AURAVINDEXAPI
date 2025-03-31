@@ -1,18 +1,14 @@
 import * as roles from '../default_db_data/role.js';
 import * as genders from '../default_db_data/gender.js';
 import * as book_statuses from '../default_db_data/book_status.js';
-import * as room_statuses from '../default_db_data/room_status.js'
 import * as book_collections from '../default_db_data/book_collection.js';
-import * as room_locations from '../default_db_data/room_location.js';
 import * as users from '../default_db_data/user.js';
 import * as log_actions from '../default_db_data/log_action.js';
 
 import * as role_repository from '../role/role.repository.js';
 import * as gender_repository from '../gender/gender.repository.js';
 import * as book_status_repository from '../book_status/book_status.repository.js'
-import * as room_status_repository from '../room_status/room_status.repository.js';
 import * as book_collection_repository from '../book_collection/book_collection.repository.js';
-import * as room_location_repository from '../room_location/room_location.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import * as log_action_repository from '../log_action/log_action.repository.js';
 
@@ -70,18 +66,6 @@ export const import_default_data = async () => {
     }
     console.log("Book statuses successfully imported.");
 
-    for (const room_status of room_statuses.room_statuses) {
-        const exists = await room_status_repository.filter_room_statuses({room_status: room_status.room_status});
-        if(exists.length == 0) {
-            console.log("Creating room status: " + room_status.room_status);
-            await room_status_repository.create_room_status(room_status);   
-        } else {
-            console.log("Room status " + room_status.room_status + " already exists");
-            
-        }
-    }
-    console.log("Room statuses successfully imported.");
-
     for (const book_collection of book_collections.book_collections) {
         const exists = await book_collection_repository.filter_book_collections({name: book_collection.name});
         if(exists.length == 0) {
@@ -93,18 +77,6 @@ export const import_default_data = async () => {
         }
     }
     console.log("Book collections successfully imported.");
-
-    for (const room_location of room_locations.room_locations) {
-        const exists = await room_location_repository.filter_room_locations({location: room_location.location});
-        if(exists.length == 0) {
-            console.log("Creating room location: " + room_location.location);
-            await room_location_repository.create_room_location(room_location);   
-        } else {
-            console.log("Room location " + room_location.location + " already exists");
-            
-        }
-    }
-    console.log("Room locations successfully imported.");
 
     for (const log_action of log_actions.log_actions) {
         const exists = await log_action_repository.filter_log_actions({action_code: log_action.action_code});

@@ -6,6 +6,7 @@ import { generate_filter } from '../config/util.js';
  * 
  * @param {string} fee_code - The unique fee code for the fee type.
  * @param {string} message - The message associated with the fee type.
+ * @param {Decimal128} cost - The fee cost that the user must pay.
  * @returns {Promise<Object>} - The newly created fee type object.
  * @throws {ObjectAlreadyExists} - If the fee type with the given fee_code already exists.
  */
@@ -14,7 +15,7 @@ export const create_new_fee_type = async (fee_code, message) => {
     if(fee_type_exists.length != 0) {
         throw new ObjectAlreadyExists("fee_type");
     }
-    const new_fee_type = await fee_type_repository.create_fee_type({fee_code, message});
+    const new_fee_type = await fee_type_repository.create_fee_type({fee_code, message, cost});
     return new_fee_type;
 }
 /**
