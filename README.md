@@ -1,4 +1,4 @@
-# Aura Vindex
+# Aura Vindex (FOR WEB PROJECT)
 **Aura Vindex** is a full-stack web application designed to streamline library management. It provides tools for libraries to efficiently handle:
 
 - Books: Catalog and manage book inventory.
