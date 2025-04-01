@@ -4,6 +4,8 @@ import * as book_statuses from '../default_db_data/book_status.js';
 import * as book_collections from '../default_db_data/book_collection.js';
 import * as users from '../default_db_data/user.js';
 import * as log_actions from '../default_db_data/log_action.js';
+import * as loan_statuses from '../default_db_data/loan_status.js';
+import * as plan_statuses from '../default_db_data/plan_status.js';
 
 import * as role_repository from '../role/role.repository.js';
 import * as gender_repository from '../gender/gender.repository.js';
@@ -11,6 +13,8 @@ import * as book_status_repository from '../book_status/book_status.repository.j
 import * as book_collection_repository from '../book_collection/book_collection.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import * as log_action_repository from '../log_action/log_action.repository.js';
+import * as loan_status_repository from '../loan_status/loan_status.repository.js';
+import * as plan_status_repository from '../plan_status/plan_status.repository.js';
 
 import { app_config } from '../config/app.config.js';
 import { ImportingDefaultDataUnauthorized } from '../config/errors.js';
@@ -89,6 +93,30 @@ export const import_default_data = async () => {
         }
     }
     console.log("Log actions successfully imported.");
+
+    for (const loan_status of loan_statuses.loan_statuses) {
+        const exists = await loan_status_repository.filter_loan_statuses({loan_status: loan_status.loan_status});
+        if(exists.length == 0) {
+            console.log("Creating loan status: " + loan_status.loan_status);
+            await loan_status_repository.create_loan_status(loan_status);   
+        } else {
+            console.log("Loan status " + loan_status.loan_status + " already exists");
+            
+        }
+    }
+    console.log("Loan statuses successfully imported.");
+
+    for (const plan_status of plan_statuses.plan_statuses) {
+        const exists = await plan_status_repository.filter_plan_statuses({plan_status: plan_status.plan_status});
+        if(exists.length == 0) {
+            console.log("Creating plan status: " + plan_status.plan_status);
+            await plan_status_repository.create_plan_status(plan_status);   
+        } else {
+            console.log("Plan status " + plan_status.plan_status + " already exists");
+            
+        }
+    }
+    console.log("Plan statuses successfully imported.");
 
     for (const user of users.users) {
         const exists = await user_repository.filter_users({username: user.username});
