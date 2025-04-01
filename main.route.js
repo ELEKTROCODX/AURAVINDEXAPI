@@ -16,6 +16,7 @@ import { import_router } from './src/import/import.route.js';
 import { loan_router } from './src/loan/loan.route.js';
 import { loan_status_router } from './src/loan_status/loan_status.route.js';
 import { log_action_router } from './src/log_action/log_action.route.js';
+import { plan_status_router } from './src/plan_status/plan_status.route.js';
 import { role_router } from './src/role/role.route.js';
 import { user_router } from './src/user/user.route.js';
 
@@ -38,8 +39,9 @@ main_router.use('/fee_type/', fee_type_router);
 main_router.use('/fee_status/', fee_status_router);
 main_router.use('/gender/', gender_router);
 main_router.use('/loan/', loan_router);
-main_router.use('/loan/status/', loan_status_router)
+main_router.use('/loan/status/', loan_status_router);
 main_router.use('/log_action/', log_action_router);
+main_router.use('/plan_status/', plan_status_router);
 main_router.use('/role/', role_router);
 main_router.use('/user/', user_router);
 
