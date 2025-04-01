@@ -13,7 +13,7 @@ export const create_plan_status = async (req, res) => {
     const {plan_status} = req.body;
     try {
         await plan_status_service.create_new_plan_status(plan_status);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_BOOK_STATUS, plan_status);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_PLAN_STATUS, plan_status);
         res.status(201).json({message: 'Plan status registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
@@ -83,7 +83,7 @@ export const update_plan_status = async (req, res) => {
         const updates = req.body;
         
         await plan_status_service.update_plan_status(id, updates);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.UPDATE_BOOK_STATUS, id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.UPDATE_PLAN_STATUS, id);
         res.json({message: 'Plan status updated successfully'});
     } catch (error) {
         if(error instanceof ObjectMissingParameters) {
@@ -110,7 +110,7 @@ export const delete_plan_status = async (req, res) => {
     try {
         const id = req.params.id;
         await plan_status_service.delete_plan_status(id);        
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.DELETE_BOOK_STATUS, id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.DELETE_PLAN_STATUS, id);
         res.json({message: 'Plan status deleted successfully'});
     } catch (error) {
         if(error instanceof ObjectMissingParameters) {

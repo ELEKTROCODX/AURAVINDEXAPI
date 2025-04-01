@@ -13,7 +13,7 @@ export const create_loan_status = async (req, res) => {
     const {loan_status} = req.body;
     try {
         await loan_status_service.create_new_loan_status(loan_status);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_BOOK_STATUS, loan_status);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_LOAN_STATUS, loan_status);
         res.status(201).json({message: 'Loan status registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
@@ -83,7 +83,7 @@ export const update_loan_status = async (req, res) => {
         const updates = req.body;
         
         await loan_status_service.update_loan_status(id, updates);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.UPDATE_BOOK_STATUS, id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.UPDATE_LOAN_STATUS, id);
         res.json({message: 'Loan status updated successfully'});
     } catch (error) {
         if(error instanceof ObjectMissingParameters) {
@@ -110,7 +110,7 @@ export const delete_loan_status = async (req, res) => {
     try {
         const id = req.params.id;
         await loan_status_service.delete_loan_status(id);        
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.DELETE_BOOK_STATUS, id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.DELETE_LOAN_STATUS, id);
         res.json({message: 'Loan status deleted successfully'});
     } catch (error) {
         if(error instanceof ObjectMissingParameters) {
