@@ -6,8 +6,8 @@ import { generate_filter } from '../config/util.js';
  * Creates a new notification in the system.
  * @param {string} sender - The ID of the user sending the notification.
  * @param {string} receiver - The ID of the user receiving the notification.
- * @param {string} title - The title notification.
- * @param {string} description - The description notification.
+ * @param {string} title - The notification title.
+ * @param {string} description - The notification description.
  * @returns {Promise<Object>} The newly created notification object.
  * @throws {ObjectNotFound} If the sender or receiver does not exist.
  */
@@ -54,7 +54,7 @@ export const get_all_notifications = async (page, limit) => {
 /**
  * Filters notifications based on a field and value with pagination.
  *
- * @param {string} filter_field - The field to filter by (e.g., notification_type, sender, receiver).
+ * @param {string} filter_field - The field to filter by (e.g. sender, receiver).
  * @param {string} filter_value - The value to match for the specified field.
  * @param {number} page - The page number to retrieve.
  * @param {number} limit - The number of notifications per page.
@@ -63,9 +63,10 @@ export const get_all_notifications = async (page, limit) => {
  */
 export const filter_notifications = async (filter_field, filter_value, page, limit) => {
     const field_types = {
-        notification_type: 'ObjectId',
         sender: 'ObjectId',
-        receiver: 'ObjectId'
+        receiver: 'ObjectId',
+        title: 'String',
+        description: 'String'
     };
     const allowed_fields = Object.keys(field_types);
     if(!allowed_fields.includes(filter_field)) {

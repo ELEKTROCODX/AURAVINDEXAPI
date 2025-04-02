@@ -59,7 +59,8 @@ export const get_all_fee_types = async (page, limit) => {
 export const filter_fee_types = async (filter_field, filter_value, page, limit) => {
     const field_types = {
         fee_code: 'String',
-        message: 'String'
+        message: 'String',
+        cost: 'Decimal128'
     };
     const allowed_fields = Object.keys(field_types);
     if(!allowed_fields.includes(filter_field)) {
