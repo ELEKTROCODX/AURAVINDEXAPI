@@ -1,6 +1,6 @@
-export const book_statuses = [
-    {"book_status": "ACTIVE"},
-    {"book_status": "PENDING"},
-    {"book_status": "CANCELED"},
-    {"book_status": "RENEWED"}
+export const plan_statuses = [
+    {"plan_status": "ACTIVE"},
+    {"plan_status": "PENDING"},
+    {"plan_status": "CANCELED"},
+    {"plan_status": "RENEWED"}
 ];
