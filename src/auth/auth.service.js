@@ -31,6 +31,7 @@ export const register = async (username, name, last_name, email, biography, gend
     if(user_exists.length != 0) {
         throw new ObjectAlreadyExists("user");
     }
+    if(!user_img) user_img = app_config.DEFAULT_USER_IMG_PATH;
     const new_user = await user_repository.create_user({username, name, last_name, email, biography, gender, favorite_book, birthdate, user_img, role, password});
     return new_user;
 }
