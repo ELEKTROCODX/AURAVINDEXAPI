@@ -88,6 +88,12 @@ export const roles = [
         ]
     },
     {
+        "name": "Delivery",
+        "permissions": [
+
+        ]
+    },
+    {
         "name": "Client user",
         "permissions": [
 

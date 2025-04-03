@@ -8,13 +8,11 @@ import jwt from 'jsonwebtoken';
 /**
  * Registers a new user by validating the provided data and creating a user in the database.
  * 
- * @param {string} username - The username of the new user.
  * @param {string} name - The first name of the new user.
  * @param {string} last_name - The last name of the new user.
  * @param {string} email - The email address of the new user.
  * @param {string} biography - The biography of the new user.
  * @param {string} gender - The gender of the new user.
- * @param {string} favorite_book - The favorite book of the new user.
  * @param {Date} birthdate - The birthdate of the new user.
  * @param {string} user_img - The profile image URL of the new user.
  * @param {ObjectId} role - The role of the new user (if not provided, default to 'Client user').
@@ -22,17 +20,17 @@ import jwt from 'jsonwebtoken';
  * 
  * @returns {Promise<Object>} - The newly created user object.
  * 
- * @throws {ObjectAlreadyExists} - If a user with the same username or email already exists.
+ * @throws {ObjectAlreadyExists} - If a user with the same email already exists.
  */
-export const register = async (username, name, last_name, email, biography, gender, favorite_book, birthdate, user_img, password) => {
-    const user_exists = await user_repository.filter_users({['username']: new RegExp(username, 'i'), ['email']: new RegExp(email, 'i')}, 0, 10);
+export const register = async (name, last_name, email, biography, gender, birthdate, user_img, address, password) => {
+    const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
     const find_role = await role_repository.filter_roles({name: 'Client user'});
     const role = find_role[0]._id;
     if(user_exists.length != 0) {
         throw new ObjectAlreadyExists("user");
     }
     if(!user_img) user_img = app_config.DEFAULT_USER_IMG_PATH;
-    const new_user = await user_repository.create_user({username, name, last_name, email, biography, gender, favorite_book, birthdate, user_img, role, password});
+    const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
     return new_user;
 }
 /**
