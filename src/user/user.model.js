@@ -25,11 +25,6 @@ const user_schema = new Schema({
         type: String,
         required: false
     },
-    favorite_book: {
-        type: Schema.Types.ObjectId,
-        ref: 'book',
-        required: false
-    },
     gender: {
         type: Schema.Types.ObjectId,
         ref: 'gender',

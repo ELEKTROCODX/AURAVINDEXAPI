@@ -60,12 +60,6 @@ const biography = body("biography")
     `User biography cannot be longer than ${app_config.USER_BIOGRAPHY_MAX_LENGTH} characters`
   );
 
-// Default favorite book validation
-const favorite_book = body("favorite_book")
-  .optional()
-  .isMongoId()
-  .withMessage("Valid favorite book ID is required");
-
 // Default gender validation
 const gender = body("gender")
   .isString()
@@ -110,7 +104,6 @@ export const user_validation_rules_post = [
   last_name,
   email,
   biography,
-  favorite_book,
   gender,
   birthdate,
   role,
@@ -125,7 +118,6 @@ export const user_validation_rules_update = [
   last_name,
   email,
   biography,
-  favorite_book,
   gender,
   birthdate,
   role,

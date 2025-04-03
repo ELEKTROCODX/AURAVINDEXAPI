@@ -15,9 +15,9 @@ import fs from 'fs';
  */
 export const create_user = async (req, res) => {
     try {
-        const {username, name, last_name, email, biography, favorite_book, gender, birthdate, role, password} = req.body;
+        const {username, name, last_name, email, biography, gender, birthdate, role, password} = req.body;
         const user_img = req.file ? `/images/users/${req.file.filename}` : app_config.DEFAULT_USER_IMG_PATH;
-        await user_service.create_new_user(username, name, last_name, email, biography, gender, favorite_book, birthdate, user_img, role, password);
+        await user_service.create_new_user(username, name, last_name, email, biography, gender, birthdate, user_img, role, password);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_USER, username);
         res.status(201).json({message: 'User created successfully'});
     } catch (error) {

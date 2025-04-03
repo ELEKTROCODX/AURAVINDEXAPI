@@ -14,7 +14,6 @@ import bcrypt from 'bcryptjs';
  * @param {string} email - The email address of the user.
  * @param {string} biography - A short biography of the user.
  * @param {string} gender - The gender of the user.
- * @param {string} favorite_book - The user's favorite book.
  * @param {Date} birthdate - The birthdate of the user.
  * @param {string} user_img - The user's profile image URL.
  * @param {string} role - The role of the user (optional, defaults to 'Client user').
@@ -23,7 +22,7 @@ import bcrypt from 'bcryptjs';
  * @throws {ObjectAlreadyExists} If a user with the same username or email already exists.
  * @returns {Object} The newly created user object.
  */
-export const create_new_user = async (username, name, last_name, email, biography, gender, favorite_book, birthdate, user_img, role, password) => {
+export const create_new_user = async (username, name, last_name, email, biography, gender, birthdate, user_img, role, password) => {
     const user_exists = await user_repository.filter_users({['username']: new RegExp(username, 'i'), ['email']: new RegExp(email, 'i')}, 0, 10);
     if(user_exists.length != 0) {
         throw new ObjectAlreadyExists("user");
@@ -32,7 +31,7 @@ export const create_new_user = async (username, name, last_name, email, biograph
         const find_role = await role_repository.filter_roles({name: 'Client user'});
         role = find_role[0]._id;
     }
-    const new_user = await user_repository.create_user({username, name, last_name, email, biography, gender, favorite_book, birthdate, user_img, role, password});
+    const new_user = await user_repository.create_user({username, name, last_name, email, biography, gender, birthdate, user_img, role, password});
     return new_user;
 }
 /**
@@ -82,7 +81,6 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
         last_name: 'String',
         email: 'String',
         biography: 'String',
-        favorite_book: 'ObjectId',
         gender: 'ObjectId',
         birthdate: 'Date',
         user_img: 'String',
