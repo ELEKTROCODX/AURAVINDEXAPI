@@ -21,7 +21,7 @@ import bcrypt from 'bcryptjs';
  * @throws {ObjectAlreadyExists} If a user with the same email already exists.
  * @returns {Object} The newly created user object.
  */
-export const create_new_user = async (name, last_name, email, biography, gender, birthdate, user_img, role, password) => {
+export const create_new_user = async (name, last_name, email, biography, gender, birthdate, user_img, address, role, password) => {
     const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
     if(user_exists.length != 0) {
         throw new ObjectAlreadyExists("user");
@@ -30,7 +30,7 @@ export const create_new_user = async (name, last_name, email, biography, gender,
         const find_role = await role_repository.filter_roles({name: 'Client user'});
         role = find_role[0]._id;
     }
-    const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, role, password});
+    const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
     return new_user;
 }
 /**
@@ -82,6 +82,7 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
         gender: 'ObjectId',
         birthdate: 'Date',
         user_img: 'String',
+        address: 'String',
         role: 'ObjectId'
     };
     const allowed_fields = Object.keys(field_types);

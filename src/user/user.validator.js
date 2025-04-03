@@ -69,6 +69,14 @@ const birthdate = body("birthdate")
     return true;
   });
 
+// Default address validation
+const address = body("address")
+  .optional()
+  .isLength({ max: app_config.USER_ADDRESS_MAX_LENGTH })
+  .withMessage(
+    `User address cannot be longer than ${app_config.USER_ADDRESS_MAX_LENGTH} characters`
+  );
+
 // Default role validation
 const role = body("role")
   .optional()
@@ -94,6 +102,7 @@ export const user_validation_rules_post = [
   biography,
   gender,
   birthdate,
+  address,
   role,
   password,
 ];
@@ -107,6 +116,7 @@ export const user_validation_rules_update = [
   biography,
   gender,
   birthdate,
+  address,
   role,
   password,
 ];

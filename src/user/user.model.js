@@ -34,6 +34,10 @@ const user_schema = new Schema({
         type: String,
         required: false
     },
+    address: {
+        type: String,
+        required: false
+    },
     role: {
         type: Schema.Types.ObjectId,
         ref: 'role',
