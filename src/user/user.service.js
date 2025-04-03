@@ -7,8 +7,7 @@ import bcrypt from 'bcryptjs';
 
 /**
  * Creates a new user with the provided information.
- * 
- * @param {string} username - The username of the new user.
+ *
  * @param {string} name - The first name of the user.
  * @param {string} last_name - The last name of the user.
  * @param {string} email - The email address of the user.
@@ -19,11 +18,11 @@ import bcrypt from 'bcryptjs';
  * @param {string} role - The role of the user (optional, defaults to 'Client user').
  * @param {string} password - The password for the user account.
  * 
- * @throws {ObjectAlreadyExists} If a user with the same username or email already exists.
+ * @throws {ObjectAlreadyExists} If a user with the same email already exists.
  * @returns {Object} The newly created user object.
  */
-export const create_new_user = async (username, name, last_name, email, biography, gender, birthdate, user_img, role, password) => {
-    const user_exists = await user_repository.filter_users({['username']: new RegExp(username, 'i'), ['email']: new RegExp(email, 'i')}, 0, 10);
+export const create_new_user = async (name, last_name, email, biography, gender, birthdate, user_img, role, password) => {
+    const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
     if(user_exists.length != 0) {
         throw new ObjectAlreadyExists("user");
     }
@@ -31,7 +30,7 @@ export const create_new_user = async (username, name, last_name, email, biograph
         const find_role = await role_repository.filter_roles({name: 'Client user'});
         role = find_role[0]._id;
     }
-    const new_user = await user_repository.create_user({username, name, last_name, email, biography, gender, birthdate, user_img, role, password});
+    const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, role, password});
     return new_user;
 }
 /**
@@ -66,7 +65,7 @@ export const get_all_users = async (page, limit) => {
 /**
  * Filters users based on the provided field and value with pagination.
  * 
- * @param {string} filter_field - The field to filter users by (e.g., 'username', 'email').
+ * @param {string} filter_field - The field to filter users by (e.g. 'email').
  * @param {string} filter_value - The value to search for in the filter field.
  * @param {number} page - The page number to retrieve.
  * @param {number} limit - The number of users to retrieve per page.
@@ -76,7 +75,6 @@ export const get_all_users = async (page, limit) => {
  */
 export const filter_users = async (filter_field, filter_value, page, limit) => {
     const field_types = {
-        username: 'String',
         name: 'String',
         last_name: 'String',
         email: 'String',
@@ -133,7 +131,7 @@ export const get_user_by_id = async (id) => {
  * 
  * @throws {ObjectMissingParameters} If the ID is not provided.
  * @throws {ObjectNotFound} If no user is found with the provided ID.
- * @throws {ObjectAlreadyExists} If another user exists with the same username or email.
+ * @throws {ObjectAlreadyExists} If another user exists with the same email.
  * @returns {Object} The updated user object.
  */
 export const update_user = async (id, updates) => { 
@@ -141,7 +139,7 @@ export const update_user = async (id, updates) => {
         throw new ObjectMissingParameters("user");
     }
     const user_exists_id = await user_repository.find_user_by_id(id);
-    const user_exists = await user_repository.filter_users({['username']: new RegExp(updates.name, 'i'), ['email']: new RegExp(updates.email, 'i')}, 0, 10);
+    const user_exists = await user_repository.filter_users({['email']: new RegExp(updates.email, 'i')}, 0, 10);
 
     if(!user_exists_id){
         throw new ObjectNotFound("user");

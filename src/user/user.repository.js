@@ -9,12 +9,12 @@ export const create_user = async (user_data) => {
 
 // Fetch all
 export const find_all_users = async (skip, limit) => {
-    return await user_model.user.find().skip(skip).limit(limit).populate('username gender role');
+    return await user_model.user.find().skip(skip).limit(limit).populate('gender role');
 }
 
 // Fetch with filters
 export const filter_users = async (filter, skip, limit) => {
-    return await user_model.user.find(filter).skip(skip).limit(limit).populate('username gender role');
+    return await user_model.user.find(filter).skip(skip).limit(limit).populate('gender role');
 }
 
 // Count users
@@ -24,7 +24,7 @@ export const count_users = async () => {
 
 // Fetch by ID
 export const find_user_by_id = async (id) => {
-    return await user_model.user.findById(id).populate('username gender role') || null;
+    return await user_model.user.findById(id).populate('gender role') || null;
 }
 
 // Update user

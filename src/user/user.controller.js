@@ -10,15 +10,15 @@ import fs from 'fs';
  * @param {Object} res - The response object to send the result.
  * 
  * @returns {void} 
- * @throws {ObjectAlreadyExists} If a user with the same username or email already exists.
+ * @throws {ObjectAlreadyExists} If a user with the same email already exists.
  * @throws {ObjectMissingParameters} If required parameters are missing.
  */
 export const create_user = async (req, res) => {
     try {
-        const {username, name, last_name, email, biography, gender, birthdate, role, password} = req.body;
+        const {name, last_name, email, biography, gender, birthdate, role, password} = req.body;
         const user_img = req.file ? `/images/users/${req.file.filename}` : app_config.DEFAULT_USER_IMG_PATH;
-        await user_service.create_new_user(username, name, last_name, email, biography, gender, birthdate, user_img, role, password);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_USER, username);
+        await user_service.create_new_user(name, last_name, email, biography, gender, birthdate, user_img, role, password);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_USER, email);
         res.status(201).json({message: 'User created successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
@@ -90,7 +90,7 @@ export const get_user_by_id = async (req, res) => {
  * 
  * @returns {void} 
  * @throws {ObjectMissingParameters} If the ID or update parameters are missing.
- * @throws {ObjectAlreadyExists} If another user exists with the same username or email.
+ * @throws {ObjectAlreadyExists} If another user exists with the same email.
  * @throws {ObjectNotFound} If no user is found with the provided ID.
  */
 export const update_user = async (req, res) => {

@@ -5,10 +5,6 @@ import bcrypt from 'bcryptjs';
 // Create schema
 const user_schema = new Schema({
     // ID
-    username: {
-        type: String,
-        required: true
-    },
     name: {
         type: String,
         required: true

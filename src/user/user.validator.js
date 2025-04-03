@@ -11,17 +11,6 @@ const id = param("id")
   .isMongoId()
   .withMessage("Valid ID is required");
 
-// Default username validation
-const username = body("username")
-  .exists({ checkFalsy: true })
-  .isString()
-  .notEmpty()
-  .withMessage("User username is required")
-  .isLength({ max: app_config.USER_NAME_MAX_LENGTH })
-  .withMessage(
-    `User username cannot be longer than ${app_config.USER_NAME_MAX_LENGTH} characters`
-  );
-
 // Default name validation
 const name = body("name")
   .isString()
@@ -99,7 +88,6 @@ export const user_validation_rules_get_id = [id];
 
 // POST validation rules
 export const user_validation_rules_post = [
-  username,
   name,
   last_name,
   email,
@@ -113,7 +101,6 @@ export const user_validation_rules_post = [
 // PUT validation rules
 export const user_validation_rules_update = [
   id,
-  username,
   name,
   last_name,
   email,
