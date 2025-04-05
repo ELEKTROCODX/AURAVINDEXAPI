@@ -123,7 +123,8 @@ export const import_default_data = async () => {
         if(exists.length == 0) {
             const gender_exists = await gender_repository.filter_genders({name: user.gender});
             const role_exists = await role_repository.filter_roles({name: user.role});
-            
+            const user_img = user.user_img ? user.user_img : app_config.DEFAULT_USER_IMG_PATH;
+            user.user_img = user_img;
             user.gender = gender_exists[0]._id;
             user.role = role_exists[0]._id;
             
