@@ -140,3 +140,9 @@ export class ReservationOutsideWorkingHours extends Error {
     }
 }
 
+export class ActivePlanAlreadyFinished extends Error {
+    constructor() {
+        super('This plan has already been finished.');
+        this.name = 'ActivePlanAlreadyFinished';
+    }
+}
