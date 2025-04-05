@@ -1,5 +1,6 @@
 // Import router from express
 import {Router} from 'express';
+import { active_plan_router } from './src/active_plan/active_plan.route.js';
 import { audit_log_router } from './src/audit_log/audit_log.route.js';
 import { auth_router } from './src/auth/auth.route.js';
 import { author_router } from './src/author/author.route.js';
@@ -29,6 +30,7 @@ const main_router = Router();
 main_router.use('/auth/', auth_router);
 main_router.use('/import/', import_router);
 // Use routers
+main_router.use('/active_plan', active_plan_router);
 main_router.use('/audit_log/', audit_log_router);
 main_router.use('/author/', author_router);
 main_router.use('/book/', book_router);
