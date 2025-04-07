@@ -82,13 +82,13 @@ export const request_password_reset = async (email) => {
         app_config.jwtSecret,
         {expiresIn: '15m'}
     );
-    const reset_link = `https://${app_config.app_main_domain}/reset_password?token=${reset_token}`;
+    const reset_link = `https://${app_config.app_main_domain}/reset_password.html?token=${reset_token}`;
     const result = await send_email(
         email, 
-        'Password Reset Request',
+        'Password Reset Request [AURA VINDEX]',
         `
         <p>Hi <strong>[${user_data[0].name} ${user_data[0].last_name}]</strong>,</p>
-        <p>We received a request to reset the password for your <strong>Aura Vindex</strong> account. If you made this request, please click the link below to set a new password:</p>
+        <p>We received a request to reset the password for your <strong>AURA VINDEX</strong> account. If you made this request, please click the link below to set a new password:</p>
         <p style="text-align: center;">
             <a href="${reset_link}" style="
                 display: inline-block;
@@ -104,7 +104,7 @@ export const request_password_reset = async (email) => {
         <p>If you have any questions or need further assistance, feel free to reach out to our support team at <a href="mailto:${app_config.app_support_email}">${app_config.app_support_email}</a>.</p>
         <br>
         <p>Best regards,</p>
-        <p>The Aura Vindex Team</p>
+        <p>The AURA VINDEX Team</p>
     `,
     );
     if(result.accepted.length == 0) {

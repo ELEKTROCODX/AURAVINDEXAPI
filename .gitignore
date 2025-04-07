@@ -11,3 +11,4 @@ public/images/rooms/*
 !public/images/rooms/default.png
 public/images/users/*
 !public/images/users/default.png
+.vscode
