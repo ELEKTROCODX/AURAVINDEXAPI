@@ -34,7 +34,7 @@ const book_schema = new Schema({
         required: true
     },
     sample: {
-        type: Number,
+        type: String,
         required: true
     },
     location: {
