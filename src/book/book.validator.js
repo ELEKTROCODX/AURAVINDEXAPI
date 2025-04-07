@@ -78,16 +78,6 @@ const edition = body("edition")
     `Book edition cannot be longer than ${app_config.BOOK_EDITION_MAX_LENGTH} characters`
   );
 
-// Default age restriction validation
-const age_restriction = body("age_restriction")
-  .isString()
-  .notEmpty()
-  .withMessage("Book age restriction is required")
-  .isLength({ max: app_config.BOOK_AGE_RESTRICTION_MAX_LENGTH })
-  .withMessage(
-    `Book age restriction cannot be longer than ${app_config.BOOK_AGE_RESTRICTION_MAX_LENGTH} characters`
-  );
-
 // Default sample validation
 const sample = body("sample")
   .isString()
@@ -138,7 +128,7 @@ export const book_validation_rules_get_classification = [
 
 
 // POST validation rules
-export const book_validation_rules_post = [title, isbn, classification, summary, editorial, language, edition, age_restriction, sample, location, book_status, collection];
+export const book_validation_rules_post = [title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, collection];
 
 // PUT validation rules
-export const book_validation_rules_update = [id, title, isbn, classification, summary, editorial, language, edition, age_restriction, sample, location, book_status, collection];
+export const book_validation_rules_update = [id, title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, collection];

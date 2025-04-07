@@ -10,10 +10,10 @@ import * as audit_log_service from '../audit_log/audit_log.service.js';
  * @returns {void}
  */
 export const create_book = async (req, res) => {    
-    const {title, isbn, classification, summary, editorial, language, edition, age_restriction, sample, location, book_status, genres, collection, authors} = req.body;
+    const {title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, collection, authors} = req.body;
     try {
         const book_img = req.file ? `/images/books/${req.file.filename}` : app_config.DEFAULT_BOOK_IMG_PATH;
-        await book_service.create_new_book(title, isbn, classification, summary, editorial, language, edition, age_restriction, sample, location, book_status, genres, collection, authors, book_img);
+        await book_service.create_new_book(title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, collection, authors, book_img);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_BOOK, classification);
         res.status(201).json({message: 'Book registered successfully'});
     } catch (error) {

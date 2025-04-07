@@ -14,7 +14,6 @@ import { generate_filter } from '../config/util.js';
  * @param {string} editorial - The editorial ID that the book belongs to.
  * @param {string} language - The language of the book.
  * @param {string} edition - The edition of the book.
- * @param {string} age_restriction - Age restriction for the book.
  * @param {string} sample - Sample availability of the book.
  * @param {string} location - Location where the book is stored.
  * @param {string} book_status - The status of the book.
@@ -26,7 +25,7 @@ import { generate_filter } from '../config/util.js';
  * @throws {ObjectNotFound} If editorial, book status, or collection does not exist.
  * @throws {ObjectAlreadyExists} If a book with the same classification already exists.
  */
-export const create_new_book = async (title, isbn, classification, summary, editorial, language, edition, age_restriction, sample, location, book_status, genres, collection, authors, book_img) => {
+export const create_new_book = async (title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, collection, authors, book_img) => {
     const book_exists_classification = await book_repository.filter_books({['classification']: new RegExp(classification, 'i')}, 0, 10);
     
     const editorial_exists = editorial_repository.find_editorial_by_id(editorial);
@@ -45,7 +44,7 @@ export const create_new_book = async (title, isbn, classification, summary, edit
     if(book_exists_classification.length != 0) {
         throw new ObjectAlreadyExists("book");
     }
-    const new_book = await book_repository.create_book({title, isbn, classification, summary, editorial, language, edition, age_restriction, sample, location, book_status, genres, collection, authors, book_img});
+    const new_book = await book_repository.create_book({title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, collection, authors, book_img});
     return new_book;
 }
 /**
@@ -95,7 +94,6 @@ export const filter_books = async (filter_field, filter_value, page, limit) => {
         editorial: 'ObjectId',
         language: 'String',
         edition: 'String',
-        age_restriction: 'String',
         sample: 'Number',
         location: 'String',
         book_status: 'ObjectId',

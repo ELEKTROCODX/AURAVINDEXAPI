@@ -33,10 +33,6 @@ const book_schema = new Schema({
         type: String,
         required: true
     },
-    age_restriction: {
-        type: String,
-        required: true
-    },
     sample: {
         type: Number,
         required: true
