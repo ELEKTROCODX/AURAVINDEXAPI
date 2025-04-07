@@ -20,11 +20,17 @@ const name = body("name")
   `Plan name cannot be longer than ${app_config.PLAN_NAME_MAX_LENGTH} characters`
 );
 
-// Default price validation
-const price = param("price")
+// Default fixed price validation
+const fixed_price = param("fixed_price")
   .isDecimal()
   .notEmpty()
-  .withMessage("Plan price is required");
+  .withMessage("Plan fixed price is required");
+
+// Default monthly price validation
+const monthly_price = param("monthly_price")
+  .isDecimal()
+  .notEmpty()
+  .withMessage("Plan monthly price is required");
 
 // Default max simultaneous loans validation
 const max_simultaneous_loans = param("max_simultaneous_loans")
@@ -48,7 +54,7 @@ const max_renovations_per_loan = param("max_renovations_per_loan")
 export const plan_validation_rules_get_id = [id];
 
 // POST validation rules
-export const plan_validation_rules_post = [name, price, max_simultaneous_loans, max_return_days, max_renovations_per_loan];
+export const plan_validation_rules_post = [name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan];
 
 // PUT validation rules
-export const plan_validation_rules_update = [id, name, price, max_simultaneous_loans, max_return_days, max_renovations_per_loan];
+export const plan_validation_rules_update = [id, name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan];

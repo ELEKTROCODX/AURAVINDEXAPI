@@ -8,7 +8,11 @@ const plan_schema = new Schema({
         type: String,
         required: true
     },
-    price: {
+    fixed_price: {
+        type: Schema.Types.Decimal128,
+        required: true
+    },
+    monthly_price: {
         type: Schema.Types.Decimal128,
         required: true
     },

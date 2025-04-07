@@ -10,9 +10,9 @@ import * as audit_log_service from '../audit_log/audit_log.service.js';
  * @returns {void}
  */
 export const create_plan = async (req, res) => {
-    const {name, price, max_simultaneous_loans, max_return_days, max_renovations_per_loan} = req.body;
+    const {name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan} = req.body;
     try {
-        await plan_service.create_new_plan(name, price, max_simultaneous_loans, max_return_days, max_renovations_per_loan);
+        await plan_service.create_new_plan(name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_PLAN, name);
         res.status(201).json({message: 'Plan registered successfully'});
     } catch (error) {
