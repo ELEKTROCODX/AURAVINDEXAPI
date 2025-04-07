@@ -80,7 +80,7 @@ export const filter_notifications = async (filter_field, filter_value, page, lim
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const notifications = await notification_repository.filter_notifications(filter, skip, limit);
-    const total_notifications = await notification_repository.count_notifications();
+    const total_notifications = notifications.length;
     const total_pages = Math.ceil(total_notifications / limit);
     return {
         data: notifications,

@@ -74,7 +74,7 @@ export const filter_fee_types = async (filter_field, filter_value, page, limit) 
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const fee_types = await fee_type_repository.filter_fee_types(filter, skip, limit);
-    const total_fee_types = await fee_type_repository.count_fee_types();
+    const total_fee_types = fee_types.length;
     const total_pages = Math.ceil(total_fee_types / limit);
     return {
         data: fee_types,

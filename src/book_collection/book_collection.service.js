@@ -70,7 +70,7 @@ export const filter_book_collections = async (filter_field, filter_value, page, 
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const book_collections = await book_collection_repository.filter_book_collections(filter, skip, limit);
-    const total_book_collections = await book_collection_repository.count_book_collections();
+    const total_book_collections = book_collections.length;
     const total_pages = Math.ceil(total_book_collections / limit);
     return {
         data: book_collections,

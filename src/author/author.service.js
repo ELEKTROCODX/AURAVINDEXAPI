@@ -82,7 +82,7 @@ export const filter_authors = async (filter_field, filter_value, page, limit) =>
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const authors = await author_repository.filter_authors(filter, skip, limit);
-    const total_authors = await author_repository.count_authors();
+    const total_authors = authors.length;
     const total_pages = Math.ceil(total_authors / limit);
     return {
         data: authors,

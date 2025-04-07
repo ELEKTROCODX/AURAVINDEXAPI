@@ -67,7 +67,7 @@ export const filter_log_actions = async (filter_field, filter_value, page, limit
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const log_actions = await log_action_repository.filter_log_actions(filter, skip, limit);
-    const total_log_actions = await log_action_repository.count_log_actions();
+    const total_log_actions = log_actions.length;
     const total_pages = Math.ceil(total_log_actions / limit);
     return {
         data: log_actions,

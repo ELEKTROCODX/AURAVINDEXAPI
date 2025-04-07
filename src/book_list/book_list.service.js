@@ -88,7 +88,7 @@ export const filter_book_lists = async (filter_field, filter_value, page, limit)
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const book_lists = await book_list_repository.filter_book_lists(filter, skip, limit);
-    const total_book_lists = await book_list_repository.count_book_lists();
+    const total_book_lists = book_lists.length;
     const total_pages = Math.ceil(total_book_lists / limit);
     return {
         data: book_lists,

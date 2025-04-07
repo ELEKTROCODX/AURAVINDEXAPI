@@ -74,7 +74,7 @@ export const filter_editorials = async (filter_field, filter_value, page, limit)
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const editorials = await editorial_repository.filter_editorials(filter, skip, limit);
-    const total_editorials = await editorial_repository.count_editorials();
+    const total_editorials = editorials.length;
     const total_pages = Math.ceil(total_editorials / limit);
     return {
         data: editorials,

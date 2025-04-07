@@ -97,7 +97,7 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const users = await user_repository.filter_users(filter, skip, limit);
-    const total_users = await user_repository.count_users();
+    const total_users = users.length;
     const total_pages = Math.ceil(total_users / limit);
     return {
         data: users,

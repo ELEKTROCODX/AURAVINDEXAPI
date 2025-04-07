@@ -114,7 +114,7 @@ export const filter_books = async (filter_field, filter_value, page, limit) => {
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const books = await book_repository.filter_books(filter, skip, limit);
-    const total_books = await book_repository.count_books();
+    const total_books = books.length;
     const total_pages = Math.ceil(total_books / limit);
     return {
         data: books,

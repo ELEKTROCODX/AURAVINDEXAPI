@@ -70,7 +70,7 @@ export const filter_plan_statuses = async (filter_field, filter_value, page, lim
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const plan_statuses = await plan_status_repository.filter_plan_statuses(filter, skip, limit);
-    const total_plan_statuses = await plan_status_repository.count_plan_statuses();
+    const total_plan_statuses = plan_statuses.length;
     const total_pages = Math.ceil(total_plan_statuses / limit);
     return {
         data: plan_statuses,

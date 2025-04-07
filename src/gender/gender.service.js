@@ -70,7 +70,7 @@ export const filter_genders = async (filter_field, filter_value, page, limit) =>
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const genders = await gender_repository.filter_genders(filter, skip, limit);
-    const total_genders = await gender_repository.count_genders();
+    const total_genders = genders.length;
     const total_pages = Math.ceil(total_genders / limit);
     return {
         data: genders,

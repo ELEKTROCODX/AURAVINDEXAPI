@@ -70,7 +70,7 @@ export const filter_loan_statuses = async (filter_field, filter_value, page, lim
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const loan_statuses = await loan_status_repository.filter_loan_statuses(filter, skip, limit);
-    const total_loan_statuses = await loan_status_repository.count_loan_statuses();
+    const total_loan_statuses = loan_statuses.length;
     const total_pages = Math.ceil(total_loan_statuses / limit);
     return {
         data: loan_statuses,

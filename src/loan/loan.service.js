@@ -122,7 +122,7 @@ export const filter_loans = async (filter_field, filter_value, page, limit) => {
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const loans = await loan_repository.filter_loans(filter, skip, limit);
-    const total_loans = await loan_repository.count_loans();
+    const total_loans = loans.length;
     const total_pages = Math.ceil(total_loans / limit);
     return {
         data: loans,

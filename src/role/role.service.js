@@ -69,7 +69,7 @@ export const filter_roles = async (filter_field, filter_value, page, limit) => {
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const roles = await role_repository.filter_roles(filter, skip, limit);
-    const total_roles = await role_repository.count_roles();
+    const total_roles = roles.length;
     const total_pages = Math.ceil(total_roles / limit);
     return {
         data: roles,

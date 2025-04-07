@@ -88,7 +88,7 @@ export const filter_audit_logs = async (filter_field, filter_value, page, limit)
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const audit_logs = await audit_log_repository.filter_audit_logs(filter, skip, limit);
-    const total_audit_logs = await audit_log_repository.count_audit_logs();
+    const total_audit_logs = audit_logs.length;
     const total_pages = Math.ceil(total_audit_logs / limit);
     return {
         data: audit_logs,

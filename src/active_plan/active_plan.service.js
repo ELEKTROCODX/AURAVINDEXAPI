@@ -101,7 +101,7 @@ export const filter_active_plans = async (filter_field, filter_value, page, limi
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const plans = await active_plan_repository.filter_active_plans(filter, skip, limit);
-    const total_active_plans = await active_plan_repository.count_active_plans();
+    const total_active_plans = plans.length;
     const total_pages = Math.ceil(total_active_plans / limit);
     return {
         data: plans,
