@@ -21,31 +21,31 @@ const name = body("name")
 );
 
 // Default fixed price validation
-const fixed_price = param("fixed_price")
+const fixed_price = body("fixed_price")
   .isDecimal()
   .notEmpty()
   .withMessage("Plan fixed price is required");
 
 // Default monthly price validation
-const monthly_price = param("monthly_price")
+const monthly_price = body("monthly_price")
   .isDecimal()
   .notEmpty()
   .withMessage("Plan monthly price is required");
 
 // Default max simultaneous loans validation
-const max_simultaneous_loans = param("max_simultaneous_loans")
+const max_simultaneous_loans = body("max_simultaneous_loans")
   .isNumeric()
   .notEmpty()
   .withMessage("Plan max simultaneous loans is required");
 
 // Default max return days validation
-const max_return_days = param("max_return_days")
+const max_return_days = body("max_return_days")
 .isNumeric()
 .notEmpty()
 .withMessage("Plan max return days is required");
 
 // Default max renovations per loan validation
-const max_renovations_per_loan = param("max_renovations_per_loan")
+const max_renovations_per_loan = body("max_renovations_per_loan")
  .isNumeric()
  .notEmpty()
  .withMessage("Plan max renovations per loan is required");
