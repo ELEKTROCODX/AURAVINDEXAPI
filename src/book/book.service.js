@@ -99,7 +99,8 @@ export const filter_books = async (filter_field, filter_value, page, limit) => {
         book_status: 'ObjectId',
         genres: 'String',
         collection: 'ObjectId',
-        authors: 'ObjectId'
+        authors: 'ObjectId',
+        book_img: 'String'
     };
     const allowed_fields = Object.keys(field_types);
     if(!allowed_fields.includes(filter_field)) {

@@ -19,7 +19,8 @@ services:
     image: mongo:6
     container_name: mongo_db_docker
     ports:
-      - "27017:27017"  # MongoDB port
+      #- "127.0.0.1:27017:27017"  # MongoDB port
+      - "27017:27017"
     volumes:
       - mongodb_data:/data/db  # Data persistance
     networks:
