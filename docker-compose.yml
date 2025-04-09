@@ -21,6 +21,8 @@ services:
     ports:
       - "127.0.0.1:27017:27017"  # MongoDB port
       #- "27017:27017"
+    env_file:
+      - .env
     volumes:
       - mongodb_data:/data/db  # Data persistance
     networks:
