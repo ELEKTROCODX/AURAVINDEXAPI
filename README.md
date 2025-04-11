@@ -35,7 +35,7 @@ Follow these steps to set up and run the project locally:
 4. When you are running the container for the first time, you need to create the database and an admin user for that database (which will be used for the server connection), run `docker compose up mongodb -d` to only deploy the MongoDB database.
 5. Run `docker compose exec -it mongodb mongosh "mongodb://root_user:root_password@localhost:mongodb_port"` to connect to the database and access the MongoDB command line.
 6. Run `use DATABASE_NAME` to create a database with that name. Then create an username for that database: `db.createUser({user: 'username', pwd: 'password', roles: ["readWrite"]})`. Run `exit` to exit the MongoDB command line.
-4. Run the application using Docker Compose. First run `docker compose up --build` and once it's done verify if the containers are running by executing the command `docker ps -a`
+4. Run the application using Docker Compose. First run `docker compose up --build -d` and once it's done verify if the containers are running by executing the command `docker ps -a`
 5. To access the application you can check on http://localhost:3000 (or the port set in the `.env` file).
 6. If you have issues with the server, you can check docker compose logs to look for errors; you can verify if the `.env` file has the correct configurations.
 ## Documentation
@@ -77,6 +77,8 @@ ME_CONFIG_BASICAUTH_USERNAME=mongo_express_username
 ME_CONFIG_BASICAUTH_PASSWORD=mongo_express_password
 # Mongo Express default port
 ME_CONFIG_PORT=8081
+# Base route for production
+ME_CONFIG_SITE_BASEURL=/mongoexpress
 ```
 ## Deployment
 In this section we'll explain how to deploy the server to the cloud. We'll use Digital Ocean. 
@@ -89,6 +91,14 @@ server {
     listen 80;
     server_name <DIGITAL_OCEAN_IP>;
 
+    location /mongoexpress/ {
+        proxy_pass http://localhost:<MONGO_EXPRESS_PORT>;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
     location / {
         proxy_pass http://localhost:<SERVER_PORT>; # The port that the server listens to
         proxy_http_version 1.1;
