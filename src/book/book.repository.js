@@ -9,12 +9,12 @@ export const create_book = async (book_data) => {
 
 // Fetch all
 export const find_all_books = async (skip, limit) => {
-    return await book_model.book.find().skip(skip).limit(limit).populate('title editorial book_status collection authors');
+    return await book_model.book.find().skip(skip).limit(limit).populate('title editorial book_status book_collection authors');
 }
 
 // Fetch with filters
 export const filter_books = async (filter, skip, limit) => {
-    return await book_model.book.find(filter).skip(skip).limit(limit).populate('title editorial book_status collection authors');
+    return await book_model.book.find(filter).skip(skip).limit(limit).populate('title editorial book_status book_collection authors');
 }
 
 // Count books
@@ -24,7 +24,7 @@ export const count_books = async () => {
 
 // Fetch by ID
 export const find_book_by_id = async (id) => {
-    return await book_model.book.findById(id).populate('title editorial book_status collection authors') || null;
+    return await book_model.book.findById(id).populate('title editorial book_status book_collection authors') || null;
 }
 
 // Update book

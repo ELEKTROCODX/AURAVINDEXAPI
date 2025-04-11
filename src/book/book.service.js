@@ -18,19 +18,19 @@ import { generate_filter } from '../config/util.js';
  * @param {string} location - Location where the book is stored.
  * @param {string} book_status - The status of the book.
  * @param {Array} genres - The genres of the book.
- * @param {string} collection - The collection ID the book belongs to.
+ * @param {string} book_collection - The collection ID the book belongs to.
  * @param {Array} authors - The authors of the book.
  * @param {string} book_img - The image URL for the book.
  * @returns {Object} The newly created book object.
- * @throws {ObjectNotFound} If editorial, book status, or collection does not exist.
+ * @throws {ObjectNotFound} If editorial, book status, or book_collection does not exist.
  * @throws {ObjectAlreadyExists} If a book with the same classification already exists.
  */
-export const create_new_book = async (title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, collection, authors, book_img) => {
+export const create_new_book = async (title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, book_collection, authors, book_img) => {
     const book_exists_classification = await book_repository.filter_books({['classification']: new RegExp(classification, 'i')}, 0, 10);
     
     const editorial_exists = editorial_repository.find_editorial_by_id(editorial);
     const book_status_exists = book_status_repository.find_book_status_by_id(book_status);
-    const book_collection_exists = book_collection_repository.find_book_collection_by_id(collection);
+    const book_collection_exists = book_collection_repository.find_book_collection_by_id(book_collection);
     if(!editorial_exists) {
         throw new ObjectNotFound("editorial");
     }
@@ -44,7 +44,7 @@ export const create_new_book = async (title, isbn, classification, summary, edit
     if(book_exists_classification.length != 0) {
         throw new ObjectAlreadyExists("book");
     }
-    const new_book = await book_repository.create_book({title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, collection, authors, book_img});
+    const new_book = await book_repository.create_book({title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, genres, book_collection, authors, book_img});
     return new_book;
 }
 /**
@@ -98,7 +98,7 @@ export const filter_books = async (filter_field, filter_value, page, limit) => {
         location: 'String',
         book_status: 'ObjectId',
         genres: 'String',
-        collection: 'ObjectId',
+        book_collection: 'ObjectId',
         authors: 'ObjectId',
         book_img: 'String'
     };

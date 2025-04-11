@@ -52,7 +52,7 @@ const book_schema = new Schema({
             required: true
         }
     ],
-    collection: {
+    book_collection: {
         type: Schema.Types.ObjectId,
         ref: 'book_collection',
         required: true

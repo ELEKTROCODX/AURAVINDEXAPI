@@ -106,8 +106,8 @@ const book_status = body("book_status")
   .isMongoId()
   .withMessage("Valid book status ID is required");
 
-// Default collection validation
-const collection = body("collection")
+// Default book collection validation
+const book_collection = body("book_collection")
   .isString()
   .notEmpty()
   .withMessage("Book collection is required")
@@ -128,7 +128,7 @@ export const book_validation_rules_get_classification = [
 
 
 // POST validation rules
-export const book_validation_rules_post = [title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, collection];
+export const book_validation_rules_post = [title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, book_collection];
 
 // PUT validation rules
-export const book_validation_rules_update = [id, title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, collection];
+export const book_validation_rules_update = [id, title, isbn, classification, summary, editorial, language, edition, sample, location, book_status, book_collection];
