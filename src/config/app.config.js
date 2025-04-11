@@ -7,7 +7,7 @@ if(process.env.NODE_ENV === 'test') {
 }
 
 export const app_config = {
-    port: process.env.PORT || 3000,
+    port: process.env.SERVER_PORT || 3000,
     mongoUri: process.env.MONGODB_URI,
     jwtSecret: process.env.JWT_SECRET,
     app_main_domain: process.env.APP_MAIN_DOMAIN,

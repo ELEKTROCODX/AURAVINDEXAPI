@@ -32,6 +32,9 @@ Follow these steps to set up and run the project locally:
     - Docker Compose (for orchestrating the containers)
 2. Clone the repository with Git or download the project from GitHub.
 3. Set up the environment variables. Create an `.env` file or rename the `example.env` file from the repository. Set up the your variables, read more in the [Environment Variables](#environment-variables) section.
+4. When you are running the container for the first time, you need to create the database and an admin user for that database (which will be used for the server connection), run `docker compose up mongodb -d` to only deploy the MongoDB database.
+5. Run `docker compose exec -it mongodb mongosh "mongodb://root_user:root_password@localhost:mongodb_port"` to connect to the database and access the MongoDB command line.
+6. Run `use DATABASE_NAME` to create a database with that name. Then create an username for that database: `db.createUser({user: 'username', pwd: 'password', roles: ["readWrite"]})`. Run `exit` to exit the MongoDB command line.
 4. Run the application using Docker Compose. First run `docker compose up --build` and once it's done verify if the containers are running by executing the command `docker ps -a`
 5. To access the application you can check on http://localhost:3000 (or the port set in the `.env` file).
 6. If you have issues with the server, you can check docker compose logs to look for errors; you can verify if the `.env` file has the correct configurations.
@@ -41,15 +44,15 @@ You can read the API documentation on [Bump.sh](https://bump.sh/elektro/doc/aura
 In this section you'll understand what each environment variable is used for.
 ```bash
 # The URI to connect to the MongoDB database.
-MONGODB_URI=mongodb://localhost:3000/auravindex
-# If we are deploying the MongoDB database in Docker, use:
-# MONGODB_URI=mongodb://service_name:port/database_name
+MONGODB_URI=mongodb://adminUsername:adminPassword@service_name:port/database_name
+# URI to connect to the MongoDB Shell
+MONGODB_URI_SHELL=mongodb://rootUsername:rootPassword@localhost:27017/
 # The port that will be used to listen to when running the server.
-PORT=3000
+SERVER_PORT=3000
 # The JWT secret is a secret key used to sign and verify JSON Web Tokens (JWT).
 JWT_SECRET=example
 # Main app domain
-APP_MAIN_DOMAIN=auravindex.me
+APP_MAIN_DOMAIN=example.com
 # Admin gmail email and app password (This is used to send the reset password links to emails)
 ADMIN_GMAIL_EMAIL=example@gmail.com
 ADMIN_GMAIL_PASSWORD=appPasswordExample
@@ -60,6 +63,20 @@ ALLOW_IMPORTING_DEFAULT_DATA=true
 # When requesting the server to import default data, you can set up the credentials for the default admin user.
 APP_ADMIN_EMAIL=example@gmail.com
 APP_ADMIN_PASSWORD=securePassword1234
+# MongoDB default data
+MONGO_INITDB_ROOT_USERNAME=rootUsername
+MONGO_INITDB_ROOT_PASSWORD=rootPassword
+#MONGO_INITDB_DATABASE=AURAVINDEX
+# Mongo Express default data
+ME_CONFIG_MONGODB_ADMINUSERNAME=rootUsername
+ME_CONFIG_MONGODB_ADMINPASSWORD=rootPassword
+ME_CONFIG_MONGODB_URL=mongodb://rootUsername:rootPassword@service_name:27017/?authSource=admin
+# Require authentication to access Mongo Express
+ME_CONFIG_BASICAUTH_ENABLED=true
+ME_CONFIG_BASICAUTH_USERNAME=mongo_express_username
+ME_CONFIG_BASICAUTH_PASSWORD=mongo_express_password
+# Mongo Express default port
+ME_CONFIG_PORT=8081
 ```
 ## Deployment
 In this section we'll explain how to deploy the server to the cloud. We'll use Digital Ocean. 
@@ -73,7 +90,7 @@ server {
     server_name <DIGITAL_OCEAN_IP>;
 
     location / {
-        proxy_pass http://localhost:4000; # The port that the server listens to
+        proxy_pass http://localhost:<SERVER_PORT>; # The port that the server listens to
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

@@ -8,7 +8,8 @@ COPY package*.json ./
 RUN npm install
 # Copy other files
 COPY . .
-# Expose port 
+# Expose ports
+EXPOSE 8081
 EXPOSE 44000
 # Start server
 CMD ["npm", "start"]

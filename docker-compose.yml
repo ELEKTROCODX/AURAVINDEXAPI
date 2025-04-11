@@ -1,12 +1,12 @@
-version: '3.9'
 services:
   server:
     build:
       context: ./
       dockerfile: Dockerfile
     container_name: server_docker
+    restart: always
     ports:
-      - "44000:44000"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     env_file:
       - .env
     depends_on:
@@ -25,6 +25,18 @@ services:
       - .env
     volumes:
       - mongodb_data:/data/db  # Data persistance
+    networks:
+      - app-network
+  mongoexpress:
+    image: mongo-express
+    container_name: mongo_express_docker
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${ME_CONFIG_PORT}:${ME_CONFIG_PORT}"
+    depends_on:
+      - mongodb  # Start MongoDB before
     networks:
       - app-network
 volumes:
