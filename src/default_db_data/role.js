@@ -86,6 +86,10 @@ export const roles = [
       "CREATE_PLAN_STATUS",
       "UPDATE_PLAN_STATUS",
       "DELETE_PLAN_STATUS",
+      "READ_RECENT_BOOK",
+      "CREATE_RECENT_BOOK",
+      "UPDATE_RECENT_BOOK",
+      "DELETE_RECENT_BOOK",
       "READ_ROLE",
       "CREATE_ROLE",
       "UPDATE_ROLE",
@@ -177,6 +181,7 @@ export const roles = [
       "CREATE_NOTIFICATION",
       "READ_PLAN",
       "READ_PLAN_STATUS",
+      "READ_RECENT_BOOK",
       "READ_ROLE",
       "READ_USER"
     ],

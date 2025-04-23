@@ -20,6 +20,7 @@ import { log_action_router } from './src/log_action/log_action.route.js';
 import { notification_router } from './src/notification/notification.route.js';
 import { plan_router } from './src/plan/plan.route.js';
 import { plan_status_router } from './src/plan_status/plan_status.route.js';
+import { recent_book_router } from './src/recent_book/recent_book.route.js';
 import { role_router } from './src/role/role.route.js';
 import { user_router } from './src/user/user.route.js';
 
@@ -48,6 +49,7 @@ main_router.use('/log_action/', log_action_router);
 main_router.use('/notification/', notification_router);
 main_router.use('/plan/', plan_router);
 main_router.use('/plan_status/', plan_status_router);
+main_router.use('/recent_book/', recent_book_router);
 main_router.use('/role/', role_router);
 main_router.use('/user/', user_router);
 

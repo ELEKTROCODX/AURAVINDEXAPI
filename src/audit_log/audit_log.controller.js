@@ -47,7 +47,7 @@ export const get_all_audit_logs = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        res.status(500).json({message: 'Error fetching audit_logs', error: error.message});
+        res.status(500).json({message: 'Error fetching audit logs', error: error.message});
     }
 }
 /**
