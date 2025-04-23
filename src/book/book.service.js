@@ -66,7 +66,7 @@ export const get_all_books = async (show_duplicates, page, limit) => {
     const books = await book_repository.find_all_books(skip, limit);
     
     let filtered_books = books;
-    if (!show_duplicates) {
+    if ((!show_duplicates) || (show_duplicates == "false")) {
         const seen_classifications = new Set();
         filtered_books = books.filter(book => {
             const parts = book.classification.split('.');
@@ -137,7 +137,7 @@ export const filter_books = async (show_duplicates, filter_field, filter_value, 
     const books = await book_repository.filter_books(filter, skip, limit);
 
     let filtered_books = books;
-    if (!show_duplicates) {
+    if ((!show_duplicates) || (show_duplicates == "false")) {
         const seen_classifications = new Set();
         filtered_books = books.filter(book => {
             const parts = book.classification.split('.');

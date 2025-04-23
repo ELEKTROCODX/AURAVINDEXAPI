@@ -55,6 +55,7 @@ export const app_config = {
     USER_EMAIL_MAX_LENGTH: 50,
     USER_MIN_PASSWORD_LENGTH: 6,
     USER_BIOGRAPHY_MAX_LENGTH: 300,
+    USER_MAX_RECENT_BOOKS_LOG: 10,
     WORKING_HOURS: {
         MONDAY_TO_FRIDAY: {
             start: "07:00",
@@ -65,7 +66,7 @@ export const app_config = {
             end: "12:00"
         }
     },
-    USER_MIN_AGE_REQUIRED: 13,
+    USER_MIN_AGE_REQUIRED: 16,
     USER_MAX_AGE_ALLOWED: 130,
     PERMISSIONS: {
         SIGNUP: 'SIGNUP',
