@@ -121,3 +121,5 @@ export const reset_password = async (req, res) => {
         res.status(500).json({message: 'Error resetting password', error: error.message});
     }
 }
+
+/* CLOSE ACCOUNT REQUEST */
