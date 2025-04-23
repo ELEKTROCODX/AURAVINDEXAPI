@@ -50,12 +50,13 @@ export const create_new_book = async (title, isbn, classification, summary, edit
 /**
  * Fetches all books from the database with pagination.
  * 
+ * @param {Boolean} show_duplicates - If duplicates should be displayed
  * @param {number} page - The page number to fetch.
  * @param {number} limit - The number of books per page.
  * @returns {Array} A list of books.
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid.
  */
-export const get_all_books = async (page, limit) => {
+export const get_all_books = async (show_duplicates, page, limit) => {
     if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book");
     }
@@ -63,10 +64,29 @@ export const get_all_books = async (page, limit) => {
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const books = await book_repository.find_all_books(skip, limit);
-    const total_books = await book_repository.count_books();
+    
+    let filtered_books = books;
+    if (!show_duplicates) {
+        const seen_classifications = new Set();
+        filtered_books = books.filter(book => {
+            const parts = book.classification.split('.');
+            if (parts.length < 3) return true;
+
+            const base_classification = `${parts[0]}.${parts[1]}`;
+            if (seen_classifications.has(base_classification)) {
+                return false;
+            } else {
+                seen_classifications.add(base_classification);
+                return true;
+            }
+        });
+    }
+
+    const total_books = filtered_books.length;
     const total_pages = Math.ceil(total_books / limit);
+    const paginated_books = filtered_books.slice(skip, skip + limit)
     return {
-        data: books,
+        data: paginated_books,
         pagination: {
             totalItems: total_books,
             totalPages: total_pages,
@@ -78,6 +98,7 @@ export const get_all_books = async (page, limit) => {
 /**
  * Filters books based on a given field and value with pagination.
  * 
+ * @param {Boolean} show_duplicates - If duplicates should be displayed
  * @param {string} filter_field - The field to filter by (e.g., title, isbn).
  * @param {string} filter_value - The value to filter by.
  * @param {number} page - The page number to fetch.
@@ -85,7 +106,7 @@ export const get_all_books = async (page, limit) => {
  * @returns {Array} A list of filtered books.
  * @throws {ObjectInvalidQueryFilters} If the filter field is invalid.
  */
-export const filter_books = async (filter_field, filter_value, page, limit) => {
+export const filter_books = async (show_duplicates, filter_field, filter_value, page, limit) => {
     const field_types = {
         title: 'String',
         isbn: 'String',
@@ -114,10 +135,28 @@ export const filter_books = async (filter_field, filter_value, page, limit) => {
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
     const books = await book_repository.filter_books(filter, skip, limit);
-    const total_books = books.length;
+
+    let filtered_books = books;
+    if (!show_duplicates) {
+        const seen_classifications = new Set();
+        filtered_books = books.filter(book => {
+            const parts = book.classification.split('.');
+            if (parts.length < 3) return true;
+
+            const base_classification = `${parts[0]}.${parts[1]}`;
+            if (seen_classifications.has(base_classification)) {
+                return false;
+            } else {
+                seen_classifications.add(base_classification);
+                return true;
+            }
+        });
+    }
+    const total_books = filtered_books.length;
     const total_pages = Math.ceil(total_books / limit);
+    const paginated_books = filtered_books.slice(skip, skip + limit)
     return {
-        data: books,
+        data: paginated_books,
         pagination: {
             totalItems: total_books,
             totalPages: total_pages,
