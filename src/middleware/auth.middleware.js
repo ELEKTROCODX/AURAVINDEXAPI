@@ -17,3 +17,19 @@ export const auth_middleware = (req, res, next) => {
     res.status(401).json({ message: 'Invalid token.' });
   }
 };
+
+export const optional_auth_middlelware = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  try {
+    if(token) {
+      const decoded = jwt.verify(token, app_config.jwtSecret);
+      req.user = decoded;
+    }
+    next();
+  } catch (error) {
+    if(error.name == 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token has expired.' });
+    }
+    res.status(401).json({ message: 'Invalid token.' });
+  }
+}

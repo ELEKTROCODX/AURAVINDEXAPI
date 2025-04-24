@@ -60,10 +60,11 @@ export const get_all_books = async (req, res) => {
  */
 export const get_book_by_id = async (req, res) => {
     try {
-        const id = req.params.id;
-        
-        const book = await book_service.get_book_by_id(id);
-        if(req.user.id) await recent_book_service.add_book_to_list(req.user.id, id);
+        const book_id = req.params.id;
+        const book = await book_service.get_book_by_id(book_id);
+        if(req.user && req.user.id) {
+            await recent_book_service.add_book_to_list(req.user.id, book_id);
+        }
         res.json(book);
     } catch (error) {
         if(error instanceof ObjectNotFound) {

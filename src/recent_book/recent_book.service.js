@@ -2,6 +2,7 @@ import {ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters,
 import * as recent_book_repository from './recent_book.repository.js';
 import * as book_repository from '../book/book.repository.js';
 import { generate_filter } from '../config/util.js';
+import { app_config } from '../config/app.config.js';
 /**
  * Creates a new recent book with the specified user and books.
  * @param {string} user - The owner of the recent book list.
@@ -10,7 +11,7 @@ import { generate_filter } from '../config/util.js';
  * @throws {ObjectAlreadyExists} - Throws if the recent book already exists.
  */
 export const create_new_recent_book = async (user, books) => {
-    const recent_book_exists = await recent_book_repository.filter_recent_books({['user']: new RegExp(user, 'i')}, 0, 10);
+    const recent_book_exists = await recent_book_repository.filter_recent_books({['user']: user}, 0, 10);
     if(recent_book_exists.length != 0) {
         throw new ObjectAlreadyExists("recent_book");
     }
@@ -109,7 +110,7 @@ export const update_recent_book = async (id, updates) => {
         throw new ObjectMissingParameters("recent_book");
     }
     const recent_book_exists_id = await recent_book_repository.find_recent_book_by_id(id);
-    const recent_book_exists_user = await recent_book_repository.filter_recent_books({['user']: new RegExp(updates.user, 'i')}, 0, 10);
+    const recent_book_exists_user = await recent_book_repository.filter_recent_books({['user']: updates.user_id}, 0, 10);
     if(!recent_book_exists_id){
         throw new ObjectNotFound("recent_book");
     }
@@ -126,24 +127,24 @@ export const update_recent_book = async (id, updates) => {
  * @throws {ObjectNotFound} - Throws if the recent book is not found.
  */
 export const add_book_to_list = async (user_id, book_id) => {
-    let id = null;
+    let recent_book_id = null;
     if(!user_id) {
         throw new ObjectMissingParameters("recent_book");
     }
     if(!book_id) {
         throw new ObjectMissingParameters("book")
     }
-    const recent_book = await recent_book_repository.filter_recent_books({['user']: new RegExp(user_id, 'i')}, 0, 10);
+    let recent_book = await recent_book_repository.filter_recent_books({['user']: user_id}, 0, 10);
     const book = await book_repository.find_book_by_id(book_id);
     if(recent_book.length == 0) {
-        await recent_book_repository.create_recent_book({user_id});
+        await recent_book_repository.create_recent_book({user: user_id, books: []});
     }
-    id = await (await recent_book_repository.filter_recent_books({['user']: new RegExp(user_id, 'i')}, 0, 10))._id;
+    recent_book = await recent_book_repository.filter_recent_books({['user']: user_id}, 0, 10);
     if(!book) {
         throw new ObjectNotFound("book");
     }
 
-    const current_list = recent_book.books || [];
+    const current_list = recent_book[0].books || [];
     const is_book_in_list = current_list.includes(book_id);
     const updated_list = [...current_list];
     if (is_book_in_list) {
@@ -156,7 +157,7 @@ export const add_book_to_list = async (user_id, book_id) => {
     if (updated_list.length > max_length) {
         updated_list.pop();
     }
-    await recent_book_repository.updated_book_list(id, updated_list);
+    await recent_book_repository.updated_book_list(recent_book[0]._id, updated_list);
 }
 /**
  * Removes a book from a recent_book.
