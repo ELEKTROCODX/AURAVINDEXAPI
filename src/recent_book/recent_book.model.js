@@ -13,7 +13,7 @@ const recent_book_schema = new Schema({
         {
             type: Schema.Types.ObjectId,
             ref: 'book',
-            required: true
+            required: false
         }
     ],
 }, {timestamps : true});

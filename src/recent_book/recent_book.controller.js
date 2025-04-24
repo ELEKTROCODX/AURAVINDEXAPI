@@ -1,6 +1,7 @@
 import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as recent_book_service from './recent_book.service.js';
+import * as audit_log_service from '../audit_log/audit_log.service.js';
 /**
  * Creates a new recent book entry by calling the service.
  * 
@@ -12,7 +13,7 @@ export const create_recent_book = async (req, res) => {
     const {user, books} = req.body;
     try {
         await recent_book_service.create_new_recent_book(user, books);
-        await recent_book_service.create_new_recent_book(req.user.id, app_config.PERMISSIONS.CREATE_RECENT_BOOK, `${user}`);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_RECENT_BOOK, `${user}`);
         res.status(201).json({message: 'Audit log registered successfully'});
     } catch (error) {
         if(error instanceof ObjectNotFound) {
@@ -36,11 +37,11 @@ export const get_all_recent_books = async (req, res) => {
         const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
         if(!filter_field || !filter_value) {
             const recent_books = await recent_book_service.get_all_recent_books(page, limit);
-            await recent_book_service.create_new_recent_book(req.user.id, app_config.PERMISSIONS.READ_RECENT_BOOK, 'RECENT_BOOKS');
+            await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_RECENT_BOOK, 'RECENT_BOOKS');
             res.json(recent_books);
         } else {
             const recent_books = await recent_book_service.filter_recent_books(filter_field, filter_value, page, limit);
-            await recent_book_service.create_new_recent_book(req.user.id, app_config.PERMISSIONS.READ_RECENT_BOOK, 'FILTERED_RECENT_BOOKS');
+            await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_RECENT_BOOK, 'FILTERED_RECENT_BOOKS');
             res.json(recent_books);
         }
     } catch (error) {
@@ -61,7 +62,7 @@ export const get_recent_book_by_id = async (req, res) => {
     try {
         const id = req.params.id;
         const recent_book = await recent_book_service.get_recent_book_by_id(id);
-        await recent_book_service.create_new_recent_book(req.user.id, app_config.PERMISSIONS.READ_RECENT_BOOK, id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_RECENT_BOOK, id);
         res.json(recent_book);
     } catch (error) {
         if(error instanceof ObjectNotFound) {

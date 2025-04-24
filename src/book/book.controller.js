@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as book_service from './book.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import * as recent_book_service from '../recent_book/recent_book.service.js';
 /**
  * Controller for creating a new book.
  * 
@@ -62,6 +63,7 @@ export const get_book_by_id = async (req, res) => {
         const id = req.params.id;
         
         const book = await book_service.get_book_by_id(id);
+        if(req.user.id) await recent_book_service.add_book_to_list(req.user.id, id);
         res.json(book);
     } catch (error) {
         if(error instanceof ObjectNotFound) {

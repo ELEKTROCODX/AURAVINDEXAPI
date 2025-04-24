@@ -55,7 +55,7 @@ export const get_all_recent_books = async (page, limit) => {
  */
 export const filter_recent_books = async (filter_field, filter_value, page, limit) => {
     const field_types = {
-        user: 'String',
+        user: 'ObjectId',
         books: 'String'
     };
     const allowed_fields = Object.keys(field_types);
@@ -125,18 +125,20 @@ export const update_recent_book = async (id, updates) => {
  * @throws {ObjectMissingParameters} - Throws if the ID or book is missing.
  * @throws {ObjectNotFound} - Throws if the recent book is not found.
  */
-export const add_book_to_list = async (id, book_id) => {
-    if(!id) {
+export const add_book_to_list = async (user_id, book_id) => {
+    let id = null;
+    if(!user_id) {
         throw new ObjectMissingParameters("recent_book");
     }
     if(!book_id) {
         throw new ObjectMissingParameters("book")
     }
-    const recent_book = await recent_book_repository.find_recent_book_by_id(id);
+    const recent_book = await recent_book_repository.filter_recent_books({['user']: new RegExp(user_id, 'i')}, 0, 10);
     const book = await book_repository.find_book_by_id(book_id);
-    if(!recent_book) {
-        throw new ObjectNotFound("recent_book");
+    if(recent_book.length == 0) {
+        await recent_book_repository.create_recent_book({user_id});
     }
+    id = await (await recent_book_repository.filter_recent_books({['user']: new RegExp(user_id, 'i')}, 0, 10))._id;
     if(!book) {
         throw new ObjectNotFound("book");
     }
