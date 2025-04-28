@@ -146,3 +146,24 @@ export class ActivePlanAlreadyFinished extends Error {
         this.name = 'ActivePlanAlreadyFinished';
     }
 }
+
+export class ExceededMaxBookLists extends Error {
+    constructor() {
+        super(`You cannot have more than ${app_config.USER_MAX_BOOK_LISTS} lists`);
+        this.name = 'ExceededMaxBookLists';
+    }
+}
+
+export class BookAlreadyInBookList extends Error {
+    constructor() {
+        super('This book is already in the list');
+        this.name = 'BookAlreadyInBookList';
+    }
+}
+
+export class ExceededMaxBooksPerList extends Error {
+    constructor() {
+        super(`You cannot have more than ${app_config.BOOK_LIST_MAX_BOOKS} books in a list`);
+        this.name = 'ExceededMaxBooksPerList';
+    }
+}

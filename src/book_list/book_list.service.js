@@ -1,8 +1,10 @@
-import {ObjectAlreadyExists, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
+import {BookAlreadyInBookList, ExceededMaxBookLists, ExceededMaxBooksPerList, ObjectAlreadyExists, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
 import * as book_list_repository from './book_list.repository.js';
 import * as book_repository from '../book/book.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import { generate_filter } from '../config/util.js';
+import { book_list } from './book_list.model.js';
+import { app_config } from '../config/app.config.js';
 /**
  * Creates a new book list.
  * 
@@ -12,13 +14,16 @@ import { generate_filter } from '../config/util.js';
  * @param {Array} books - The list of books in the list
  * @throws {ObjectNotFound} If the owner does not exist.
  * @throws {ObjectAlreadyExists} If a book list with the same title already exists for the owner.
+ * @throws {ExceededMaxBooksPerList} If the number of books exceeds the maximum allowed.
+ * @throws {ExceededMaxBookLists} If the user exceeds the maximum number of book lists allowed.
  * @returns {Promise<Object>} The created book list object.
  */
 export const create_new_book_list = async (title, description, owner, books) => {
     const book_list_exists = await book_list_repository.filter_book_lists({['title']: new RegExp(title, 'i'), owner}, 0, 10);
+    const book_lists_from_user = await book_list_repository.filter_book_lists({['owner']: owner}, 0, app_config.USER_MAX_BOOK_LISTS);
     const owner_exists = await user_repository.find_user_by_id(owner);
     for(let i = 0; i < books.length; i++) {
-        let book_exists = book_repository.find_book_by_id(books[i]);
+        let book_exists = await book_repository.find_book_by_id(books[i]);
         if(!book_exists) {
             books.splice(i, 1);
         }
@@ -28,6 +33,12 @@ export const create_new_book_list = async (title, description, owner, books) => 
     }
     if(book_list_exists.length != 0) {
         throw new ObjectAlreadyExists("book_list");
+    }
+    if(books.length > app_config.BOOK_LIST_MAX_BOOKS) {
+        throw new ExceededMaxBooksPerList();
+    }
+    if(book_lists_from_user.length > app_config.USER_MAX_BOOK_LISTS) {
+        throw new ExceededMaxBookLists();
     }
     const new_book_list = await book_list_repository.create_book_list({title, description, owner, books});
     return new_book_list;
@@ -145,6 +156,8 @@ export const update_book_list = async (id, updates) => {
  * @param {string} book_id - The ID of the book to add.
  * @throws {ObjectMissingParameters} If the ID or book ID is missing.
  * @throws {ObjectNotFound} If the book list or book does not exist.
+ * @throws {BookAlreadyInBookList} If the book is already in the book list.
+ * @throws {ExceededMaxBooksPerList} If the book list exceeds the maximum number of books allowed.
  * @returns {void}
  */
 export const add_book_to_book_list = async (id, book_id) => {
@@ -158,6 +171,12 @@ export const add_book_to_book_list = async (id, book_id) => {
     }
     if(!book_list_exists_book) {
         throw new ObjectNotFound("book");
+    }
+    if(book_list_exists_id.books.includes(book_id)) {
+        throw new BookAlreadyInBookList();
+    }
+    if(book_list_exists_book.books.length > app_config.BOOK_LIST_MAX_BOOKS) {
+        throw new ExceededMaxBooksPerList();
     }
     await book_list_repository.add_book_to_book_list(id, book_id);
 }

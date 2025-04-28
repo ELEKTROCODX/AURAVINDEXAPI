@@ -1,5 +1,5 @@
 import { app_config } from '../config/app.config.js';
-import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
+import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters, BookAlreadyInBookList, ExceededMaxBooksPerList, ExceededMaxBookLists } from '../config/errors.js';
 import * as book_list_service from './book_list.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
 /**
@@ -20,6 +20,12 @@ export const create_book_list = async (req, res) => {
             return res.status(400).json({message: error.message});
         }
         if(error instanceof ObjectAlreadyExists) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof ExceededMaxBookLists) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof ExceededMaxBooksPerList) {
             return res.status(409).json({message: error.message});
         }
         res.status(500).json({message: 'Error creating book list', error: error.message});
@@ -126,6 +132,12 @@ export const add_book_to_book_list = async (req, res) => {
         }
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
+        }
+        if(error instanceof BookAlreadyInBookList) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof ExceededMaxBooksPerList) {
+            return res.status(409).json({message: error.message});
         }
     }
 }

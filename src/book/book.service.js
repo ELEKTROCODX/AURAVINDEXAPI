@@ -86,7 +86,6 @@ export const get_all_books = async (show_duplicates, show_lents, page, limit) =>
             return !(book.book_status && book.book_status.book_status === "LENT");
         });
     }
-
     const total_books = filtered_books.length
     const total_pages = Math.ceil(total_books / limit);
     const paginated_books = filtered_books.slice(skip, skip + limit)
