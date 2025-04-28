@@ -23,7 +23,7 @@ import jwt from 'jsonwebtoken';
  * @throws {ObjectAlreadyExists} - If a user with the same email already exists.
  */
 export const register = async (name, last_name, email, biography, gender, birthdate, user_img, address, password) => {
-    const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
+    const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, null, null);
     const find_role = await role_repository.filter_roles({name: 'Client user'});
     const role = find_role[0]._id;
     if(user_exists.length != 0) {

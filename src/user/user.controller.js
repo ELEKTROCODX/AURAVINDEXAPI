@@ -1,6 +1,7 @@
 import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters, InvalidLogin, InvalidPasswordReset, FailedToSendEmail, InvalidOrExpiredToken } from '../config/errors.js';
 import * as user_service from './user.service.js';
+import * as book_list_service from '../book_list/book_list.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
 import fs from 'fs';
 /**
@@ -18,6 +19,8 @@ export const create_user = async (req, res) => {
         const {name, last_name, email, biography, gender, birthdate, address, role, password} = req.body;
         const user_img = req.file ? `/images/users/${req.file.filename}` : app_config.DEFAULT_USER_IMG_PATH;
         await user_service.create_new_user(name, last_name, email, biography, gender, birthdate, user_img, address, role, password);
+        const user_data = await user_service.filter_users('email', email, 1, 1);
+        await book_list_service.create_new_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data.data[0]._id, books: []});
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_USER, email);
         res.status(201).json({message: 'User created successfully'});
     } catch (error) {
