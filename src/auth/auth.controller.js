@@ -20,7 +20,7 @@ export const register = async (req, res) => {
         const {name, last_name, email, biography, gender, address, birthdate, password} = req.body;
         const user_img = req.file ? `/images/users/${req.file.filename}` : app_config.DEFAULT_USER_IMG_PATH;
         await auth_service.register(name, last_name, email, biography, gender, birthdate, user_img, address, password);
-        const user_data = await user_service.filter_users('email', email, null, null);
+        const user_data = await user_service.filter_users('email', email, 0, 10);
         await book_list_service.create_new_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data.data[0]._id, books: []});
         await audit_log_service.create_new_audit_log(user_data.data[0]._id, app_config.PERMISSIONS.SIGNUP, email);
         res.status(201).json({message: 'User registered successfully'});

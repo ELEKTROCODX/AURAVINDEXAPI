@@ -1,6 +1,7 @@
 import {FailedToSendEmail, InvalidEmailValidation, InvalidPasswordReset, ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
 import * as user_repository from './user.repository.js';
 import * as role_repository from '../role/role.repository.js';
+import * as book_list_repository from '../book_list/book_list.repository.js';
 import { app_config } from '../config/app.config.js';
 import { generate_filter } from '../config/util.js';
 import bcrypt from 'bcryptjs';
@@ -31,6 +32,8 @@ export const create_new_user = async (name, last_name, email, biography, gender,
         role = find_role[0]._id;
     }
     const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
+    const user_data = await user_repository.filter_users('email', email, null, null);
+    await book_list_repository.create_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data[0]._id, books: []});
     return new_user;
 }
 /**
