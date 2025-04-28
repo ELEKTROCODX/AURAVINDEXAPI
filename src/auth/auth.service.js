@@ -31,6 +31,8 @@ export const register = async (name, last_name, email, biography, gender, birthd
     }
     if(!user_img) user_img = app_config.DEFAULT_USER_IMG_PATH;
     const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
+    const user_data = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
+    await book_list_repository.create_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data[0]._id, books: []});
     return new_user;
 }
 /**
