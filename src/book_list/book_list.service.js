@@ -20,7 +20,7 @@ import { app_config } from '../config/app.config.js';
  */
 export const create_new_book_list = async (title, description, owner, books) => {
     const book_list_exists = await book_list_repository.filter_book_lists({['title']: new RegExp(title, 'i'), owner}, 0, 10);
-    const book_lists_from_user = await book_list_repository.filter_book_lists({['owner']: owner}, 0, app_config.USER_MAX_BOOK_LISTS);
+    const book_lists_from_user = await book_list_repository.filter_book_lists({['owner']: owner}, null, null);
     const owner_exists = await user_repository.find_user_by_id(owner);
     for(let i = 0; i < books.length; i++) {
         let book_exists = await book_repository.find_book_by_id(books[i]);
