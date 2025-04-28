@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { FailedToSendEmail, InvalidLogin, InvalidOrExpiredToken, ObjectAlreadyExists, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
 import * as user_repository from '../user/user.repository.js';
 import * as role_repository from '../role/role.repository.js';
+import * as book_list_repository from '../book_list/book_list.repository.js';
 import { send_email } from '../config/util.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
