@@ -63,9 +63,12 @@ export const get_all_books = async (show_duplicates, page, limit) => {
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const books = await book_repository.find_all_books(skip, limit);
+    const books = await book_repository.find_all_books(null, null);
     
     let filtered_books = books;
+    /* 
+        The pagination currently does not work as expected because the total books is based on the filters added to the query
+    */
     if ((!show_duplicates) || (show_duplicates == "false")) {
         const seen_classifications = new Set();
         filtered_books = books.filter(book => {
@@ -82,7 +85,7 @@ export const get_all_books = async (show_duplicates, page, limit) => {
         });
     }
 
-    const total_books = filtered_books.length;
+    const total_books = filtered_books.length
     const total_pages = Math.ceil(total_books / limit);
     const paginated_books = filtered_books.slice(skip, skip + limit)
     return {
@@ -134,7 +137,7 @@ export const filter_books = async (show_duplicates, filter_field, filter_value, 
     limit = parseInt(limit);
     const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const books = await book_repository.filter_books(filter, skip, limit);
+    const books = await book_repository.filter_books(filter, null, null);
 
     let filtered_books = books;
     if ((!show_duplicates) || (show_duplicates == "false")) {
