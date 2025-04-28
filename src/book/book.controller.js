@@ -36,12 +36,12 @@ export const create_book = async (req, res) => {
  */
 export const get_all_books = async (req, res) => {
     try {
-        const { filter_field, filter_value, show_duplicates = true, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
+        const { filter_field, filter_value, show_duplicates = true, show_lents = true, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
         if(!filter_field || !filter_value) {
-            const books = await book_service.get_all_books(show_duplicates, page, limit);
+            const books = await book_service.get_all_books(show_duplicates, show_lents, page, limit);
             res.json(books);
         } else {
-            const books = await book_service.filter_books(show_duplicates, filter_field, filter_value, page, limit);
+            const books = await book_service.filter_books(show_duplicates, show_lents, filter_field, filter_value, page, limit);
             res.json(books);
         }
     } catch (error) {

@@ -56,7 +56,7 @@ export const create_new_book = async (title, isbn, classification, summary, edit
  * @returns {Array} A list of books.
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid.
  */
-export const get_all_books = async (show_duplicates, page, limit) => {
+export const get_all_books = async (show_duplicates, show_lents, page, limit) => {
     if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book");
     }
@@ -66,9 +66,6 @@ export const get_all_books = async (show_duplicates, page, limit) => {
     const books = await book_repository.find_all_books(null, null);
     
     let filtered_books = books;
-    /* 
-        The pagination currently does not work as expected because the total books is based on the filters added to the query
-    */
     if ((!show_duplicates) || (show_duplicates == "false")) {
         const seen_classifications = new Set();
         filtered_books = books.filter(book => {
@@ -82,6 +79,11 @@ export const get_all_books = async (show_duplicates, page, limit) => {
                 seen_classifications.add(base_classification);
                 return true;
             }
+        });
+    }
+    if ((!show_lents) || (show_lents == "false")) {
+        filtered_books = filtered_books.filter(book => {
+            return !(book.book_status && book.book_status.book_status === "LENT");
         });
     }
 
@@ -109,7 +111,7 @@ export const get_all_books = async (show_duplicates, page, limit) => {
  * @returns {Array} A list of filtered books.
  * @throws {ObjectInvalidQueryFilters} If the filter field is invalid.
  */
-export const filter_books = async (show_duplicates, filter_field, filter_value, page, limit) => {
+export const filter_books = async (show_duplicates, show_lents, filter_field, filter_value, page, limit) => {
     const field_types = {
         title: 'String',
         isbn: 'String',
@@ -153,6 +155,11 @@ export const filter_books = async (show_duplicates, filter_field, filter_value, 
                 seen_classifications.add(base_classification);
                 return true;
             }
+        });
+    }
+    if ((!show_lents) || (show_lents == "false")) {
+        filtered_books = filtered_books.filter(book => {
+            return !(book.book_status && book.book_status.book_status === "LENT");
         });
     }
     const total_books = filtered_books.length;
