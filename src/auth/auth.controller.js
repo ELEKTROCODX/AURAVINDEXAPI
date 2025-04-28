@@ -20,8 +20,8 @@ export const register = async (req, res) => {
         const {name, last_name, email, biography, gender, address, birthdate, password} = req.body;
         const user_img = req.file ? `/images/users/${req.file.filename}` : app_config.DEFAULT_USER_IMG_PATH;
         await auth_service.register(name, last_name, email, biography, gender, birthdate, user_img, address, password);
-        const user_data = await user_service.filter_users('email', email, 0, 10);
-        await audit_log_service.create_new_audit_log(user_data.data[0]._id, app_config.PERMISSIONS.SIGNUP, email);
+        const user_data = await user_service.filter_users('email', email, 1, 1);
+        await audit_log_service.create_new_audit_log(user_data.data[0]._id, app_config.PERMISSIONS.SIGNIN, user_data.data[0].email);
         res.status(201).json({message: 'User registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
