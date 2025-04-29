@@ -22,13 +22,13 @@ const name = body("name")
 
 // Default fixed price validation
 const fixed_price = body("fixed_price")
-  .isDecimal()
+  .isString()
   .notEmpty()
   .withMessage("Plan fixed price is required");
 
 // Default monthly price validation
 const monthly_price = body("monthly_price")
-  .isDecimal()
+  .isString()
   .notEmpty()
   .withMessage("Plan monthly price is required");
 

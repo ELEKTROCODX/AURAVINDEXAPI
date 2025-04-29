@@ -62,8 +62,8 @@ export const get_all_plans = async (page, limit) => {
 export const filter_plans = async (filter_field, filter_value, page, limit) => {
     const field_types = {
         name: 'String',
-        fixed_price: 'Decimal128',
-        monthly_price: 'Decimal128',
+        fixed_price: 'String',
+        monthly_price: 'String',
         max_simultaneous_loans: 'Number',
         max_return_days: 'Number',
         max_renovations_per_loan: 'Number'

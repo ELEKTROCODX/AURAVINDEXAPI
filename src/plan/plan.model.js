@@ -9,11 +9,11 @@ const plan_schema = new Schema({
         required: true
     },
     fixed_price: {
-        type: Schema.Types.Decimal128,
+        type: String,
         required: true
     },
     monthly_price: {
-        type: Schema.Types.Decimal128,
+        type: String,
         required: true
     },
     max_simultaneous_loans: {

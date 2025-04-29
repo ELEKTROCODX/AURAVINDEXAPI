@@ -6,6 +6,7 @@ import * as users from '../default_db_data/user.js';
 import * as log_actions from '../default_db_data/log_action.js';
 import * as loan_statuses from '../default_db_data/loan_status.js';
 import * as plan_statuses from '../default_db_data/plan_status.js';
+import * as plans from '../default_db_data/plan.js';
 
 import * as role_repository from '../role/role.repository.js';
 import * as gender_repository from '../gender/gender.repository.js';
@@ -15,9 +16,11 @@ import * as user_repository from '../user/user.repository.js';
 import * as log_action_repository from '../log_action/log_action.repository.js';
 import * as loan_status_repository from '../loan_status/loan_status.repository.js';
 import * as plan_status_repository from '../plan_status/plan_status.repository.js';
+import * as plan_repository from '../plan/plan.repository.js';
 
 import { app_config } from '../config/app.config.js';
 import { ImportingDefaultDataUnauthorized } from '../config/errors.js';
+
 /**
  * Imports default data into the system if allowed.
  * 
@@ -117,6 +120,17 @@ export const import_default_data = async () => {
         }
     }
     console.log("Plan statuses successfully imported.");
+
+    for (const plan of plans.plans) {
+        const exists = await plan_repository.filter_plans({name: plan.name});
+        if(exists.length == 0) {
+            console.log("Creating plan: " + plan.name);
+            await plan_repository.create_plan(plan);   
+        } else {
+            console.log("Plan " + plan.name + " already exists");
+            
+        }
+    }
 
     for (const user of users.users) {
         const exists = await user_repository.filter_users({username: user.username});
