@@ -186,7 +186,32 @@ export const get_latest_releases = async (limit) => {
     }
     limit = parseInt(limit);
     const books = await book_repository.find_latest_releases(limit);
-    return books;
+    /* Remove duplicates */
+    let filtered_books = books;
+    const seen_classifications = new Set();
+    filtered_books = books.filter(book => {
+        const parts = book.classification.split('.');
+        if (parts.length < 3) return true;
+
+        const base_classification = `${parts[0]}.${parts[1]}`;
+        if (seen_classifications.has(base_classification)) {
+            return false;
+        } else {
+            seen_classifications.add(base_classification);
+            return true;
+        }
+    });
+    const total_books = filtered_books.length;
+    const total_pages = Math.ceil(total_books / limit);
+    return {
+        data: filtered_books,
+        pagination: {
+            totalItems: total_books,
+            totalPages: total_pages,
+            currentPage: page,
+            pageSize: limit
+        }
+    };
 }
 
 /**
