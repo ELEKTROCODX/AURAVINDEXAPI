@@ -51,6 +51,26 @@ export const get_all_books = async (req, res) => {
         res.status(500).json({message: 'Error fetching books', error: error.message});
     }
 }
+
+/**
+ * Get the newest books in the API.
+ * @param {Object} req - The request object containing the book ID in the URL parameters.
+ * @param {Object} res - The response object to send the result.
+ * @returns {void}
+ */
+export const get_latest_releases = async (req, res) => {
+    try {
+        const { limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
+        const books = await book_service.get_latest_releases(limit);
+        res.json(books);
+    } catch (error) {
+        if(error instanceof ObjectInvalidQueryFilters) {
+            return res.status(400).json({message: error.message});
+        }
+        res.status(500).json({message: 'Error fetching latest releases', error: error.message});
+    }
+}
+
 /**
  * Controller for fetching a book by its ID.
  * 

@@ -17,6 +17,11 @@ export const filter_books = async (filter, skip, limit) => {
     return await book_model.book.find(filter).skip(skip).limit(limit).populate('title editorial book_status book_collection authors');
 }
 
+// Fetch by classification
+export const find_latest_releases = async (limit) => {
+    return await book_model.book.find().sort({createdAt: -1}).limit(limit).populate('title editorial book_status book_collection authors');
+}
+
 // Count books
 export const count_books = async () => {
     return await book_model.book.countDocuments();

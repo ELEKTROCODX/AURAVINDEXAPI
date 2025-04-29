@@ -175,6 +175,21 @@ export const filter_books = async (show_duplicates, show_lents, filter_field, fi
     };
 }
 /**
+ * Fetches the latest book releases.
+ * 
+ * @param {limit} limit - The number of books per page
+ * @returns
+ */
+export const get_latest_releases = async (limit) => {
+    if(isNaN(limit) || limit < 1) {
+        throw new ObjectInvalidQueryFilters("book");
+    }
+    limit = parseInt(limit);
+    const books = await book_repository.find_latest_releases(limit);
+    return books;
+}
+
+/**
  * Fetches a book by its ID.
  * 
  * @param {string} id - The ID of the book to fetch.
