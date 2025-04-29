@@ -208,7 +208,7 @@ export const get_latest_releases = async (limit) => {
         pagination: {
             totalItems: total_books,
             totalPages: total_pages,
-            currentPage: page,
+            currentPage: 1,
             pageSize: limit
         }
     };
