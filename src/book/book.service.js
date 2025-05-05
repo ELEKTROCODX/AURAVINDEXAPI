@@ -128,7 +128,7 @@ export const filter_books = async (show_duplicates, show_lents, filter_field, fi
         book_img: 'String'
     };
     const allowed_fields = Object.keys(field_types);
-    if(!allowed_fields.includes(filter_field)) {
+    if(!allowed_fields.includes(filter_field) && filter_field != "any") {
         throw new ObjectInvalidQueryFilters("book");
     }
     if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {

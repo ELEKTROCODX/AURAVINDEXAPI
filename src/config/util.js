@@ -82,6 +82,26 @@ export const is_within_working_hours = (start, finish) => {
 
 // Funtion to generate filter from queries
 export const generate_filter = (field_types, filter_field, filter_value) => {
+  if(filter_field == "any") {
+    const or_filters = []; 
+    for (const [field, type] of Object.entries(field_types)) {
+      if (type === 'ObjectId') {
+        if (mongoose.isValidObjectId(filter_value)) {
+          or_filters.push({ [field]: filter_value });
+        }
+      } else if(type == 'String') {
+        or_filters.push({ [field]: { $regex: filter_value, $options: 'i' } });
+      } else if(type == 'Number') {
+        or_filters.push({[field]: Number(filter_value)});
+      } else if(type == 'Date') {
+        or_filters.push({[field]: new Date(filter_value)});
+      } else {
+        or_filters.push({[field]: filter_value});
+      }
+    }
+    return { $or: or_filters };
+  }
+
   if(field_types[filter_field] && mongoose.isValidObjectId(filter_value)) {
     return {[filter_field]: filter_value };
   } else if(field_types[filter_field] === 'String') {
