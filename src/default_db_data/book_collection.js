@@ -6,7 +6,6 @@ export const book_collections = [
     {"name": "Children"}, 
     {"name": "Braille"}, 
     {"name": "Reference"},
-    {"name": "Music"},
     {"name": "Thesis"}, 
     {"name": "Newspaper archive"},
 ];
