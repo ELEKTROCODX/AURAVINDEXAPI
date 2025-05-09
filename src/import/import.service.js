@@ -12,6 +12,7 @@ import * as role_repository from '../role/role.repository.js';
 import * as gender_repository from '../gender/gender.repository.js';
 import * as book_status_repository from '../book_status/book_status.repository.js'
 import * as book_collection_repository from '../book_collection/book_collection.repository.js';
+import * as book_list_repository from '../book_list/book_list.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import * as log_action_repository from '../log_action/log_action.repository.js';
 import * as loan_status_repository from '../loan_status/loan_status.repository.js';
@@ -133,7 +134,7 @@ export const import_default_data = async () => {
     }
 
     for (const user of users.users) {
-        const exists = await user_repository.filter_users({username: user.username});
+        const exists = await user_repository.filter_users({email: user.email});
         if(exists.length == 0) {
             const gender_exists = await gender_repository.filter_genders({name: user.gender});
             const role_exists = await role_repository.filter_roles({name: user.role});
@@ -143,7 +144,9 @@ export const import_default_data = async () => {
             user.role = role_exists[0]._id;
             
             console.log("Creating user: " + user.username);
-            await user_repository.create_user(user);   
+            await user_repository.create_user(user);
+            const user_data = await user_repository.filter_users({email: email}, 0, 10);
+            await book_list_repository.create_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data[0]._id, books: []});
         } else {
             console.log("User " + user.username + " already exists");
             
