@@ -57,12 +57,9 @@ export const create_new_book = async (title, isbn, classification, summary, edit
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid.
  */
 export const get_all_books = async (show_duplicates, show_lents, page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none") ) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book");
     }
-    page = parseInt(page);
-    limit = parseInt(limit);
-    const skip = (page - 1) * limit;
     const books = await book_repository.find_all_books(null, null);
     
     let filtered_books = books;
@@ -86,6 +83,10 @@ export const get_all_books = async (show_duplicates, show_lents, page, limit) =>
             return !(book.book_status && book.book_status.book_status === "LENT");
         });
     }
+    if(limit == "none") limit = filtered_books.length
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
     const total_books = filtered_books.length
     const total_pages = Math.ceil(total_books / limit);
     const paginated_books = filtered_books.slice(skip, skip + limit)
