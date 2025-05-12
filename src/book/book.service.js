@@ -63,6 +63,11 @@ export const get_all_books = async (show_duplicates, show_lents, page, limit) =>
     const books = await book_repository.find_all_books(null, null);
     
     let filtered_books = books;
+    if ((!show_lents) || (show_lents == "false")) {
+        filtered_books = filtered_books.filter(book => {
+            return !(book.book_status && book.book_status.book_status === "LENT");
+        });
+    }
     if ((!show_duplicates) || (show_duplicates == "false")) {
         const seen_classifications = new Set();
         filtered_books = books.filter(book => {
@@ -76,11 +81,6 @@ export const get_all_books = async (show_duplicates, show_lents, page, limit) =>
                 seen_classifications.add(base_classification);
                 return true;
             }
-        });
-    }
-    if ((!show_lents) || (show_lents == "false")) {
-        filtered_books = filtered_books.filter(book => {
-            return !(book.book_status && book.book_status.book_status === "LENT");
         });
     }
     const total_books = filtered_books.length
@@ -139,6 +139,11 @@ export const filter_books = async (show_duplicates, show_lents, filter_field, fi
     const books = await book_repository.filter_books(filter, null, null);
 
     let filtered_books = books;
+    if ((!show_lents) || (show_lents == "false")) {
+        filtered_books = filtered_books.filter(book => {
+            return !(book.book_status && book.book_status.book_status === "LENT");
+        });
+    }
     if ((!show_duplicates) || (show_duplicates == "false")) {
         const seen_classifications = new Set();
         filtered_books = books.filter(book => {
@@ -152,11 +157,6 @@ export const filter_books = async (show_duplicates, show_lents, filter_field, fi
                 seen_classifications.add(base_classification);
                 return true;
             }
-        });
-    }
-    if ((!show_lents) || (show_lents == "false")) {
-        filtered_books = filtered_books.filter(book => {
-            return !(book.book_status && book.book_status.book_status === "LENT");
         });
     }
     const total_books = filtered_books.length
