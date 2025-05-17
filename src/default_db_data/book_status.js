@@ -4,5 +4,5 @@ export const book_statuses = [
     {"book_status": "LENT"},
     {"book_status": "RESERVED"},
     {"book_status": "REPAIRING"},
-    {"book_status": "DISCARTED"}
+    {"book_status": "DISCARDED"}
 ];
