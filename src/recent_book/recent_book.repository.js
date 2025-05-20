@@ -9,12 +9,18 @@ export const create_recent_book = async (recent_book_data) => {
 
 // Fetch all
 export const find_all_recent_books = async (skip, limit) => {
-    return await recent_book_model.recent_book.find().skip(skip).limit(limit).populate('user books');
+    return await recent_book_model.recent_book.find().skip(skip).limit(limit).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'books' }
+    ]);
 }
 
 // Fetch with filters
 export const filter_recent_books = async (filter, skip, limit) => {
-    return await recent_book_model.recent_book.find(filter).skip(skip).limit(limit).populate('user books');
+    return await recent_book_model.recent_book.find(filter).skip(skip).limit(limit).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'books' }
+    ]);
 }
 
 // Count recent_books
@@ -24,7 +30,10 @@ export const count_recent_books = async () => {
 
 // Fetch by ID
 export const find_recent_book_by_id = async (id) => {
-    return await recent_book_model.recent_book.findById(id).populate('user books') || null;
+    return await recent_book_model.recent_book.findById(id).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'books' }
+    ]) || null;
 }
 
 // Update recent_book

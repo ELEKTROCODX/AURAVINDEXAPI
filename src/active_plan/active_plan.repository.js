@@ -10,12 +10,20 @@ export const create_active_plan = async (active_plan_data) => {
 
 // Fetch all
 export const find_all_active_plans = async (skip, limit) => {
-    return await active_plan_model.active_plan.find().skip(skip).limit(limit).populate('plan user plan_status');
+    return await active_plan_model.active_plan.find().skip(skip).limit(limit).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'plan' },
+        { path: 'plan_status' }
+    ]);
 }
 
 // Fetch with filters
 export const filter_active_plans = async (filter, skip, limit) => {
-    return await active_plan_model.active_plan.find(filter).skip(skip).limit(limit).populate('plan user plan_status');
+    return await active_plan_model.active_plan.find(filter).skip(skip).limit(limit).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'plan' },
+        { path: 'plan_status' }
+    ]);
 }
 
 // Count active_plans
@@ -25,7 +33,11 @@ export const count_active_plans = async () => {
 
 // Fetch by ID
 export const find_active_plan_by_id = async (id) => {
-    return await active_plan_model.active_plan.findById(id).populate('plan user plan_status') || null;
+    return await active_plan_model.active_plan.findById(id).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'plan' },
+        { path: 'plan_status' }
+    ]) || null;
 }
 
 // Fetch by finish and start date
@@ -38,7 +50,11 @@ export const find_active_plan_by_date = async (user_id, start_date, finish_date)
             {createdAt: {$lte: start_date}, return_date: {$gte: finish_date}},
             {createdAt: {$lte: start_date}, returned_date: {$gte: finish_date}}
         ]
-    }).populate('plan user plan_status') || null;
+    }).populate([
+        { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'plan' },
+        { path: 'plan_status' }
+    ]) || null;
 }
 
 // Update active plan

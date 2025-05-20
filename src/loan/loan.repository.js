@@ -9,12 +9,18 @@ export const create_loan = async (loan_data) => {
 
 // Fetch all
 export const find_all_loans = async (skip, limit) => {
-    return await loan_model.loan.find().skip(skip).limit(limit).populate('user book');
+    return await loan_model.loan.find().skip(skip).limit(limit).populate([
+        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'book' },
+    ]);
 }
 
 // Fetch with filters
 export const filter_loans = async (filter, skip, limit) => {
-    return await loan_model.loan.find(filter).skip(skip).limit(limit).populate('user book');
+    return await loan_model.loan.find(filter).skip(skip).limit(limit).populate([
+        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'book' },
+    ]);
 }
 
 // Count loans
@@ -24,7 +30,10 @@ export const count_loans = async () => {
 
 // Fetch by ID
 export const find_loan_by_id = async (id) => {
-    return await loan_model.loan.findById(id).populate('user book') || null;
+    return await loan_model.loan.findById(id).populate([
+        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'book' },
+    ]) || null;
 }
 
 // Fetch by finish and start date
@@ -36,7 +45,10 @@ export const find_loan_by_date = async (book_id, start_date, finish_date) => {
             {createdAt: {$lte: start_date}, return_date: {$gte: finish_date}},
             {createdAt: {$lte: start_date}, returned_date: {$gte: finish_date}}
         ]
-    }).populate('user book') || null;
+    }).populate([
+        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
+        { path: 'book' },
+    ]) || null;
 }
 
 // Update loan
