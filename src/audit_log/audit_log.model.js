@@ -14,7 +14,7 @@ const audit_log_schema = new Schema({
         ref: 'log_action',
         required: true
     },
-    object: {
+    affected_object: {
         type: String,
         required: true
     }

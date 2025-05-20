@@ -24,7 +24,7 @@ const action = body("action")
   .withMessage("Action ID or code is required");
 
 // Default action ID validation
-const object = body("object")
+const affected_object = body("affected_object")
 .exists({ checkFalsy: true })
 .isString()
 .notEmpty()
@@ -34,7 +34,7 @@ const object = body("object")
 export const audit_log_validation_rules_get_id = [id];
 
 // POST validation rules
-export const audit_log_validation_rules_post = [user, action, object];
+export const audit_log_validation_rules_post = [user, action, affected_object];
 
 // PUT validation rules
-export const audit_log_validation_rules_update = [id, user, action, object];
+export const audit_log_validation_rules_update = [id, user, action, affected_object];

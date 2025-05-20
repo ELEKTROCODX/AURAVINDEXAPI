@@ -10,11 +10,11 @@ import { app_config } from '../config/app.config.js';
  * 
  * @param {string} user - The user ID who performed the action.
  * @param {string} action - The action that was performed.
- * @param {string} object - The object that was affected by the action.
+ * @param {string} affected_object - The object that was affected by the action.
  * @returns {object} The newly created audit log entry.
  * @throws {ObjectNotFound} If the user or action doesn't exist.
  */
-export const create_new_audit_log = async (user, action, object) => {
+export const create_new_audit_log = async (user, action, affected_object) => {
     const user_exists = await user_repository.find_user_by_id(user);
     let log_action_exists;
     if( (!user_exists) && (action != app_config.PERMISSIONS.IMPORT_DEFAULT_DATA) ) {
@@ -29,7 +29,7 @@ export const create_new_audit_log = async (user, action, object) => {
         }
         action = log_action_exists[0]._id;
     }
-    const new_audit_log = await audit_log_repository.create_audit_log({user, action, object});
+    const new_audit_log = await audit_log_repository.create_audit_log({user, action, affected_object});
     return new_audit_log;
 }
 /**
@@ -74,7 +74,7 @@ export const filter_audit_logs = async (filter_field, filter_value, page, limit)
     const field_types = {
         user: 'ObjectId',
         action: 'ObjectId',
-        object: 'String'
+        affected_object: 'String'
     };
     const allowed_fields = Object.keys(field_types);
     if(!allowed_fields.includes(filter_field)) {

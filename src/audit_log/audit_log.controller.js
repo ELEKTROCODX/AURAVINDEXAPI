@@ -9,10 +9,10 @@ import * as audit_log_service from './audit_log.service.js';
  * @returns {void}
  */
 export const create_audit_log = async (req, res) => {
-    const {user, action, object} = req.body;
+    const {user, action, affected_object} = req.body;
     try {
-        await audit_log_service.create_new_audit_log(user, action, object);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_AUDIT_LOG, `${user} - ${action} - ${object}`);
+        await audit_log_service.create_new_audit_log(user, action, affected_object);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_AUDIT_LOG, `${user} - ${action} - ${affected_object}`);
         res.status(201).json({message: 'Audit log registered successfully'});
     } catch (error) {
         if(error instanceof ObjectNotFound) {
