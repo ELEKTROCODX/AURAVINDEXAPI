@@ -36,7 +36,7 @@ export const get_all_audit_logs = async (req, res) => {
         const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
         if(!filter_field || !filter_value) {
             const audit_logs = await audit_log_service.get_all_audit_logs(page, limit);
-            await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_AUDIT_LOG, 'AUDIT_LOGS');
+            await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_AUDIT_LOG, 'ALL_AUDIT_LOGS');
             res.json(audit_logs);
         } else {
             const audit_logs = await audit_log_service.filter_audit_logs(filter_field, filter_value, page, limit);
