@@ -11,7 +11,12 @@ export const create_recent_book = async (recent_book_data) => {
 export const find_all_recent_books = async (skip, limit) => {
     return await recent_book_model.recent_book.find().skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'books' }
+        { path: 'books', populate: [
+            { path: 'editorial' },
+            { path: 'book_status' },
+            { path: 'book_collection' },
+            { path: 'authors' },
+        ] }
     ]);
 }
 
@@ -19,7 +24,12 @@ export const find_all_recent_books = async (skip, limit) => {
 export const filter_recent_books = async (filter, skip, limit) => {
     return await recent_book_model.recent_book.find(filter).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'books' }
+        { path: 'books', populate: [
+            { path: 'editorial' },
+            { path: 'book_status' },
+            { path: 'book_collection' },
+            { path: 'authors' },
+        ] }
     ]);
 }
 
@@ -32,7 +42,12 @@ export const count_recent_books = async () => {
 export const find_recent_book_by_id = async (id) => {
     return await recent_book_model.recent_book.findById(id).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'books' }
+        { path: 'books', populate: [
+            { path: 'editorial' },
+            { path: 'book_status' },
+            { path: 'book_collection' },
+            { path: 'authors' },
+        ] }
     ]) || null;
 }
 
