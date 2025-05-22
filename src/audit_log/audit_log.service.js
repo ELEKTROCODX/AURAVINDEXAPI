@@ -41,17 +41,19 @@ export const create_new_audit_log = async (user, action, affected_object) => {
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid.
  */
 export const get_all_audit_logs = async (page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("audit_log");
     }
+    const audit_logs = await audit_log_repository.find_all_audit_logs(null, null);
+    const total_audit_logs = audit_logs.length;
+    if(limit == "none") limit = total_audit_logs;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const audit_logs = await audit_log_repository.find_all_audit_logs(skip, limit);
-    const total_audit_logs = await audit_log_repository.count_audit_logs();
     const total_pages = Math.ceil(total_audit_logs / limit);
+    const paginated_audit_logs = audit_logs.slice(skip, skip + limit);
     return {
-        data: audit_logs,
+        data: paginated_audit_logs,
         pagination: {
             totalItems: total_audit_logs,
             totalPages: total_pages,
@@ -77,21 +79,23 @@ export const filter_audit_logs = async (filter_field, filter_value, page, limit)
         affected_object: 'String'
     };
     const allowed_fields = Object.keys(field_types);
-    if(!allowed_fields.includes(filter_field)) {
+    if(!allowed_fields.includes(filter_field) && filter_field != "any") {
         throw new ObjectInvalidQueryFilters("audit_log");
     }
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("audit_log");
     }
+    const filter = generate_filter(field_types, filter_field, filter_value);
+    const audit_logs = await audit_log_repository.filter_audit_logs(filter, null, null);
+    const total_audit_logs = audit_logs.length;
+    if(limit == "none") limit = total_audit_logs;
     page = parseInt(page);
     limit = parseInt(limit);
-    const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const audit_logs = await audit_log_repository.filter_audit_logs(filter, skip, limit);
-    const total_audit_logs = audit_logs.length;
     const total_pages = Math.ceil(total_audit_logs / limit);
+    const paginated_audit_logs = audit_logs.slice(skip, skip + limit);
     return {
-        data: audit_logs,
+        data: paginated_audit_logs,
         pagination: {
             totalItems: total_audit_logs,
             totalPages: total_pages,
