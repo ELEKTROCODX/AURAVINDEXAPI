@@ -14,9 +14,9 @@ import * as audit_log_service from '../audit_log/audit_log.service.js';
  * @throws {ObjectNotFound} If the user or book is not found.
  */
 export const create_loan = async (req, res) => {
-    const {user, book, return_date, returned_date, renewals} = req.body;
+    const {user, book, loan_status, return_date, returned_date, renewals} = req.body;
     try {
-        await loan_service.create_new_loan(user, book, return_date, returned_date, renewals);
+        await loan_service.create_new_loan(user, book, loan_status, return_date, returned_date, renewals);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_LOAN, `${user} - ${book}`);
         res.status(201).json({message: 'Loan registered successfully'});
     } catch (error) {

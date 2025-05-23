@@ -2,7 +2,8 @@ import {LoanAlreadyFinished, LoanExceededMaxRenewals, LoanReturnDateExceedsMaxAl
 import * as loan_repository from './loan.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import * as book_repository from '../book/book.repository.js';
-import * as book_status_repository from '../book_status/book_status.repository.js';
+import * as book_status_repository from '../book_status/book_status.repository.js'
+import * as loan_status_repository from '../loan_status/loan_status.repository.js';
 import { app_config } from '../config/app.config.js';
 import { generate_filter } from '../config/util.js';
 /**
@@ -10,6 +11,7 @@ import { generate_filter } from '../config/util.js';
  * 
  * @param {string} user - The ID of the user requesting the loan.
  * @param {string} book - The ID of the book being loaned.
+ * @param {string} loan_status - The ID of the loan status.
  * @param {string} return_date - The date by which the book should be returned.
  * @param {string} returned_date - The date the book is actually returned (if any).
  * @param {number} renewals - The number of times the loan has been renewed.
@@ -19,9 +21,10 @@ import { generate_filter } from '../config/util.js';
  * @throws {ObjectAlreadyExists} If a loan already exists for the given book and user.
  * @throws {LoanExceededMaxRenewals} If the maximum allowed renewals for the loan are exceeded.
  */
-export const create_new_loan = async (user, book, return_date, returned_date, renewals = 0) => {
+export const create_new_loan = async (user, book, loan_status, return_date, returned_date, renewals = 0) => {
     const user_exists = await user_repository.find_user_by_id(user);
     const book_exists = await book_repository.find_book_by_id(book);
+    const loan_status_exists = await loan_status_repository.find_loan_status_by_id(loan_status);
     /* Create validation to check if book status is available */
     if(book_exists.book_status.book_status != "AVAILABLE") {
         throw new ObjectNotAvailable("book")
@@ -53,7 +56,9 @@ export const create_new_loan = async (user, book, return_date, returned_date, re
     if(!book_exists) {
         throw new ObjectNotFound("book");
     }
-    
+    if(!loan_status_exists) {
+        throw new ObjectNotFound("loan_status");
+    }
     if(loan_exists) {
         throw new ObjectAlreadyExists("loan");
     }
@@ -106,6 +111,7 @@ export const filter_loans = async (filter_field, filter_value, page, limit) => {
     const field_types = {
         user: 'ObjectId',
         book: 'ObjectId',
+        loan_status: 'ObjectId',
         return_date: 'Date',
         returned_date: 'Date',
         renewals: 'Number'
@@ -167,6 +173,7 @@ export const update_loan = async (id, updates) => {
     const loan_exists_id = await loan_repository.find_loan_by_id(id);
     const user_exists = await user_repository.find_user_by_id(updates.user);
     const book_exists = await book_repository.find_book_by_id(updates.book);
+    const loan_status_exists = await loan_status_repository.find_loan_status_by_id(updates.loan_status);
 
     const loan_exists_date = await loan_repository.find_loan_by_date(updates.book, updates.createdAt, updates.returned_date || updates.return_date);
 
@@ -179,6 +186,9 @@ export const update_loan = async (id, updates) => {
     if(!book_exists) {
         throw new ObjectNotFound("book");
     }        
+    if(!loan_status_exists) {
+        throw new ObjectNotFound("loan_status");
+    }
     if( (loan_exists_date) && (loan_exists_date._id.toString() != id ) ) {
         throw new ObjectAlreadyExists("loan");
     }
@@ -226,10 +236,11 @@ export const request_loan_renewal = async (id) => {
         throw new ObjectMissingParameters("loan");
     }
     const loan_exists = await loan_repository.find_loan_by_id(id);
+    const loan_status_exists = await loan_status_repository.filter_loan_statuses({loan_status: 'RENEWED'}, 0, 1);
     if(!loan_exists) {
         throw new ObjectNotFound("loan");
     }
-    if(loan_exists.returned_date) {
+    if(loan_exists.returned_date || loan.loan_status.loan_status == "FINISHED") {
         throw new LoanAlreadyFinished();
     }
     loan_exists.renewals += 1;
@@ -241,6 +252,7 @@ export const request_loan_renewal = async (id) => {
     return await loan_repository.update_loan(id, {
         "user": loan_exists.user,
         "book": loan_exists.book,
+        "loan_status": loan_status_exists[0]._id,
         "return_date": date.toISOString(),
         "renewals": loan_exists.renewals
     });
@@ -259,6 +271,8 @@ export const return_book = async (id) => {
         throw new ObjectMissingParameters("loan");
     }
     const loan_exists = await loan_repository.find_loan_by_id(id);
+    const loan_status_exists = await loan_status_repository.filter_loan_statuses({loan_status: 'FINISHED'}, 0, 1);
+
     if(!loan_exists) {
         throw new ObjectNotFound("loan");
     }
@@ -268,6 +282,7 @@ export const return_book = async (id) => {
         throw new LoanAlreadyFinished();
     }
     loan_exists.returned_date = new Date();
+    loan_exists.loan_status = loan_status_exists[0]._id;
     book_exists.book_status = available_book_status[0]._id;
     const updated_loan = await loan_repository.update_loan(id, loan_exists);
     await book_repository.update_book(book_exists._id, book_exists);

@@ -14,6 +14,11 @@ const loan_schema = new Schema({
         ref: 'book',
         required: true
     },
+    loan_status: {
+         type: Schema.Types.ObjectId,
+        ref: 'loan_status',
+        required: true 
+    },
     return_date: {
         type: Date,
         required: true

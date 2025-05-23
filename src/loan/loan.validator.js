@@ -27,6 +27,14 @@ const book = body("book")
   .isMongoId()
   .withMessage("Valid book ID is required");
 
+// Default loan status validation
+const loan_status = body("book")
+  .isString()
+  .notEmpty()
+  .withMessage("Loan status is required")
+  .isMongoId()
+  .withMessage("Valid loan status ID is required");
+
 // Default return date validation
 const return_date = body("return_date")
   .optional()
@@ -53,7 +61,7 @@ const renewals = body("renewals")
 export const loan_validation_rules_get_id = [id];
 
 // POST validation rules
-export const loan_validation_rules_post = [user, book, return_date, returned_date, renewals];
+export const loan_validation_rules_post = [user, book, loan_status,  return_date, returned_date, renewals];
 
 // PUT validation rules
-export const loan_validation_rules_update = [id, user, book, return_date, returned_date, renewals];
+export const loan_validation_rules_update = [id, user, book, loan_status, return_date, returned_date, renewals];
