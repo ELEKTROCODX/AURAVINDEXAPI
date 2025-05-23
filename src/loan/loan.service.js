@@ -78,17 +78,19 @@ export const create_new_loan = async (user, book, loan_status, return_date, retu
  * @throws {ObjectInvalidQueryFilters} If invalid filters are provided in the query parameters.
  */
 export const get_all_loans = async (page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none"))|| page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("loan");
     }
+    const loans = await loan_repository.find_all_loans(null, null);
+    const total_loans = loans.length;
+    if(limit == "none") limit = total_loans;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const loans = await loan_repository.find_all_loans(skip, limit);
-    const total_loans = await loan_repository.count_loans();
     const total_pages = Math.ceil(total_loans / limit);
+    const paginated_loans = loans.slice(skip, skip + limit);
     return {
-        data: loans,
+        data: paginated_loans,
         pagination: {
             totalItems: total_loans,
             totalPages: total_pages,
@@ -120,18 +122,20 @@ export const filter_loans = async (filter_field, filter_value, page, limit) => {
     if(!allowed_fields.includes(filter_field)) {
         throw new ObjectInvalidQueryFilters("loan");
     }
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("loan");
     }
+    const filter = generate_filter(field_types, filter_field, filter_value);
+    const loans = await loan_repository.filter_loans(filter, null, null);
+    const total_loans = loans.length;
+    if(limit == "none") limit = total_loans;
     page = parseInt(page);
     limit = parseInt(limit);
-    const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const loans = await loan_repository.filter_loans(filter, skip, limit);
-    const total_loans = loans.length;
     const total_pages = Math.ceil(total_loans / limit);
+    const paginated_loans = loans.slice(skip, skip + limit);
     return {
-        data: loans,
+        data: paginated_loans,
         pagination: {
             totalItems: total_loans,
             totalPages: total_pages,
