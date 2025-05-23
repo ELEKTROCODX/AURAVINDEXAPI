@@ -29,9 +29,8 @@ const plan = body("plan")
 
 // Default plan status validation
 const plan_status = body("plan_status")
+  .optional()
   .isString()
-  .notEmpty()
-  .withMessage("Plan status is required")
   .isMongoId()
   .withMessage("Valid plan status ID is required");
 

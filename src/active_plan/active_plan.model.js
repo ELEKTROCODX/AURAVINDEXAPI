@@ -17,7 +17,7 @@ const active_plan_schema = new Schema({
     plan_status: {
         type: Schema.Types.ObjectId,
         ref: 'plan_status',
-        required: true
+        required: false
     },
     ending_date: {
         type: Date,

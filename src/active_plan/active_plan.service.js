@@ -16,10 +16,18 @@ import { app_config } from '../config/app.config.js';
  * @throws {ObjectAlreadyExists} If the active plan already exists.
  */
 export const create_new_active_plan = async (user, plan, plan_status, ending_date, finished_date) => {
-
     const plan_exists = await plan_repository.find_plan_by_id(plan);
     const user_exists = await user_repository.find_user_by_id(user);
-    const plan_status_exists = await plan_status_repository.find_plan_status_by_id(plan_status);
+    let plan_status_exists = null;
+    if(plan_status) {
+        plan_status_exists = await plan_status_repository.find_plan_status_by_id(plan_status);
+    } else {
+        plan_status_active = await plan_status_repository.filter_plan_statuses({plan_status: 'ACTIVE'}, 0, 10);
+        if(plan_status_active.length == 0) {
+            throw new ObjectNotFound("plan_status");
+        }
+        plan_status_exists = plan_status_active[0]._id;
+    }
 
     if(!ending_date) {
         const date = new Date();
