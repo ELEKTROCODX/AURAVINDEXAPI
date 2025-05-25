@@ -26,7 +26,8 @@ export const create_new_active_plan = async (user, plan, plan_status, ending_dat
         if(plan_status_active.length == 0) {
             throw new ObjectNotFound("plan_status");
         }
-        plan_status_exists = plan_status_active[0]._id;
+        plan_status_exists = plan_status_active[0];
+        plan_status = plan_status_exists._id;
     }
 
     if(!ending_date) {
@@ -48,6 +49,7 @@ export const create_new_active_plan = async (user, plan, plan_status, ending_dat
     if(active_plan_exists) {
         throw new ObjectAlreadyExists("active_plan");
     }
+    
     const new_active_plan = await active_plan_repository.create_active_plan({user, plan, plan_status, ending_date, finished_date});
     return new_active_plan;
 }

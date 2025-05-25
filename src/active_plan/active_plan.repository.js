@@ -42,13 +42,15 @@ export const find_active_plan_by_id = async (id) => {
 
 // Fetch by finish and start date
 export const find_active_plan_by_date = async (user_id, start_date, finish_date) => {
-    const plan_status_exists = await plan_status_repository.filter_plan_statuses({name: 'ACTIVE'});
+    const plan_status_exists = await plan_status_repository.filter_plan_statuses({plan_status: 'ACTIVE'});
+    const start = new Date(start_date);
+    const end = new Date(finish_date);
     return await active_plan_model.active_plan.findOne({
         user: user_id,
         plan_status: plan_status_exists[0]._id,
         $or: [
-            {createdAt: {$lte: start_date}, return_date: {$gte: finish_date}},
-            {createdAt: {$lte: start_date}, returned_date: {$gte: finish_date}}
+            { createdAt:  { $lt: end  }, ending_date: { $gt: start } },
+            { createdAt:  { $lt: end  }, finished_date: { $gt: start } }
         ]
     }).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
