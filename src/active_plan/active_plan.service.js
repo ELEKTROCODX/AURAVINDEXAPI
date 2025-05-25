@@ -119,7 +119,7 @@ export const filter_active_plans = async (filter_field, filter_value, page, limi
     const total_pages = Math.ceil(total_active_plans / limit);
     const paginated_active_plans = active_plans.slice(skip, skip + limit);
     return {
-        data: paginated_active_plansg,
+        data: paginated_active_plans,
         pagination: {
             totalItems: total_active_plans,
             totalPages: total_pages,
