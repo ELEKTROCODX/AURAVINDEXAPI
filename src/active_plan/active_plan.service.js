@@ -62,17 +62,20 @@ export const create_new_active_plan = async (user, plan, plan_status, ending_dat
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid values.
  */
 export const get_all_active_plans = async (page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("plan");
     }
+
+    const active_plans = await active_plan_repository.find_all_active_plans(null);
+    const total_active_plans = active_plans.length;
+    if(limit == "none") limit = total_active_plans;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const plans = await active_plan_repository.find_all_active_plans(skip, limit);
-    const total_active_plans = await active_plan_repository.count_active_plans();
     const total_pages = Math.ceil(total_active_plans / limit);
+    const paginated_active_plans = active_plans.slice(skip, skip + limit);
     return {
-        data: plans,
+        data: paginated_active_plans,
         pagination: {
             totalItems: total_active_plans,
             totalPages: total_pages,
@@ -103,18 +106,20 @@ export const filter_active_plans = async (filter_field, filter_value, page, limi
     if(!allowed_fields.includes(filter_field)) {
         throw new ObjectInvalidQueryFilters("plan");
     }
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("plan");
     }
+    const filter = generate_filter(field_types, filter_field, filter_value);
+    const active_plans = await active_plan_repository.filter_active_plans(filter, null, null);
+    const total_active_plans = active_plans.length;
+    if(limit == "none") limit = total_active_plans;
     page = parseInt(page);
     limit = parseInt(limit);
-    const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const plans = await active_plan_repository.filter_active_plans(filter, skip, limit);
-    const total_active_plans = plans.length;
     const total_pages = Math.ceil(total_active_plans / limit);
+    const paginated_active_plans = active_plans.slice(skip, skip + limit);
     return {
-        data: plans,
+        data: paginated_active_plansg,
         pagination: {
             totalItems: total_active_plans,
             totalPages: total_pages,
