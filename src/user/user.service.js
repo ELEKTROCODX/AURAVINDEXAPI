@@ -46,17 +46,19 @@ export const create_new_user = async (name, last_name, email, biography, gender,
  * @returns {Array} An array of user objects.
  */
 export const get_all_users = async (page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("user");
     }
+    const users = await user_repository.find_all_users(null, null);
+    const total_users = users.length;
+    if(limit == "none") limit = total_users;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const users = await user_repository.find_all_users(skip, limit);
-    const total_users = await user_repository.count_users();
     const total_pages = Math.ceil(total_users / limit);
+    const paginated_users = users.slice(skip, skip + limit);
     return {
-        data: users,
+        data: paginated_users,
         pagination: {
             totalItems: total_users,
             totalPages: total_pages,
@@ -92,18 +94,21 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
     if(!allowed_fields.includes(filter_field)) {
         throw new ObjectInvalidQueryFilters("user");
     }
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("user");
     }
+    
+    const filter = generate_filter(field_types, filter_field, filter_value);
+    const users = await user_repository.filter_users(filter, null, null);
+    const total_users = users.length;
+    if(limit == "none") limit = total_users;
     page = parseInt(page);
     limit = parseInt(limit);
-    const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const users = await user_repository.filter_users(filter, skip, limit);
-    const total_users = users.length;
     const total_pages = Math.ceil(total_users / limit);
+    const paginated_users = users.slice(skip, skip + limit);
     return {
-        data: users,
+        data: paginated_users,
         pagination: {
             totalItems: total_users,
             totalPages: total_pages,
