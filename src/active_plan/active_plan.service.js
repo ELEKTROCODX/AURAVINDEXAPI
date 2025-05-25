@@ -22,7 +22,7 @@ export const create_new_active_plan = async (user, plan, plan_status, ending_dat
     if(plan_status) {
         plan_status_exists = await plan_status_repository.find_plan_status_by_id(plan_status);
     } else {
-        plan_status_active = await plan_status_repository.filter_plan_statuses({plan_status: 'ACTIVE'}, 0, 10);
+        let plan_status_active = await plan_status_repository.filter_plan_statuses({plan_status: 'ACTIVE'}, 0, 10);
         if(plan_status_active.length == 0) {
             throw new ObjectNotFound("plan_status");
         }
