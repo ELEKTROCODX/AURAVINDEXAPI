@@ -2,10 +2,12 @@ import { app_config } from '../config/app.config.js';
 import { FailedToSendEmail, InvalidLogin, InvalidOrExpiredToken, ObjectAlreadyExists, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
 import * as user_repository from '../user/user.repository.js';
 import * as role_repository from '../role/role.repository.js';
+import * as recent_book_repository from '../recent_book/recent_book.repository.js';
 import * as book_list_repository from '../book_list/book_list.repository.js';
 import { send_email } from '../config/util.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { recent_book } from '../recent_book/recent_book.model.js';
 /**
  * Registers a new user by validating the provided data and creating a user in the database.
  * 
@@ -34,6 +36,7 @@ export const register = async (name, last_name, email, biography, gender, birthd
     const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
     const user_data = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
     await book_list_repository.create_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data[0]._id, books: []});
+    await recent_book_repository.create_recent_book({user: user_data[0]._id, books: []});
     return new_user;
 }
 /**

@@ -1,6 +1,7 @@
 import {FailedToSendEmail, InvalidEmailValidation, InvalidPasswordReset, ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
 import * as user_repository from './user.repository.js';
 import * as role_repository from '../role/role.repository.js';
+import * as recent_book_repository from '../recent_book/recent_book.repository.js';
 import * as book_list_repository from '../book_list/book_list.repository.js';
 import { app_config } from '../config/app.config.js';
 import { generate_filter } from '../config/util.js';
@@ -34,6 +35,7 @@ export const create_new_user = async (name, last_name, email, biography, gender,
     const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
     const user_data = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
     await book_list_repository.create_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data[0]._id, books: []});
+    await recent_book_repository.create_recent_book({user: user_data[0]._id, books: []});
     return new_user;
 }
 /**
