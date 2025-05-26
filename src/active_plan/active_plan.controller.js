@@ -1,5 +1,5 @@
 import { app_config } from '../config/app.config.js';
-import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectNotAvailable, ObjectInvalidQueryFilters, ActivePlanAlreadyFinished } from '../config/errors.js';
+import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectNotAvailable, ObjectInvalidQueryFilters, ActivePlanAlreadyFinished, ActivePlanAlreadyCancelled } from '../config/errors.js';
 import * as active_plan_service from './active_plan.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
 /**
@@ -183,13 +183,13 @@ export const request_active_plan_renewal = async (req, res) => {
     }
 }
 /**
- * Completes a active plan by updating its status and the associated book's status to "AVAILABLE".
+ * Completes an active plan by updating its status to "FINISHED".
  *
  * @param {Object} req - The HTTP request object.
  * @param {string} req.params.id - The ID of the active plan to finish.
  * @param {Object} res - The HTTP response object.
  * @throws {ObjectMissingParameters} If the active plan ID is missing.
- * @throws {ObjectNotFound} If the active plan or book is not found.
+ * @throws {ObjectNotFound} If the active plan is not found.
  * @throws {Active planAlreadyFinished} If the active plan has already been finished.
  * @throws {ObjectAlreadyExists | ObjectNotAvailable} If other specific active plan-related issues occur.
  * @returns {void} Sends a JSON response indicating the active plan completion result.
@@ -218,5 +218,43 @@ export const finish_active_plan = async (req, res) => {
         }
         // Internal error
         res.status(500).json({message: 'Error finishing active plan', error: error.message});
+    }
+}
+/**
+ * Completes an plan by updating its status and the associated book's status to "AVAILABLE".
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {string} req.params.id - The ID of the active plan to finish.
+ * @param {Object} res - The HTTP response object.
+ * @throws {ObjectMissingParameters} If the active plan ID is missing.
+ * @throws {ObjectNotFound} If the active plan or book is not found.
+ * @throws {ActivePlanAlreadyCancelled} If the active plan has already been cancelled.
+ * @throws {ObjectAlreadyExists | ObjectNotAvailable} If other specific active plan-related issues occur.
+ * @returns {void} Sends a JSON response indicating the active plan completion result.
+ */
+export const cancel_active_plan = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await active_plan_service.cancel_active_plan(id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CANCEL_ACTIVE_PLAN, id);
+        res.json({message: 'Active plan cancelled successfully'});
+    } catch (error) {
+        if(error instanceof ObjectMissingParameters) {
+            return res.status(400).json({message: error.message});
+        }
+        if(error instanceof ObjectAlreadyExists) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof ObjectNotAvailable) {
+            return res.status(400).json({message: error.message});
+        }
+        if(error instanceof ObjectNotFound) {
+            return res.status(404).json({message: error.message});
+        }
+        if(error instanceof ActivePlanAlreadyCancelled) {
+            return res.status(400).json({message: error.message});
+        }
+        // Internal error
+        res.status(500).json({message: 'Error cancelling active plan', error: error.message});
     }
 }

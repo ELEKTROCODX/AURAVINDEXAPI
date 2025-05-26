@@ -146,6 +146,12 @@ export class ActivePlanAlreadyFinished extends Error {
         this.name = 'ActivePlanAlreadyFinished';
     }
 }
+export class ActivePlanAlreadyCancelled extends Error {
+    constructor() {
+        super('This plan has already been cancelled.');
+        this.name = 'ActivePlanAlreadyFinished';
+    }
+}
 
 export class ExceededMaxBookLists extends Error {
     constructor() {

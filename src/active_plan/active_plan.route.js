@@ -17,5 +17,5 @@ active_plan_router.delete('/:id', auth_middleware, validate_permission(app_confi
 active_plan_router.put('/:id/renewal/', auth_middleware, validate_permission(app_config.PERMISSIONS.REQUEST_ACTIVE_PLAN_RENEWAL), active_plan_validator.active_plan_validation_rules_get_id, validate, active_plan_controller.request_active_plan_renewal);
 /* Finish active plan route */
 active_plan_router.put('/:id/finish/', auth_middleware, validate_permission(app_config.PERMISSIONS.FINISH_ACTIVE_PLAN), active_plan_validator.active_plan_validation_rules_get_id, validate, active_plan_controller.finish_active_plan);
-//active_plan_router.put('/:id/cancel/', auth_middleware, validate_permission(app_config.PERMISSIONS.CANCEL_ACTIVE_PLAN), active_plan_validator.active_plan_validation_rules_get_id, active_plan_controller.return_book);
+active_plan_router.put('/:id/cancel/', auth_middleware, validate_permission(app_config.PERMISSIONS.CANCEL_ACTIVE_PLAN), active_plan_validator.active_plan_validation_rules_get_id, active_plan_controller.cancel_active_plan);
 export {active_plan_router};

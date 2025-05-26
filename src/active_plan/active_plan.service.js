@@ -233,13 +233,12 @@ export const request_active_plan_renewal = async (id) => {
         "finished_date": date
     });
 }
-
 /**
  * Finish a suscription.
  *
  * @param {string} id - The ID of the active plan to finish.
  * @throws {ObjectMissingParameters} If the active plan ID is missing.
- * @throws {ObjectNotFound} If the active plan or associated book is not found.
+ * @throws {ObjectNotFound} If the active plan is not found.
  * @throws {ActivePlanAlreadyFinished} If the active plan has already been finished.
  * @returns {Object} The updated active plan object.
  */
@@ -251,10 +250,35 @@ export const finish_active_plan = async (id) => {
     if(!active_plan_exists) {
         throw new ObjectNotFound("active_plan");
     }
-    const plan_exists = await plan_repository.find_plan_by_id(active_plan_exists.plan);
     const finished_active_plan_status = await plan_status_repository.filter_plan_statuses({plan_status: 'FINISHED'}, 0, 1);
     if(active_plan_exists.finished_date || active_plan_exists.plan_status.plan_status == "FINISHED") {
         throw new ActivePlanAlreadyFinished();
+    }
+    active_plan_exists.finished_date = new Date();
+    active_plan_exists.plan_status = finished_active_plan_status[0]._id;
+    const updated_active_plan = await active_plan_repository.update_active_plan(id, active_plan_exists);
+    return updated_active_plan;
+}
+/**
+ * Cancel a suscription.
+ *
+ * @param {string} id - The ID of the active plan to cancel.
+ * @throws {ObjectMissingParameters} If the active plan ID is missing.
+ * @throws {ObjectNotFound} If the active plan is not found.
+ * @throws {ActivePlanAlreadyCancelled} If the active plan has already been cancelled.
+ * @returns {Object} The updated active plan object.
+ */
+export const cancel_active_plan = async (id) => {
+    if(!id) {
+        throw new ObjectMissingParameters("active_plan");
+    }
+    const active_plan_exists = await active_plan_repository.find_active_plan_by_id(id);
+    if(!active_plan_exists) {
+        throw new ObjectNotFound("active_plan");
+    }
+    const finished_active_plan_status = await plan_status_repository.filter_plan_statuses({plan_status: 'CANCELED'}, 0, 1);
+    if(active_plan_exists.finished_date || active_plan_exists.plan_status.plan_status == "CANCELED") {
+        throw new ActivePlanAlreadyCancelled();
     }
     active_plan_exists.finished_date = new Date();
     active_plan_exists.plan_status = finished_active_plan_status[0]._id;
