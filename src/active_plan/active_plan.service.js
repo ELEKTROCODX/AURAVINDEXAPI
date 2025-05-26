@@ -192,10 +192,8 @@ export const delete_active_plan = async (id) => {
     if(!id) {
         throw new ObjectMissingParameters("plan");
     }
-    
     const active_plan_exists = await active_plan_repository.find_active_plan_by_id(id);
-
-    if(!plan_exists){
+    if(!active_plan_exists){
         throw new ObjectNotFound("plan");
     }
     return await active_plan_repository.delete_active_plan(id);
@@ -229,7 +227,7 @@ export const request_active_plan_renewal = async (id) => {
         "user": active_plan_exists.user,
         "plan": active_plan_exists.plan,
         "plan_status": active_plan_exists.plan_status,
-        "ending_date": active_plan_exists.ending_date,
+        "ending_date": date,
         "finished_date": date
     });
 }
