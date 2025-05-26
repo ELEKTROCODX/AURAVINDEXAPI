@@ -176,7 +176,7 @@ export const request_active_plan_renewal = async (req, res) => {
             return res.status(404).json({message: error.message});
         }
         if(error instanceof ActivePlanAlreadyFinished) {
-            return res.status(400).json({message: error.message});
+            return res.status(409).json({message: error.message});
         }
         // Internal error
         res.status(500).json({message: 'Error reqesting active plan renewal', error: error.message});
@@ -214,7 +214,7 @@ export const finish_active_plan = async (req, res) => {
             return res.status(404).json({message: error.message});
         }
         if(error instanceof ActivePlanAlreadyFinished) {
-            return res.status(400).json({message: error.message});
+            return res.status(409).json({message: error.message});
         }
         // Internal error
         res.status(500).json({message: 'Error finishing active plan', error: error.message});
@@ -252,7 +252,7 @@ export const cancel_active_plan = async (req, res) => {
             return res.status(404).json({message: error.message});
         }
         if(error instanceof ActivePlanAlreadyCancelled) {
-            return res.status(400).json({message: error.message});
+            return res.status(409).json({message: error.message});
         }
         // Internal error
         res.status(500).json({message: 'Error cancelling active plan', error: error.message});
