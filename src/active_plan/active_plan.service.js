@@ -228,7 +228,6 @@ export const request_active_plan_renewal = async (id) => {
         "plan": active_plan_exists.plan,
         "plan_status": active_plan_exists.plan_status,
         "ending_date": date,
-        "finished_date": date
     });
 }
 /**
