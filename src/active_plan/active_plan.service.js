@@ -63,7 +63,7 @@ export const create_new_active_plan = async (user, plan, plan_status, ending_dat
  */
 export const get_all_active_plans = async (page, limit) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
-        throw new ObjectInvalidQueryFilters("plan");
+        throw new ObjectInvalidQueryFilters("active_plan");
     }
 
     const active_plans = await active_plan_repository.find_all_active_plans(null);
@@ -104,10 +104,10 @@ export const filter_active_plans = async (filter_field, filter_value, page, limi
     };
     const allowed_fields = Object.keys(field_types);
     if(!allowed_fields.includes(filter_field)) {
-        throw new ObjectInvalidQueryFilters("plan");
+        throw new ObjectInvalidQueryFilters("active_plan");
     }
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
-        throw new ObjectInvalidQueryFilters("plan");
+        throw new ObjectInvalidQueryFilters("active_plan");
     }
     const filter = generate_filter(field_types, filter_field, filter_value);
     const active_plans = await active_plan_repository.filter_active_plans(filter, null, null);
@@ -137,8 +137,8 @@ export const filter_active_plans = async (filter_field, filter_value, page, limi
  */
 export const get_active_plan_by_id = async (id) => {
     const active_plan_exists = await active_plan_repository.find_active_plan_by_id(id);
-    if(!plan_exists) {
-        throw new ObjectNotFound("plan");
+    if(!active_plan_exists) {
+        throw new ObjectNotFound("active_plan");
     }
     return active_plan_exists;
 }
@@ -154,7 +154,7 @@ export const get_active_plan_by_id = async (id) => {
  */
 export const update_active_plan = async (id, updates) => { 
     if(!id) {
-        throw new ObjectMissingParameters("plan");
+        throw new ObjectMissingParameters("active_plan");
     }
     const plan_exists = await plan_repository.find_plan_by_id(plan);
     const user_exists = await user_repository.find_user_by_id(user);
@@ -190,11 +190,11 @@ export const update_active_plan = async (id, updates) => {
  */
 export const delete_active_plan = async (id) => {
     if(!id) {
-        throw new ObjectMissingParameters("plan");
+        throw new ObjectMissingParameters("active_plan");
     }
     const active_plan_exists = await active_plan_repository.find_active_plan_by_id(id);
     if(!active_plan_exists){
-        throw new ObjectNotFound("plan");
+        throw new ObjectNotFound("active_plan");
     }
     return await active_plan_repository.delete_active_plan(id);
 }
