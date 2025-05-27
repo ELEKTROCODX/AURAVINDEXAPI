@@ -20,7 +20,7 @@ export const find_all_loans = async (skip, limit) => {
 export const filter_loans = async (filter, skip, limit) => {
     return await loan_model.loan.find(filter).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'book' },
+        { path: 'book', populate: [{ path: 'authors' }, { path: 'editorial' }, { path: 'book_status'}, { path: 'book_collection'}] },
         { path: 'loan_status' }
     ]);
 }
@@ -34,7 +34,7 @@ export const count_loans = async () => {
 export const find_loan_by_id = async (id) => {
     return await loan_model.loan.findById(id).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'book' },
+        { path: 'book', populate: [{ path: 'authors' }, { path: 'editorial' }, { path: 'book_status'}, { path: 'book_collection'}] },
         { path: 'loan_status' }
     ]) || null;
 }
@@ -50,7 +50,7 @@ export const find_loan_by_date = async (book_id, start_date, finish_date) => {
         ]
     }).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'book' },
+        { path: 'book', populate: [{ path: 'authors' }, { path: 'editorial' }, { path: 'book_status'}, { path: 'book_collection'}] },
         { path: 'loan_status' }
     ]) || null;
 }
