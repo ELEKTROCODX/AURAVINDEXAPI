@@ -25,6 +25,7 @@ export const create_new_loan = async (user, book, loan_status, return_date, retu
     const user_exists = await user_repository.find_user_by_id(user);
     const book_exists = await book_repository.find_book_by_id(book);
     const loan_status_exists = await loan_status_repository.find_loan_status_by_id(loan_status);
+    const finished_loan_status = await loan_status_repository.filter_loan_statuses({loan_status: 'FINISHED'}, 0, 1);
     /* Create validation to check if book status is available */
     if(book_exists.book_status.book_status != "AVAILABLE") {
         throw new ObjectNotAvailable("book")
@@ -45,7 +46,7 @@ export const create_new_loan = async (user, book, loan_status, return_date, retu
         }
     }
     /* Create validation to check if there's a loan for a specific user and/or book between loan date */
-    const loan_exists = await loan_repository.find_loan_by_date(book, Date.now(), return_date);    
+    const loan_exists = await loan_repository.find_loan_by_date(book, user, finished_loan_status[0]._id, Date.now(), return_date);    
     /* Create validation to check if loan has been renewed  */
     if(renewals > app_config.LOAN_MAX_RENEWALS_PER_LOAN) {
         throw new LoanExceededMaxRenewals();

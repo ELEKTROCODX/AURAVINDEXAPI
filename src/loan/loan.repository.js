@@ -40,10 +40,12 @@ export const find_loan_by_id = async (id) => {
 }
 
 // Fetch by finish and start date
-export const find_loan_by_date = async (book_id, start_date, finish_date) => {
+export const find_loan_by_date = async (book_id, user_id, loan_status_id, start_date, finish_date) => {
     // Function to check if loan date catches another loan with book and date, guided by ChatGPT.
     return await loan_model.loan.findOne({
         book: book_id,
+        user: user_id,
+        loan_status: { $ne: loan_status_id },
         $or: [
             {createdAt: {$lte: start_date}, return_date: {$gte: finish_date}},
             {createdAt: {$lte: start_date}, returned_date: {$gte: finish_date}}
