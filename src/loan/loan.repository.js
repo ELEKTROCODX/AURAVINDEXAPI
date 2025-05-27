@@ -11,7 +11,7 @@ export const create_loan = async (loan_data) => {
 export const find_all_loans = async (skip, limit) => {
     return await loan_model.loan.find().skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'book' },
+        { path: 'book', populate: [{ path: 'authors' }, { path: 'editorial' }, { path: 'book_status'}, { path: 'book_collection'}] },
         { path: 'loan_status' }
     ]);
 }
