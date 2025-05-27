@@ -44,7 +44,7 @@ main_router.use('/fee_type/', fee_type_router);
 main_router.use('/fee_status/', fee_status_router);
 main_router.use('/gender/', gender_router);
 main_router.use('/loan/', loan_router);
-main_router.use('/loan/status/', loan_status_router);
+main_router.use('/loan_status/', loan_status_router);
 main_router.use('/log_action/', log_action_router);
 main_router.use('/notification/', notification_router);
 main_router.use('/plan/', plan_router);
