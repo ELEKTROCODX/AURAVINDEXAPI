@@ -73,6 +73,7 @@ export const log_actions = [
     { "action_code": "CREATE_LOAN_STATUS" },
     { "action_code": "UPDATE_LOAN_STATUS" },
     { "action_code": "DELETE_LOAN_STATUS" },
+    { "action_code": "APPROVE_LOAN" },
     { "action_code": "REQUEST_LOAN_RENEWAL" },
     { "action_code": "FINISH_LOAN" },
     { "action_code": "READ_LOG_ACTION" },
