@@ -65,7 +65,7 @@ export const create_new_loan = async (user, book, loan_status, return_date, retu
     /* Change book status to lent */
     const lent_book_status = await book_status_repository.filter_book_statuses({book_status: 'LENT'}, 0, 1);
     book_exists.book_status = lent_book_status[0]._id;
-    const new_loan = await loan_repository.create_loan({user, book, return_date, returned_date, renewals});
+    const new_loan = await loan_repository.create_loan({user, book, loan_status, return_date, returned_date, renewals});
     await book_repository.update_book(book_exists._id, book_exists);
     return new_loan;
 }
