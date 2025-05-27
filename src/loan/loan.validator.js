@@ -38,15 +38,15 @@ const loan_status = body("book")
 // Default return date validation
 const return_date = body("return_date")
   .optional()
-  .isISO8601() // ISO 8601 (YYYY-MM-DD)
-  .withMessage("Invalid date format, use YYYY-MM-DD");
+  .isISO8601() // ISO 8601 (yyyy-MM-dd)
+  .withMessage("Invalid date format, use yyyy-MM-dd");
 
 // Default returned date validation
 const returned_date = body("returned_date")
   .optional()
   .custom((value) => {
     if (!is_valid_date_time_format(value)) {
-      throw new Error("Invalid returned date format, use YYYY-MM-DD HH:MM");
+      throw new Error("Invalid returned date format, use yyyy-MM-dd HH:MM");
     }
     return true;
   });

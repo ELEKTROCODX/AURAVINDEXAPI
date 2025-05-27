@@ -37,15 +37,15 @@ const plan_status = body("plan_status")
 // Default ending date validation
 const ending_date = body("ending_date")
   .optional()
-  .isISO8601() // ISO 8601 (YYYY-MM-DD)
-  .withMessage("Invalid ending date format, use YYYY-MM-DD");
+  .isISO8601() // ISO 8601 (yyyy-MM-dd)
+  .withMessage("Invalid ending date format, use yyyy-MM-dd");
 
 // Default finished date validation
 const finished_date = body("finished_date")
   .optional()
   .custom((value) => {
     if (!is_valid_date_time_format(value)) {
-      throw new Error("Invalid finished date format, use YYYY-MM-DD HH:MM");
+      throw new Error("Invalid finished date format, use yyyy-MM-dd HH:MM");
     }
     return true;
   });

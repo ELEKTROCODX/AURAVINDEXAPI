@@ -39,7 +39,7 @@ const paid_date = body("paid_date")
   .optional()
   .custom((value) => {
     if (!isValidDateTimeFormat(value)) {
-      throw new Error("Invalid paid date format, use YYYY-MM-DD HH:MM");
+      throw new Error("Invalid paid date format, use yyyy-MM-dd HH:MM");
     }
     return true;
   });
@@ -49,8 +49,8 @@ const due_payment_date = body("due_payment_date")
   .isString()
   .notEmpty()
   .withMessage("Fee due payment date is required")
-  .isISO8601() // ISO 8601 (YYYY-MM-DD)
-  .withMessage("Invalid due payment date format, use YYYY-MM-DD");
+  .isISO8601() // ISO 8601 (yyyy-MM-dd)
+  .withMessage("Invalid due payment date format, use yyyy-MM-dd");
 
 // ID validation rules
 export const fee_validation_rules_get_id = [id];

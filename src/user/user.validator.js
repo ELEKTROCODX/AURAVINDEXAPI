@@ -64,7 +64,7 @@ const birthdate = body("birthdate")
   .withMessage("User birthdate is required")
   .custom((value) => {
     if (!is_valid_birthdate_format(value)) {
-      throw new Error(`Invalid birthdate format, use YYYY-MM-DD. Note: User must be at least ${app_config.USER_MIN_AGE_REQUIRED} years old.`);
+      throw new Error(`Invalid birthdate format, use yyyy-MM-dd. Note: User must be at least ${app_config.USER_MIN_AGE_REQUIRED} years old.`);
     }
     return true;
   });

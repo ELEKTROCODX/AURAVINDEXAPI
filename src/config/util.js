@@ -13,9 +13,9 @@ export const convert_string_cammel_case = (string) => {
     return result;
 }
 
-// Function to validate date format is YYYY-MM-DD HH:MM, guided by ChatGPT.
+// Function to validate date format is yyyy-MM-dd HH:MM, guided by ChatGPT.
 export const is_valid_date_time_format = (string) => {
-    // Regular expression to match the format YYYY-MM-DD HH:MM
+    // Regular expression to match the format yyyy-MM-dd HH:MM
     const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
   
     if (!regex.test(string)) {
