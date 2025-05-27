@@ -170,7 +170,7 @@ export const delete_loan = async (req, res) => {
 export const approve_loan = async (req, res) => {
     try {
         const id = req.params.id;
-        await loan_service.return_book(id);
+        await loan_service.approve_loan(id);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.APPROVE_LOAN, id);
         res.json({message: 'Loan approved successfully'});
     } catch (error) {
