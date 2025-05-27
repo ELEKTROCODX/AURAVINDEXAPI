@@ -44,8 +44,8 @@ const max_return_days = body("max_return_days")
 .notEmpty()
 .withMessage("Plan max return days is required");
 
-// Default max renovations per loan validation
-const max_renovations_per_loan = body("max_renovations_per_loan")
+// Default max renewals per loan validation
+const max_renewals_per_loan = body("max_renewals_per_loan")
  .isNumeric()
  .notEmpty()
  .withMessage("Plan max renovations per loan is required");
@@ -54,7 +54,7 @@ const max_renovations_per_loan = body("max_renovations_per_loan")
 export const plan_validation_rules_get_id = [id];
 
 // POST validation rules
-export const plan_validation_rules_post = [name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan];
+export const plan_validation_rules_post = [name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renewals_per_loan];
 
 // PUT validation rules
-export const plan_validation_rules_update = [id, name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan];
+export const plan_validation_rules_update = [id, name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renewals_per_loan];

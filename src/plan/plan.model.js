@@ -25,7 +25,7 @@ const plan_schema = new Schema({
         type: Number,
         required: true
     },
-    max_renovations_per_loan: {
+    max_renewals_per_loan: {
         type: Number,
         required: true
     }

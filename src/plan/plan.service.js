@@ -9,16 +9,16 @@ import { generate_filter } from '../config/util.js';
  * @param {string} monthly_price - The plan monthly price.
  * @param {string} max_simultaneous_loans - The maximum loans that users can have at the same time.
  * @param {string} max_return_days - The maximum days the user has to return the book.
- * @param {string} max_renovations_per_loan - The maximum renovations an user can request per loan.
+ * @param {string} max_renewals_per_loan - The maximum renovations an user can request per loan.
  * @returns {Promise<Object>} The newly created plan object.
  * @throws {ObjectAlreadyExists} If the plan already exists.
  */
-export const create_new_plan = async (name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan) => {
+export const create_new_plan = async (name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renewals_per_loan) => {
     const plan_exists = await plan_repository.filter_plans({['name']: new RegExp(name, 'i')}, 0, 10);
     if(plan_exists.length != 0) {
         throw new ObjectAlreadyExists("plan");
     }
-    const new_plan = await plan_repository.create_plan({name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renovations_per_loan});
+    const new_plan = await plan_repository.create_plan({name, fixed_price, monthly_price, max_simultaneous_loans, max_return_days, max_renewals_per_loan});
     return new_plan;
 }
 /**
@@ -66,7 +66,7 @@ export const filter_plans = async (filter_field, filter_value, page, limit) => {
         monthly_price: 'String',
         max_simultaneous_loans: 'Number',
         max_return_days: 'Number',
-        max_renovations_per_loan: 'Number'
+        max_renewals_per_loan: 'Number'
     };
     const allowed_fields = Object.keys(field_types);
     if(!allowed_fields.includes(filter_field)) {
