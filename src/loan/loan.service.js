@@ -274,7 +274,7 @@ export const request_loan_renewal = async (id) => {
     if(!loan_exists) {
         throw new ObjectNotFound("loan");
     }
-    if(loan_exists.returned_date || loan.loan_status.loan_status == "FINISHED") {
+    if(loan_exists.returned_date || loan_exists.loan_status.loan_status == "FINISHED") {
         throw new LoanAlreadyFinished();
     }
     loan_exists.renewals += 1;
