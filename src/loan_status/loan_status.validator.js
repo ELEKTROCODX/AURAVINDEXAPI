@@ -21,7 +21,7 @@ export const loan_status_validation_rules_get_id = [id];
 
 // Fetch loan status by status validation rules
 export const loan_status_validation_rules_get_status = [
-  param("status")
+  param("loan_status")
     .exists({ checkFalsy: true })
     .isString()
     .notEmpty()
