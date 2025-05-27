@@ -1,5 +1,5 @@
 import { app_config } from '../config/app.config.js';
-import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, LoanExceededMaxRenewals, ObjectNotAvailable, ObjectInvalidQueryFilters, LoanReturnDateExceedsMaxAllowedDays, LoanAlreadyFinished } from '../config/errors.js';
+import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, LoanExceededMaxRenewals, ObjectNotAvailable, ObjectInvalidQueryFilters, LoanReturnDateExceedsMaxAllowedDays, LoanAlreadyFinished, LoanAlreadyApproved, LoanCannotBeApproved } from '../config/errors.js';
 import * as loan_service from './loan.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
 /**
@@ -154,6 +154,46 @@ export const delete_loan = async (req, res) => {
         }
         // Internal error
         res.status(500).json({message: 'Error deleting loan', error: error.message});
+    }
+}
+/**
+ * Approve a loan by setting its status to 'ACTIVE'.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {string} req.params.id - The ID of the loan to finish.
+ * @param {Object} res - The HTTP response object.
+ * @throws {ObjectMissingParameters} If the loan ID is missing.
+ * @throws {ObjectNotFound} If the loan or book is not found.
+ * @throws {LoanAlreadyApproved} If the loan has already been aprroved.
+ * @returns {void} Sends a JSON response indicating the loan completion result.
+ */
+export const approve_loan = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await loan_service.return_book(id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.APPROVE_LOAN, id);
+        res.json({message: 'Loan approved successfully'});
+    } catch (error) {
+        if(error instanceof ObjectMissingParameters) {
+            return res.status(400).json({message: error.message});
+        }
+        if(error instanceof ObjectAlreadyExists) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof ObjectNotAvailable) {
+            return res.status(400).json({message: error.message});
+        }
+        if(error instanceof ObjectNotFound) {
+            return res.status(404).json({message: error.message});
+        }
+        if(error instanceof LoanAlreadyApproved) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof LoanCannotBeApproved) {
+            return res.status(409).json({message: error.message});
+        }
+        // Internal error
+        res.status(500).json({message: 'Error finishing loan', error: error.message});
     }
 }
 /**

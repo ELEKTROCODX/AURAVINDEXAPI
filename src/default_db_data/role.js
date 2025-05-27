@@ -64,6 +64,7 @@ export const roles = [
       "CREATE_LOAN",
       "UPDATE_LOAN",
       "DELETE_LOAN",
+      "APPROVE_LOAN",
       "REQUEST_LOAN_RENEWAL",
       "FINISH_LOAN",
       "READ_LOAN_STATUS",

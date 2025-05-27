@@ -69,7 +69,18 @@ export class LoanAlreadyFinished extends Error {
         this.name = 'LoanAlreadyFinished';
     }
 }
-
+export class LoanAlreadyApproved extends Error {
+    constructor() {
+        super('This book has already been approved');
+        this.name = 'LoanAlreadyApproved';
+    }
+}
+export class LoanCannotBeApproved extends Error {
+    constructor() {
+        suoer('This book cannot be approved because it\'s status is not pending.');
+        this.name = 'LoanCannotBeApproved';
+    }
+}
 export class InvalidLogin extends Error {
     constructor() {
         super('Invalid email or password');

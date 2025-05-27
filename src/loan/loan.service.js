@@ -1,4 +1,4 @@
-import {LoanAlreadyFinished, LoanExceededMaxRenewals, LoanReturnDateExceedsMaxAllowedDays, ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters, ObjectNotAvailable, ObjectNotFound } from '../config/errors.js';
+import {LoanAlreadyApproved, LoanAlreadyFinished, LoanCannotBeApproved, LoanExceededMaxRenewals, LoanReturnDateExceedsMaxAllowedDays, ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters, ObjectNotAvailable, ObjectNotFound } from '../config/errors.js';
 import * as loan_repository from './loan.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import * as book_repository from '../book/book.repository.js';
@@ -223,6 +223,36 @@ export const delete_loan = async (id) => {
         throw new ObjectNotFound("loan");
     }
     return await loan_repository.delete_loan(id);
+}
+
+/**
+ * Approve loans.
+ * 
+ * @param {string} id - The ID of the loan to approve.
+ * @returns {Promise<Object>} The updated loan with the new return date.
+ * @throws {LoanAlreadyApproved} If the loan has already been approved.
+ * @throws {LoanCannotBeApproved} If the loan status is not "PENDING".
+ * @throws {ObjectNotFound} If the loan with the specified ID does not exist.
+ */
+export const approve_loan = async (id) => {
+     if(!id) {
+        throw new ObjectMissingParameters("loan");
+    }
+    const loan_exists = await loan_repository.find_loan_by_id(id);
+    const loan_status_exists = await loan_status_repository.filter_loan_statuses({loan_status: 'ACTIVE'}, 0, 1);
+
+    if(!loan_exists) {
+        throw new ObjectNotFound("loan");
+    }
+    if(loan_exists.loan_status.loan_status == "ACTIVE") {
+        throw new LoanAlreadyApproved();
+    }
+    if(loan_exists.loan_status.loan_status != "PENDING") {
+        throw new LoanCannotBeApproved();
+    }
+    loan_exists.loan_status = loan_status_exists[0]._id;
+    const updated_loan = await loan_repository.update_loan(id, loan_exists);
+    return updated_loan;
 }
 /**
  * Requests a renewal for an existing loan.

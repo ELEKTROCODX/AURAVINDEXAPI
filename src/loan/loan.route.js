@@ -13,6 +13,8 @@ loan_router.get('/:id', auth_middleware, validate_permission(app_config.PERMISSI
 loan_router.post('/', auth_middleware, validate_permission(app_config.PERMISSIONS.CREATE_LOAN), loan_validator.loan_validation_rules_post, validate, loan_controller.create_loan);
 loan_router.put('/:id', auth_middleware, validate_permission(app_config.PERMISSIONS.UPDATE_LOAN), loan_validator.loan_validation_rules_update, validate, loan_controller.update_loan);
 loan_router.delete('/:id', auth_middleware, validate_permission(app_config.PERMISSIONS.DELETE_LOAN), loan_validator.loan_validation_rules_get_id, validate, loan_controller.delete_loan);
+/* Approve loan */
+loan_router.put('/:id/approve/', auth_middleware, validate_permission(app_config.PERMISSIONS.APPROVE_LOAN), loan_validator.loan_validation_rules_get_id, validate, loan_controller.approve_loan);
 /* Request renewal route */
 loan_router.put('/:id/renewal/', auth_middleware, validate_permission(app_config.PERMISSIONS.REQUEST_LOAN_RENEWAL), loan_validator.loan_validation_rules_get_id, validate, loan_controller.request_loan_renewal);
 /* Finish loan route */
