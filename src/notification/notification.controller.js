@@ -124,3 +124,28 @@ export const delete_notification = async (req, res) => {
         res.status(500).json({message: 'Error deleting notification', error: error.message});
     }
 }
+
+/**
+ * Controller to mark a notification as read by its ID.
+ *
+ * @param {Object} req - The HTTP request object containing the notification ID in the route parameters.
+ * @param {Object} res - The HTTP response object used to send the response.
+ * @returns {void}
+ */
+export const mark_notification_as_read = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await notification_service.mark_notification_as_read(id);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.MARK_NOTIFICATION_AS_READ, id);
+        res.json({message: 'Notification marked as read successfully'});
+    } catch (error) {
+        if(error instanceof ObjectMissingParameters) {
+            return res.status(400).json({message: error.message});
+        }
+        if(error instanceof ObjectNotFound) {
+            return res.status(404).json({message: error.message});
+        }
+        // Internal error
+        res.status(500).json({message: 'Error marking notification as read', error: error.message});
+    }
+}

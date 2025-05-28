@@ -149,3 +149,29 @@ export const delete_notification = async (id) => {
     }
     return await notification_repository.delete_notification(id);
 }
+
+/**
+ * Mark a notification as read.
+ *
+ * @param {string} id - The ID of the notification to mark as read.
+ * @returns {Promise<Object>} The result of the deletion operation.
+ * @throws {ObjectMissingParameters} If the ID is not provided.
+ * @throws {NotificationAlreadyMarkedAsRed} If the notification is already marked as read.
+ * @throws {ObjectNotFound} If no notification is found with the given ID.
+ */
+export const mark_notification_as_read = async (id) => {
+    if(!id) {
+        throw new ObjectMissingParameters("notification");
+    }
+    
+    const notification_exists = await notification_repository.find_notification_by_id(id);
+
+    if(!notification_exists){
+        throw new ObjectNotFound("notification");
+    }
+    if(notification_exists.is_read) {
+        throw new NotificationAlreadyMarkedAsRed("notification");
+    }
+    notification_exists.is_read = true;
+    return await notification_repository.update_notification(id, notification_exists);
+}

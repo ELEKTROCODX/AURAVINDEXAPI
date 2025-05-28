@@ -84,6 +84,7 @@ export const log_actions = [
     { "action_code": "CREATE_NOTIFICATION" },
     { "action_code": "UPDATE_NOTIFICATION" },
     { "action_code": "DELETE_NOTIFICATION" },
+    { "action_code": "MARK_NOTIFICATION_AS_READ" },
     { "action_code": "READ_PLAN" },
     { "action_code": "CREATE_PLAN" },
     { "action_code": "UPDATE_PLAN" },

@@ -13,5 +13,5 @@ notification_router.get('/:id', auth_middleware, validate_permission(app_config.
 notification_router.post('/', auth_middleware, validate_permission(app_config.PERMISSIONS.CREATE_NOTIFICATION), notification_validator.notification_validation_rules_post, validate, notification_controller.create_notification);
 notification_router.put('/:id', auth_middleware, validate_permission(app_config.PERMISSIONS.UPDATE_NOTIFICATION), notification_validator.notification_validation_rules_update, validate, notification_controller.update_notification);
 notification_router.delete('/:id', auth_middleware, validate_permission(app_config.PERMISSIONS.DELETE_NOTIFICATION), notification_validator.notification_validation_rules_get_id, validate, notification_controller.delete_notification);
-
+notification_router.put('/:id/mark_as_read', auth_middleware, validate_permission(app_config.PERMISSIONS.MARK_NOTIFICATION_AS_READ), notification_validator.notification_validation_rules_get_id, validate, notification_controller.mark_notification_as_read);
 export {notification_router};
