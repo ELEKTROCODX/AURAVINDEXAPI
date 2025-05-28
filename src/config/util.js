@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { app_config } from "./app.config.js";
 import nodemailer from 'nodemailer';
+import axios from 'axios';
 
 // Function to convert strings in cammel case
 export const convert_string_cammel_case = (string) => {
@@ -148,3 +149,27 @@ export const send_email = async (to, subject, html) => {
     throw new Error('Email sending failed');
   }
 }
+
+const send_push_notification = async (token, title, message) => {
+    try {
+        await axios.post(
+            'https://fcm.googleapis.com/fcm/send',
+            {
+                to: token,
+                notification: {
+                    title,
+                    body: message
+                }
+            },
+            {
+                headers: {
+                    Authorization: `key=${app_config.fmc_server_key}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        console.log(`Push notification sent to ${token}`);
+    } catch (error) {
+        console.error('FCM error:', error.message);
+    }
+};
