@@ -151,3 +151,33 @@ export const delete_user = async (req, res) => {
         res.status(500).json({message: 'Error deleting user', error: error.message});
     }
 }
+
+/**
+ * Save a user's FCM token for push notifications.
+ * @param {Object} req - The request object containing the user ID and FCM token.
+ * @param {Object} res - The response object to send the result.
+ * @returns {void}
+ * @throws {ObjectMissingParameters} If the user ID or FCM token is missing.
+ * @throws {ObjectNotFound} If no user is found with the provided ID.
+ */
+export const save_fcm_token = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { fcm_token } = req.body;
+        if(!fcm_token) {
+            throw new ObjectMissingParameters("fcm_token");
+        }
+        await user_service.save_fcm_token(id, fcm_token);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.UPDATE_USER, id);
+        res.json({message: 'FCM token saved successfully'});
+    } catch (error) {
+        if(error instanceof ObjectMissingParameters) {
+            return res.status(400).json({message: error.message});
+        }
+        if(error instanceof ObjectNotFound) {
+            return res.status(404).json({message: error.message});
+        }
+        // Internal error
+        res.status(500).json({message: 'Error saving FCM token', error: error.message});
+    }
+}

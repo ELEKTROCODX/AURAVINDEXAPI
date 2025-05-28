@@ -44,6 +44,10 @@ const user_schema = new Schema({
         required: false,
         // Add default for later
     },
+    fmc_token: {
+        type: String,
+        required: false
+    },
     password: {
         type: String,
         required: false
@@ -68,6 +72,7 @@ user_schema.pre('findOneAndUpdate', async function (next) {
 user_schema.set('toJSON', {
     transform: (doc, ret) => {
         delete ret.password;
+        delete ret.fmc_token;
         delete ret.__v;
         return ret;
     }

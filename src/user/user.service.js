@@ -207,3 +207,17 @@ export const delete_user = async (id) => {
     }
     return await user_repository.delete_user(id);
 }
+
+/**
+ * Save a user's FCM token for push notifications.
+ */
+export const save_fcm_token = async (id, fcm_token) => {
+    if(!id || !fcm_token) {
+        throw new ObjectMissingParameters("user");
+    }
+    const user_exists = await user_repository.find_user_by_id(id);
+    if(!user_exists) {
+        throw new ObjectNotFound("user");
+    }
+    return await user_repository.update_user(id, {fmc_token: fcm_token});
+}
