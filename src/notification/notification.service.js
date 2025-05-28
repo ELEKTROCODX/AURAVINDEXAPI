@@ -2,6 +2,7 @@ import {ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters,
 import * as notification_repository from './notification.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import { generate_filter } from '../config/util.js';
+import { send_push_notification } from '../config/fcm.js';
 /**
  * Creates a new notification in the system.
  * @param {string} receiver - The ID of the user receiving the notification.
@@ -22,7 +23,7 @@ export const create_new_notification = async (receiver, title, message, notifica
     return new_notification;
 }
 /**
- * Retrieves all notifications with pagination.
+ * Retrieves all notifications with pagi    nation.
  *
  * @param {number} page - The page number to retrieve.
  * @param {number} limit - The number of notifications per page.

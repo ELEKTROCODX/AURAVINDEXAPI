@@ -150,7 +150,8 @@ export const send_email = async (to, subject, html) => {
   }
 }
 
-const send_push_notification = async (token, title, message) => {
+// Alternative function to send push notifications using Firebase Cloud Messaging (FCM)
+/* export const send_push_notification = async (token, title, message) => {
     try {
         await axios.post(
             'https://fcm.googleapis.com/fcm/send',
@@ -172,4 +173,4 @@ const send_push_notification = async (token, title, message) => {
     } catch (error) {
         console.error('FCM error:', error.message);
     }
-};
+}; */

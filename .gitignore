@@ -12,3 +12,4 @@ public/images/rooms/*
 public/images/users/*
 !public/images/users/default.png
 .vscode
+src/config/firebase-key.json
