@@ -10,15 +10,6 @@ const id = param("id")
   .isMongoId()
   .withMessage("Valid ID is required");
 
-
-// Default sender validation
-const sender = body("sender")
-  .isString()
-  .notEmpty()
-  .withMessage("Sender is required")
-  .isMongoId()
-  .withMessage("Valid sender ID is required");
-
 // Default receiver validation
 const receiver = body("receiver")
   .isString()
@@ -37,22 +28,33 @@ const title = body("title")
     `Notification title cannot be longer than ${app_config.NOTIFICATION_TITLE_MAX_LENGTH} characters`
   );
 
-// Default description validation
-const description = body("description")
-.isString()
-.notEmpty()
-.withMessage("Notification description is required")
-.isLength({ max: app_config.NOTIFICATION_DESCRIPTION_MAX_LENGTH })
-.withMessage(
-  `Notification description cannot be longer than ${app_config.NOTIFICATION_DESCRIPTION_MAX_LENGTH} characters`
-);
+// Default message validation
+const message = body("message")
+  .isString()
+  .notEmpty()
+  .withMessage("Notification message is required")
+  .isLength({ max: app_config.NOTIFICATION_DESCRIPTION_MAX_LENGTH })
+  .withMessage(
+    `Notification message cannot be longer than ${app_config.NOTIFICATION_DESCRIPTION_MAX_LENGTH} characters`
+  );
 
+// Default notification type validation
+const notification_type = body("notification_type")
+  .isBoolean()
+  .notEmpty()
+  .withMessage("Notification type is required");
+
+// Default is_read validation
+const is_read = body("is_read")
+  .isBoolean()
+  .optional()
+  .withMessage("Is read must be a boolean value");
 
 // ID validation rules
 export const notification_validation_rules_get_id = [id];
 
 // POST validation rules
-export const notification_validation_rules_post = [sender, receiver, title, description];
+export const notification_validation_rules_post = [receiver, title, message , notification_type, is_read];
 
 // PUT validation rules
-export const notification_validation_rules_update = [id, sender, receiver, title, description];
+export const notification_validation_rules_update = [id, receiver, title, message, notification_type, is_read];

@@ -4,11 +4,6 @@ import {Schema, model} from 'mongoose';
 // Create schema
 const notification_schema = new Schema({
     // ID
-    sender: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
-    },
     receiver: {
         type: Schema.Types.ObjectId,
         ref: 'user',
@@ -18,9 +13,17 @@ const notification_schema = new Schema({
         type: String,
         required: true
     },
-    description: {
+    message: {
         type: String,
         required: true
+    },
+    notification_type: {
+        type: String,
+        required: true
+    },
+    is_read: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps : true});
 

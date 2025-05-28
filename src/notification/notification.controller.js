@@ -5,15 +5,15 @@ import * as audit_log_service from '../audit_log/audit_log.service.js';
 /**
  * Controller to handle the creation of a new notification.
  *
- * @param {Object} req - The HTTP request object containing title sender, and receiver in the body.
+ * @param {Object} req - The HTTP request object containing title and receiver in the body.
  * @param {Object} res - The HTTP response object used to send the response.
  * @returns {void}
  */
 export const create_notification = async (req, res) => {
-    const {sender, receiver, title, description} = req.body;
+    const {receiver, title, message, notification_type, is_read} = req.body;
     try {
-        await notification_service.create_new_notification(sender, receiver, title, description);
-        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_NOTIFICATION, `${sender} - ${receiver} - ${title}`);
+        await notification_service.create_new_notification(receiver, title, message, notification_type, is_read);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_NOTIFICATION, `${receiver} - ${title}`);
         res.status(201).json({message: 'Notification registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
