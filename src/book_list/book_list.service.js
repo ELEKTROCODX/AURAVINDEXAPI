@@ -52,17 +52,19 @@ export const create_new_book_list = async (title, description, owner, books) => 
  * @returns {Promise<Array>} A list of book lists.
  */
 export const get_all_book_lists = async (page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book_list");
     }
+    const book_lists = await book_list_repository.find_all_book_lists(null, null);
+    const total_book_lists = book_lists.length;
+    if(limit == "none") limit = total_book_lists;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const book_lists = await book_list_repository.find_all_book_lists(skip, limit);
-    const total_book_lists = await book_list_repository.count_book_lists();
     const total_pages = Math.ceil(total_book_lists / limit);
+    const paginated_book_lists = book_lists.slice(skip, skip + limit);
     return {
-        data: book_lists,
+        data: paginated_book_lists,
         pagination: {
             totalItems: total_book_lists,
             totalPages: total_pages,
@@ -91,18 +93,21 @@ export const filter_book_lists = async (filter_field, filter_value, page, limit)
     if(!allowed_fields.includes(filter_field)) {
         throw new ObjectInvalidQueryFilters("book_list");
     }
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book_list");
     }
+    
+    const filter = generate_filter(field_types, filter_field, filter_value);
+    const book_lists = await book_list_repository.filter_book_lists(filter, null, null);
+    const total_book_lists = book_lists.length;
+    if(limit == "none") limit = total_book_lists;
     page = parseInt(page);
     limit = parseInt(limit);
-    const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const book_lists = await book_list_repository.filter_book_lists(filter, skip, limit);
-    const total_book_lists = book_lists.length;
     const total_pages = Math.ceil(total_book_lists / limit);
+    const paginated_book_lists = book_lists.slice(skip, skip + limit);
     return {
-        data: book_lists,
+        data: paginated_book_lists,
         pagination: {
             totalItems: total_book_lists,
             totalPages: total_pages,
