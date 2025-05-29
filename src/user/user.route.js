@@ -24,6 +24,6 @@ user_router.post('/', auth_middleware, validate_permission(app_config.PERMISSION
 user_router.put('/:id', auth_middleware, validate_permission(app_config.PERMISSIONS.UPDATE_USER), upload.single('user_img'), user_validator.user_validation_rules_update, validate, user_controller.update_user);
 user_router.delete('/:id', auth_middleware, validate_permission(app_config.PERMISSIONS.DELETE_USER), user_validator.user_validation_rules_get_id, validate, user_controller.delete_user);
 /* Save a user's FCM token */
-user_router.post('/:id/fmc_token/', auth_middleware, validate_permission(app_config.PERMISSIONS.UPDATE_USER), user_validator.user_validation_rules_fcm_token, validate, user_controller.save_fcm_token);
+user_router.post('/:id/fcm_token/', auth_middleware, validate_permission(app_config.PERMISSIONS.UPDATE_USER), user_validator.user_validation_rules_fcm_token, validate, user_controller.save_fcm_token);
 
 export {user_router};
