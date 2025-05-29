@@ -18,7 +18,6 @@ export const create_new_notification = async (receiver, title, message, notifica
     }
     const new_notification = await notification_repository.create_notification({receiver, title, message, notification_type, is_read});
     if(receiver_exists.fcm_token) {
-        console.log("FCM token found, sending push notification...")
         await send_push_notification(receiver_exists.fcm_token, title, message);
     }
     return new_notification;
@@ -36,7 +35,7 @@ export const get_all_notifications = async (page, limit) => {
         throw new ObjectInvalidQueryFilters("notification");
     }
     const notifications = await notification_repository.find_all_notifications(null, null);
-    const total_notifications = await notifications.length;
+    const total_notifications = notifications.length;
     if(limit == "none") limit = total_notifications;
     page = parseInt(page);
     limit = parseInt(limit);
