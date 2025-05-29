@@ -66,7 +66,6 @@ export const login = async (req, res) => {
  */
 export const request_password_reset = async (req, res) => {
     try {
-
         const { email } = req.body;
         const response = await auth_service.request_password_reset(email);
         const user_data = await user_service.filter_users('email', email, 1, 1);

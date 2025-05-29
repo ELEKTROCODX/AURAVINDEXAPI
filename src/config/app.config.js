@@ -17,7 +17,7 @@ export const app_config = {
     admin_gmail_email: process.env.ADMIN_GMAIL_EMAIL,
     admin_gmail_password: process.env.ADMIN_GMAIL_PASSWORD,
     allow_importing_default_data: process.env.ALLOW_IMPORTING_DEFAULT_DATA,
-    sengrid_api_key: process.env.SENDGRID_API_KEY,
+    sendgrid_api_key: process.env.SEND_GRID_TOKEN,
     fmc_server_key: process.env.FCM_SERVER_KEY,
     DEFAULT_BOOK_IMG_PATH: '/images/books/default.png',
     DEFAULT_ROOM_IMG_PATH: '/images/rooms/default.png',

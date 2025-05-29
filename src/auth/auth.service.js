@@ -113,11 +113,10 @@ export const request_password_reset = async (email) => {
         <p>The AURA VINDEX Team</p>
     `,
     );
-    if(result.accepted.length == 0) {
-        throw new FailedToSendEmail(email);
-    } else {
-        return true;
+    if(!result) {
+        throw new FailedToSendEmail();
     }
+    return true;
 }
 /**
  * Resets a user's password using a token and a new password.

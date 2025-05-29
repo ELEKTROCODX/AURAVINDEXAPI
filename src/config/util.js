@@ -149,14 +149,24 @@ export const send_email = async (to, subject, html) => {
   }
 } */
 
+sgMail.setApiKey(app_config.sendgrid_api_key);
 export const send_email = async (to, subject, html) => {
-  sgMail.setApiKey(app_config.sengrid_api_key);
-  await sgMail.send({
-    to,
-    from: app_config.admin_gmail_email,
-    subject,
-    html,
-  });
+  try {
+    const msg = {
+      to,
+      from: 'aura24vindex@gmail.com', // Tu remitente verificado
+      subject,
+      html,
+      };
+    await sgMail.send(msg);
+    return true;
+  } catch (error) {
+    console.error('Error sending email:', error.message);
+    if (error.response) {
+        console.error('SendGrid Response:', error.response.body);
+    }
+    throw new Error('Failed to send email');
+  } 
 };
 
 // Alternative function to send push notifications using Firebase Cloud Messaging (FCM)
