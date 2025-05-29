@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { app_config } from "./app.config.js";
-import nodemailer from 'nodemailer';
-import axios from 'axios';
+import sgMail from '@sendgrid/mail';
 
 // Function to convert strings in cammel case
 export const convert_string_cammel_case = (string) => {
