@@ -222,5 +222,5 @@ export const save_fcm_token = async (id, fcm_token) => {
     if(!user_exists) {
         throw new ObjectNotFound("user");
     }
-    return await user_repository.update_user(id, {fmc_token: fcm_token});
+    return await user_repository.update_user(id, {fcm_token: fcm_token});
 }

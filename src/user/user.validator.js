@@ -91,12 +91,12 @@ const password = body("password")
     `Password must be at least ${app_config.USER_MIN_PASSWORD_LENGTH} characters long`
   );
 
-// Default FMC token validation
-const fmc_token = body("fmc_token")
+// Default FCM token validation
+const fcm_token = body("fcm_token")
   .optional()
   .isString()
   .notEmpty()
-  .withMessage("FMC token is required");
+  .withMessage("FCM token is required");
 
 /*   .isStrongPassword()
   .withMessage("A stronger password is required") */ // ID validation rules
@@ -132,7 +132,7 @@ export const user_validation_rules_update = [
 // FMC token validation rules
 export const user_validation_rules_fcm_token = [
   id,
-  fmc_token,
+  fcm_token,
 ];
 
 // Password reset validation rules
