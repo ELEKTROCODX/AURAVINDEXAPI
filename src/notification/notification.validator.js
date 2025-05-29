@@ -33,16 +33,20 @@ const message = body("message")
   .isString()
   .notEmpty()
   .withMessage("Notification message is required")
-  .isLength({ max: app_config.NOTIFICATION_DESCRIPTION_MAX_LENGTH })
+  .isLength({ max: app_config.NOTIFICATION_MESSAGE_MAX_LENGTH })
   .withMessage(
-    `Notification message cannot be longer than ${app_config.NOTIFICATION_DESCRIPTION_MAX_LENGTH} characters`
+    `Notification message cannot be longer than ${app_config.NOTIFICATION_MESSAGE_MAX_LENGTH} characters`
   );
 
 // Default notification type validation
 const notification_type = body("notification_type")
-  .isBoolean()
+  .isString()
   .notEmpty()
-  .withMessage("Notification type is required");
+  .withMessage("Notification type is required")
+  .isLength({ max: app_config.NOTIFICATION_TYPE_MAX_LENGTH })
+  .withMessage(
+    `Notification type cannot be longer than ${app_config.NOTIFICATION_TYPE_MAX_LENGTH} characters`
+  );
 
 // Default is_read validation
 const is_read = body("is_read")
