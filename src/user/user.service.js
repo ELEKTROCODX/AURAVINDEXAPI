@@ -55,6 +55,7 @@ export const get_all_users = async (page, limit) => {
     const users_sanitized = users.map(user => {
         const user_obj = user.toObject();
         user_obj.fcm_token = null;
+        user_obj.password = null;
         return user_obj;
     });
     const total_users = users_sanitized.length;
@@ -110,6 +111,7 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
     const users_sanitized = users.map(user => {
         const user_obj = user.toObject();
         user_obj.fcm_token = null;
+        user_obj.password = null;
         return user_obj;
     });
     const total_users = users_sanitized.length;

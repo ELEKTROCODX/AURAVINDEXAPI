@@ -1,3 +1,5 @@
+import admin from './firebase.js';  
+
 export const send_push_notification = async (fcm_token, title, body) => {
   const message = {
     token: fcm_token,
