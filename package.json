@@ -33,6 +33,7 @@
   "license": "GPL-3.0",
   "description": "Backend server for Aura Vindex.",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.5",
     "axios": "^1.8.4",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

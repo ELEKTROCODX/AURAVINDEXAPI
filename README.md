@@ -59,6 +59,8 @@ APP_MAIN_DOMAIN=example.com
 # Admin gmail email and app password (This is used to send the reset password links to emails)
 ADMIN_GMAIL_EMAIL=example@gmail.com
 ADMIN_GMAIL_PASSWORD=appPasswordExample
+# The API key for SendGrid, used to send emails.
+SEND_GRID_TOKEN=exampleToken
 # The support email where users can contact for support
 APP_SUPPORT_EMAIL=example@gmail.com
 # This options tells the server if users can request the server to import default data (they cannot access this data).

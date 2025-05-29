@@ -115,24 +115,24 @@ export const generate_filter = (field_types, filter_field, filter_value) => {
   return {[filter_field]: filter_value};
 }
 
-// Set up Nodemailer
+/* // Set up Nodemailer
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: app_config.admin_gmail_email,
     pass: app_config.admin_gmail_password
   }
-});
+}); */
 
-transporter.verify((error, success) => {
+/* transporter.verify((error, success) => {
   if(error) {
     console.error('Error setting up email transporter:', error);
   } else {
     console.log('Email transporter is ready to send messages');
   }
-});
+}); */
 
-// Function to send emails
+/* // Function to send emails
 export const send_email = async (to, subject, html) => {
   const mail_options = {
     from: app_config.admin_gmail_email,
@@ -148,7 +148,17 @@ export const send_email = async (to, subject, html) => {
     console.error('Error sending email:', error);
     throw new Error('Email sending failed');
   }
-}
+} */
+
+export const send_email = async (to, subject, html) => {
+  sgMail.setApiKey(app_config.sengrid_api_key);
+  await sgMail.send({
+    to,
+    from: app_config.admin_gmail_email,
+    subject,
+    html,
+  });
+};
 
 // Alternative function to send push notifications using Firebase Cloud Messaging (FCM)
 /* export const send_push_notification = async (token, title, message) => {
