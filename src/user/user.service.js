@@ -210,6 +210,9 @@ export const delete_user = async (id) => {
 
 /**
  * Save a user's FCM token for push notifications.
+ * @throws {ObjectMissingParameters} If the ID is not provided.
+ * @throws {ObjectNotFound} If no user is found with the provided ID.
+ * @returns {void} 
  */
 export const save_fcm_token = async (id, fcm_token) => {
     if(!id || !fcm_token) {
