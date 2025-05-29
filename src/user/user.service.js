@@ -52,13 +52,18 @@ export const get_all_users = async (page, limit) => {
         throw new ObjectInvalidQueryFilters("user");
     }
     const users = await user_repository.find_all_users(null, null);
-    const total_users = users.length;
+    const users_sanitized = users.map(user => {
+        const user_obj = user.toObject();
+        user_obj.fcm_token = null;
+        return user_obj;
+    });
+    const total_users = users_sanitized.length;
     if(limit == "none") limit = total_users;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const total_pages = Math.ceil(total_users / limit);
-    const paginated_users = users.slice(skip, skip + limit);
+    const paginated_users = users_sanitized.slice(skip, skip + limit);
     return {
         data: paginated_users,
         pagination: {
@@ -102,13 +107,18 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
     
     const filter = generate_filter(field_types, filter_field, filter_value);
     const users = await user_repository.filter_users(filter, null, null);
-    const total_users = users.length;
+    const users_sanitized = users.map(user => {
+        const user_obj = user.toObject();
+        user_obj.fcm_token = null;
+        return user_obj;
+    });
+    const total_users = users_sanitized.length;
     if(limit == "none") limit = total_users;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const total_pages = Math.ceil(total_users / limit);
-    const paginated_users = users.slice(skip, skip + limit);
+    const paginated_users = users_sanitized.slice(skip, skip + limit);
     return {
         data: paginated_users,
         pagination: {

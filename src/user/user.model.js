@@ -72,7 +72,6 @@ user_schema.pre('findOneAndUpdate', async function (next) {
 user_schema.set('toJSON', {
     transform: (doc, ret) => {
         delete ret.password;
-        delete ret.fcm_token;
         delete ret.__v;
         return ret;
     }
