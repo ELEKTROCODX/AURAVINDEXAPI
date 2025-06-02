@@ -123,4 +123,4 @@ export const reset_password = async (req, res) => {
     }
 }
 
-/* CLOSE ACCOUNT REQUEST */
+/* CLOSE ACCOUNT REQUEST */ 
