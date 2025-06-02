@@ -10,7 +10,7 @@ export const create_notification = async (notification_data) => {
 // Fetch all
 export const find_all_notifications = async (skip, limit) => {
     return await notification_model.notification.find().skip(skip).limit(limit).populate([
-        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]}
+        { path: 'receiver', populate: [{ path: 'gender' }, { path: 'role'} ]}
     ]);
 
 }
@@ -18,7 +18,7 @@ export const find_all_notifications = async (skip, limit) => {
 // Fetch with filters
 export const filter_notifications = async (filter, skip, limit) => {
     return await notification_model.notification.find(filter).skip(skip).limit(limit).populate([
-        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]}
+        { path: 'receiver', populate: [{ path: 'gender' }, { path: 'role'} ]}
     ]);
 }
 
@@ -30,7 +30,7 @@ export const count_notifications = async () => {
 // Fetch by ID
 export const find_notification_by_id = async (id) => {
     return await notification_model.notification.findById(id).populate([
-        { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]}
+        { path: 'receiver', populate: [{ path: 'gender' }, { path: 'role'} ]}
     ]) || null;
 }
 
