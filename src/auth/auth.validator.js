@@ -10,7 +10,7 @@ export const login_validation_rules = [
       `Password must be at least ${app_config.USER_MIN_PASSWORD_LENGTH} characters long`
     ),
   body("expires_in")
-    .optional
+    .optional()
     .isString()
     .withMessage("Expires in must be a string")
 ];
