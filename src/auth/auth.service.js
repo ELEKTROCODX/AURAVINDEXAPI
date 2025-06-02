@@ -49,7 +49,7 @@ export const register = async (name, last_name, email, biography, gender, birthd
  * 
  * @throws {InvalidLogin} - If the email or password is incorrect, or user doesn't exist.
  */
-export const login = async (email, password) => {
+export const login = async (email, password, expires_in) => {
     const user = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
     if(user.length != 1){
         throw new InvalidLogin();
@@ -61,7 +61,7 @@ export const login = async (email, password) => {
     const token = jwt.sign(
         {id: user[0]._id, email: user[0].email, role: user[0].role},
         app_config.jwtSecret,
-        {expiresIn: '1h'}
+        {expiresIn: expires_in}
     );
     return token;
 }

@@ -42,8 +42,8 @@ export const register = async (req, res) => {
  */
 export const login = async (req, res) => {
     try {
-        const {email, password} = req.body;
-        const token = await auth_service.login(email, password);
+        const {email, password, expires_in} = req.body;
+        const token = await auth_service.login(email, password, expires_in = "1h");
         const user_data = await user_service.filter_users('email', email, 1, 1);
         await audit_log_service.create_new_audit_log(user_data.data[0]._id, app_config.PERMISSIONS.SIGNIN, user_data.data[0].email);
         res.status(200).json({message: 'Successfully logged in', token});
