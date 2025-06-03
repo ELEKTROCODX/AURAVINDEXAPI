@@ -78,11 +78,13 @@ export const create_new_loan = async (user, book, loan_status, return_date, retu
  * @returns {Promise<Array>} A list of all loans with pagination.
  * @throws {ObjectInvalidQueryFilters} If invalid filters are provided in the query parameters.
  */
-export const get_all_loans = async (page, limit) => {
-    if(isNaN(page) || (isNaN(limit) && (limit != "none"))|| page < 1 || limit < 1) {
+export const get_all_loans = async (page, limit, sort, sort_by) => {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("loan");
     }
-    const loans = await loan_repository.find_all_loans(null, null);
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const loans = await loan_repository.find_all_loans(null, null, sort_field, sort_direction);
     const total_loans = loans.length;
     if(limit == "none") limit = total_loans;
     page = parseInt(page);
@@ -110,7 +112,7 @@ export const get_all_loans = async (page, limit) => {
  * @returns {Promise<Array>} A list of loans that match the filter criteria.
  * @throws {ObjectInvalidQueryFilters} If the filter field is invalid or pagination parameters are incorrect.
  */
-export const filter_loans = async (filter_field, filter_value, page, limit) => {
+export const filter_loans = async (filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         user: 'ObjectId',
         book: 'ObjectId',
@@ -126,8 +128,10 @@ export const filter_loans = async (filter_field, filter_value, page, limit) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("loan");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
-    const loans = await loan_repository.filter_loans(filter, null, null);
+    const loans = await loan_repository.filter_loans(filter, null, null, sort_field, sort_direction);
     const total_loans = loans.length;
     if(limit == "none") limit = total_loans;
     page = parseInt(page);

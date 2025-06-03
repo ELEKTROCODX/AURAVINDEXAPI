@@ -39,13 +39,13 @@ export const create_user = async (req, res) => {
  */
 export const get_all_users = async (req, res) => {
     try {
-        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
+        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "_id" } = req.query;
         if(!filter_field || !filter_value) {
-            const users = await user_service.get_all_users(page, limit);
+            const users = await user_service.get_all_users(page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_USER, 'ALL_USERS');
             res.json(users);
         } else {
-            const users = await user_service.filter_users(filter_field, filter_value, page, limit);
+            const users = await user_service.filter_users(filter_field, filter_value, page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_USER, 'FILTERED_USERS');
             res.json(users);
         }

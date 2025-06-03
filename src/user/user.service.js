@@ -47,11 +47,13 @@ export const create_new_user = async (name, last_name, email, biography, gender,
  * @throws {ObjectInvalidQueryFilters} If the provided page or limit is invalid.
  * @returns {Array} An array of user objects.
  */
-export const get_all_users = async (page, limit) => {
+export const get_all_users = async (page, limit, sort, sort_by) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("user");
     }
-    const users = await user_repository.find_all_users(null, null);
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const users = await user_repository.find_all_users(null, null, sort_field, sort_direction);
     const users_sanitized = users.map(user => {
         const user_obj = user.toObject();
         user_obj.fcm_token = null;
@@ -86,7 +88,7 @@ export const get_all_users = async (page, limit) => {
  * @throws {ObjectInvalidQueryFilters} If the filter field is invalid or page/limit are not valid.
  * @returns {Array} An array of filtered user objects.
  */
-export const filter_users = async (filter_field, filter_value, page, limit) => {
+export const filter_users = async (filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         name: 'String',
         last_name: 'String',
@@ -105,9 +107,10 @@ export const filter_users = async (filter_field, filter_value, page, limit) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("user");
     }
-    
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
-    const users = await user_repository.filter_users(filter, null, null);
+    const users = await user_repository.filter_users(filter, null, null, sort_field, sort_direction);
     const users_sanitized = users.map(user => {
         const user_obj = user.toObject();
         user_obj.fcm_token = null;

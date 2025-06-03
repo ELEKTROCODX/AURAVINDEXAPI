@@ -8,8 +8,8 @@ export const create_loan = async (loan_data) => {
 }
 
 // Fetch all
-export const find_all_loans = async (skip, limit) => {
-    return await loan_model.loan.find().skip(skip).limit(limit).populate([
+export const find_all_loans = async (skip, limit, sort_field, sort_direction) => {
+    return await loan_model.loan.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
         { path: 'book', populate: [{ path: 'authors' }, { path: 'editorial' }, { path: 'book_status'}, { path: 'book_collection'}] },
         { path: 'loan_status' }
@@ -17,8 +17,8 @@ export const find_all_loans = async (skip, limit) => {
 }
 
 // Fetch with filters
-export const filter_loans = async (filter, skip, limit) => {
-    return await loan_model.loan.find(filter).skip(skip).limit(limit).populate([
+export const filter_loans = async (filter, skip, limit, sort_field, sort_direction) => {
+    return await loan_model.loan.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
         { path: 'book', populate: [{ path: 'authors' }, { path: 'editorial' }, { path: 'book_status'}, { path: 'book_collection'}] },
         { path: 'loan_status' }

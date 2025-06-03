@@ -30,11 +30,13 @@ export const create_new_notification = async (receiver, title, message, notifica
  * @returns {Promise<Array>} An array of notification objects.
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid values.
  */
-export const get_all_notifications = async (page, limit) => {
+export const get_all_notifications = async (page, limit, sort, sort_by) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("notification");
     }
-    const notifications = await notification_repository.find_all_notifications(null, null);
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const notifications = await notification_repository.find_all_notifications(null, null, sort_field, sort_direction);
     const total_notifications = notifications.length;
     if(limit == "none") limit = total_notifications;
     page = parseInt(page);
@@ -62,7 +64,7 @@ export const get_all_notifications = async (page, limit) => {
  * @returns {Promise<Array>} An array of filtered notification objects.
  * @throws {ObjectInvalidQueryFilters} If the filter field, page, or limit are invalid.
  */
-export const filter_notifications = async (filter_field, filter_value, page, limit) => {
+export const filter_notifications = async (filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         receiver: 'ObjectId',
         title: 'String',
@@ -77,8 +79,10 @@ export const filter_notifications = async (filter_field, filter_value, page, lim
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("notification");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
-    const notifications = await notification_repository.filter_notifications(filter, null, null);
+    const notifications = await notification_repository.filter_notifications(filter, null, null, sort_field, sort_direction);
     const total_notifications = notifications.length;
     if(limit == "none") limit = total_notifications;
     page = parseInt(page);

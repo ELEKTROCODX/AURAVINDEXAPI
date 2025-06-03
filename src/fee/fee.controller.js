@@ -37,13 +37,13 @@ export const create_fee = async (req, res) => {
  */
 export const get_all_fees = async (req, res) => {
     try {
-        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
+        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "_id" } = req.query;
         if(!filter_field || !filter_value) {
-            const fees = await fee_service.get_all_fees(page, limit);
+            const fees = await fee_service.get_all_fees(page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_FEE, 'ALL_FEES');
             res.json(fees);
         } else {
-            const fees = await fee_service.filter_fees(filter_field, filter_value, page, limit);
+            const fees = await fee_service.filter_fees(filter_field, filter_value, page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_FEE, 'FILTERED_FEES');
             res.json(fees);
         }

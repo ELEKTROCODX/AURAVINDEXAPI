@@ -8,16 +8,16 @@ export const create_notification = async (notification_data) => {
 }
 
 // Fetch all
-export const find_all_notifications = async (skip, limit) => {
-    return await notification_model.notification.find().skip(skip).limit(limit).populate([
+export const find_all_notifications = async (skip, limit, sort_field, sort_direction) => {
+    return await notification_model.notification.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'receiver', populate: [{ path: 'gender' }, { path: 'role'} ]}
     ]);
 
 }
 
 // Fetch with filters
-export const filter_notifications = async (filter, skip, limit) => {
-    return await notification_model.notification.find(filter).skip(skip).limit(limit).populate([
+export const filter_notifications = async (filter, skip, limit, sort_field, sort_direction) => {
+    return await notification_model.notification.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'receiver', populate: [{ path: 'gender' }, { path: 'role'} ]}
     ]);
 }

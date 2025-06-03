@@ -8,13 +8,13 @@ export const create_user = async (user_data) => {
 }
 
 // Fetch all
-export const find_all_users = async (skip, limit) => {
-    return await user_model.user.find().skip(skip).limit(limit).populate('gender role');
+export const find_all_users = async (skip, limit, sort_field, sort_direction) => {
+    return await user_model.user.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate('gender role');
 }
 
 // Fetch with filters
-export const filter_users = async (filter, skip, limit) => {
-    return await user_model.user.find(filter).skip(skip).limit(limit).populate('gender role');
+export const filter_users = async (filter, skip, limit, sort_field, sort_direction) => {
+    return await user_model.user.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate('gender role');
 }
 
 // Count users

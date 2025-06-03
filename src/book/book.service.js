@@ -56,12 +56,13 @@ export const create_new_book = async (title, isbn, classification, summary, edit
  * @returns {Array} A list of books.
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid.
  */
-export const get_all_books = async (show_duplicates, show_lents, page, limit) => {
+export const get_all_books = async (show_duplicates, show_lents, page, limit, sort, sort_by) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book");
     }
-    const books = await book_repository.find_all_books(null, null);
-    
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const books = await book_repository.find_all_books(null, null, sort_field, sort_direction);
     let filtered_books = books;
     if ((!show_lents) || (show_lents == "false")) {
         filtered_books = filtered_books.filter(book => {
@@ -89,7 +90,7 @@ export const get_all_books = async (show_duplicates, show_lents, page, limit) =>
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const total_pages = Math.ceil(total_books / limit);
-    const paginated_books = filtered_books.slice(skip, skip + limit)
+    const paginated_books = filtered_books.slice(skip, skip + limit);
     return {
         data: paginated_books,
         pagination: {
@@ -111,7 +112,7 @@ export const get_all_books = async (show_duplicates, show_lents, page, limit) =>
  * @returns {Array} A list of filtered books.
  * @throws {ObjectInvalidQueryFilters} If the filter field is invalid.
  */
-export const filter_books = async (show_duplicates, show_lents, filter_field, filter_value, page, limit) => {
+export const filter_books = async (show_duplicates, show_lents, filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         title: 'String',
         isbn: 'String',
@@ -135,9 +136,10 @@ export const filter_books = async (show_duplicates, show_lents, filter_field, fi
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("book");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
-    const books = await book_repository.filter_books(filter, null, null);
-
+    const books = await book_repository.filter_books(filter, null, null, sort_field, sort_direction)
     let filtered_books = books;
     if ((!show_lents) || (show_lents == "false")) {
         filtered_books = filtered_books.filter(book => {
@@ -165,7 +167,7 @@ export const filter_books = async (show_duplicates, show_lents, filter_field, fi
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const total_pages = Math.ceil(total_books / limit);
-    const paginated_books = filtered_books.slice(skip, skip + limit)
+    const paginated_books = filtered_books.slice(skip, skip + limit);
     return {
         data: paginated_books,
         pagination: {

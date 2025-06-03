@@ -31,13 +31,13 @@ export const create_notification = async (req, res) => {
  */
 export const get_all_notifications = async (req, res) => {
     try {
-        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT } = req.query;
+        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "_id" } = req.query;
         if(!filter_field || !filter_value) {
-            const notifications = await notification_service.get_all_notifications(page, limit);
+            const notifications = await notification_service.get_all_notifications(page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_NOTIFICATION, 'ALL_NOTIFICATIONS');
             res.json(notifications);
         } else {
-            const notifications = await notification_service.filter_notifications(filter_field, filter_value, page, limit);
+            const notifications = await notification_service.filter_notifications(filter_field, filter_value, page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_NOTIFICATION, 'FILTERED_NOTIFICATIONS');
             res.json(notifications);
         }

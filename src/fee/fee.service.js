@@ -42,18 +42,22 @@ export const create_new_fee = async (fee_type, fee_status, loan, paid_date, due_
  * @returns {Promise<Array>} - List of fee objects for the requested page.
  * @throws {ObjectInvalidQueryFilters} - If the page or limit is invalid.
  */
-export const get_all_fees = async (page, limit) => {
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+export const get_all_fees = async (page, limit, sort, sort_by) => {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("fee");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const fees = await fee_repository.find_all_fees(null, null, sort_field, sort_direction);    
+    const total_fees = fees.length;
+    if(limit == "none") limit = total_fees;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
-    const fees = await fee_repository.find_all_fees(skip, limit);
-    const total_fees = await fee_repository.count_fees();
     const total_pages = Math.ceil(total_fees / limit);
+    const paginated_fees = fees.slice(skip, skip + limit);
     return {
-        data: fees,
+        data: paginated_fees,
         pagination: {
             totalItems: total_fees,
             totalPages: total_pages,
@@ -72,7 +76,7 @@ export const get_all_fees = async (page, limit) => {
  * @returns {Promise<Array>} - List of filtered fee objects.
  * @throws {ObjectInvalidQueryFilters} - If the filter field is invalid or pagination parameters are incorrect.
  */
-export const filter_fees = async (filter_field, filter_value, page, limit) => {
+export const filter_fees = async (filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         fee_type: 'ObjectId',
         fee_status: 'ObjectId',
@@ -84,18 +88,22 @@ export const filter_fees = async (filter_field, filter_value, page, limit) => {
     if(!allowed_fields.includes(filter_field)) {
         throw new ObjectInvalidQueryFilters("fee");
     }
-    if(isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("fee");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const filter = generate_filter(field_types, filter_field, filter_value);
+    const fees = await fee_repository.filter_fees(filter, null, null, sort_field, sort_direction);
+    const total_fees = fees.length;
+    if(limit == "none") limit = total_fees;
     page = parseInt(page);
     limit = parseInt(limit);
-    const filter = generate_filter(field_types, filter_field, filter_value);
     const skip = (page - 1) * limit;
-    const fees = await fee_repository.filter_fees(filter, skip, limit);
-    const total_fees = fees.length;
     const total_pages = Math.ceil(total_fees / limit);
+    const paginated_fees = fees.slice(skip, skip + limit);
     return {
-        data: fees,
+        data: paginated_fees,
         pagination: {
             totalItems: total_fees,
             totalPages: total_pages,

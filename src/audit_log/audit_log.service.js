@@ -40,11 +40,13 @@ export const create_new_audit_log = async (user, action, affected_object) => {
  * @returns {array} List of audit logs.
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid.
  */
-export const get_all_audit_logs = async (page, limit) => {
+export const get_all_audit_logs = async (page, limit, sort, sort_by) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("audit_log");
     }
-    const audit_logs = await audit_log_repository.find_all_audit_logs(null, null);
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const audit_logs = await audit_log_repository.find_all_audit_logs(null, null, sort_field, sort_direction);
     const total_audit_logs = audit_logs.length;
     if(limit == "none") limit = total_audit_logs;
     page = parseInt(page);
@@ -72,7 +74,7 @@ export const get_all_audit_logs = async (page, limit) => {
  * @returns {array} Filtered audit logs.
  * @throws {ObjectInvalidQueryFilters} If the filter field is invalid or query parameters are incorrect.
  */
-export const filter_audit_logs = async (filter_field, filter_value, page, limit) => {
+export const filter_audit_logs = async (filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         user: 'ObjectId',
         action: 'ObjectId',
@@ -85,8 +87,10 @@ export const filter_audit_logs = async (filter_field, filter_value, page, limit)
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("audit_log");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
-    const audit_logs = await audit_log_repository.filter_audit_logs(filter, null, null);
+    const audit_logs = await audit_log_repository.filter_audit_logs(filter, null, null, sort_field, sort_direction);
     const total_audit_logs = audit_logs.length;
     if(limit == "none") limit = total_audit_logs;
     page = parseInt(page);

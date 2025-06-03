@@ -8,16 +8,16 @@ export const create_audit_log = async (audit_log_data) => {
 }
 
 // Fetch all
-export const find_all_audit_logs = async (skip, limit) => {
-    return await audit_log_model.audit_log.find().skip(skip).limit(limit).populate([
+export const find_all_audit_logs = async (skip, limit, sort_field, sort_direction) => {
+    return await audit_log_model.audit_log.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
         { path: 'action' }
     ]);
 }
 
 // Fetch with filters
-export const filter_audit_logs = async (filter, skip, limit) => {
-    return await audit_log_model.audit_log.find(filter).skip(skip).limit(limit).populate([
+export const filter_audit_logs = async (filter, skip, limit, sort_field, sort_direction) => {
+    return await audit_log_model.audit_log.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
         { path: 'action' }
     ]);;

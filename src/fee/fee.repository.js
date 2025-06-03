@@ -8,13 +8,13 @@ export const create_fee = async (fee_data) => {
 }
 
 // Fetch all
-export const find_all_fees = async (skip, limit) => {
-    return await fee_model.fee.find().skip(skip).limit(limit).populate('fee_type fee_status loan');
+export const find_all_fees = async (skip, limit, sort_field, sort_direction) => {
+    return await fee_model.fee.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate('fee_type fee_status loan');
 }
 
 // Fetch with filters
-export const filter_fees = async (filter, skip, limit) => {
-    return await fee_model.fee.find(filter).skip(skip).limit(limit).populate('fee_type fee_status loan');
+export const filter_fees = async (filter, skip, limit, sort_field, sort_direction) => {
+    return await fee_model.fee.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate('fee_type fee_status loan');
 }
 
 // Count fees
