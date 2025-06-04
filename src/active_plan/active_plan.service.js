@@ -61,12 +61,13 @@ export const create_new_active_plan = async (user, plan, plan_status, ending_dat
  * @returns {Promise<Array>} An array of active_plan_objects.
  * @throws {ObjectInvalidQueryFilters} If page or limit are invalid values.
  */
-export const get_all_active_plans = async (page, limit) => {
+export const get_all_active_plans = async (page, limit, sort, sort_by) => {
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("active_plan");
     }
-
-    const active_plans = await active_plan_repository.find_all_active_plans(null);
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
+    const active_plans = await active_plan_repository.find_all_active_plans(null, null, sort_field, sort_direction);
     const total_active_plans = active_plans.length;
     if(limit == "none") limit = total_active_plans;
     page = parseInt(page);
@@ -94,7 +95,7 @@ export const get_all_active_plans = async (page, limit) => {
  * @returns {Promise<Array>} An array of filtered active plan objects.
  * @throws {ObjectInvalidQueryFilters} If the filter field, page, or limit are invalid.
  */
-export const filter_active_plans = async (filter_field, filter_value, page, limit) => {
+export const filter_active_plans = async (filter_field, filter_value, page, limit, sort, sort_by) => {
     const field_types = {
         user: 'ObjectId',
         plan: 'ObjectId',
@@ -109,8 +110,10 @@ export const filter_active_plans = async (filter_field, filter_value, page, limi
     if(isNaN(page) || (isNaN(limit) && (limit != "none")) || page < 1 || limit < 1) {
         throw new ObjectInvalidQueryFilters("active_plan");
     }
+    const sort_field = sort_by || 'createdAt';
+    const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
-    const active_plans = await active_plan_repository.filter_active_plans(filter, null, null);
+    const active_plans = await active_plan_repository.filter_active_plans(filter, null, null, sort_field, sort_direction);
     const total_active_plans = active_plans.length;
     if(limit == "none") limit = total_active_plans;
     page = parseInt(page);

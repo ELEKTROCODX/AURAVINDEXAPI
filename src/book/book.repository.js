@@ -8,12 +8,12 @@ export const create_book = async (book_data) => {
 }
 
 // Fetch all
-export const find_all_books = async (skip, limit, sort_field, sort_direction) => {
+export const find_all_books = async (skip, limit, sort_field = "createdAt", sort_direction = 1) => {
     return await book_model.book.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate('title editorial book_status book_collection authors');
 }
 
 // Fetch with filters
-export const filter_books = async (filter, skip, limit, sort_field, sort_direction) => {
+export const filter_books = async (filter, skip, limit, sort_field = "createdAt", sort_direction = 1) => {
     return await book_model.book.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate('title editorial book_status book_collection authors');
 }
 

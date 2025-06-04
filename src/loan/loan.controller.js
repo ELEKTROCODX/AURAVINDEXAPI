@@ -48,7 +48,7 @@ export const create_loan = async (req, res) => {
  */
 export const get_all_loans = async (req, res) => {
     try {
-        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "_id" } = req.query;
+        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "createdAt" } = req.query;
         if(!filter_field || !filter_value) {
             const loans = await loan_service.get_all_loans(page, limit, sort, sort_by);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_LOAN, 'ALL_LOANS');

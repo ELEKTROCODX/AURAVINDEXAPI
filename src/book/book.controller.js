@@ -36,7 +36,7 @@ export const create_book = async (req, res) => {
  */
 export const get_all_books = async (req, res) => {
     try {
-        const { filter_field, filter_value, show_duplicates = true, show_lents = true, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "_id" } = req.query;
+        const { filter_field, filter_value, show_duplicates = true, show_lents = true, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "createdAt" } = req.query;
         if(!filter_field || !filter_value) {
             const books = await book_service.get_all_books(show_duplicates, show_lents, page, limit, sort, sort_by);
             res.json(books);

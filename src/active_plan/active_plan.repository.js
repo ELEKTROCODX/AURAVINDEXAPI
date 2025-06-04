@@ -9,8 +9,8 @@ export const create_active_plan = async (active_plan_data) => {
 }
 
 // Fetch all
-export const find_all_active_plans = async (skip, limit) => {
-    return await active_plan_model.active_plan.find().skip(skip).limit(limit).populate([
+export const find_all_active_plans = async (skip, limit, sort_field = "createdAt", sort_direction = 1) => {
+    return await active_plan_model.active_plan.find().sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
         { path: 'plan' },
         { path: 'plan_status' }
@@ -18,8 +18,8 @@ export const find_all_active_plans = async (skip, limit) => {
 }
 
 // Fetch with filters
-export const filter_active_plans = async (filter, skip, limit) => {
-    return await active_plan_model.active_plan.find(filter).skip(skip).limit(limit).populate([
+export const filter_active_plans = async (filter, skip, limit, sort_field = "createdAt", sort_direction = 1) => {
+    return await active_plan_model.active_plan.find(filter).sort({[sort_field]: sort_direction}).skip(skip).limit(limit).populate([
         { path: 'user', populate: [{ path: 'gender' }, { path: 'role'} ]},
         { path: 'plan' },
         { path: 'plan_status' }
