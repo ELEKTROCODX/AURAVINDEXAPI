@@ -1,0 +1,15 @@
+node_modules/
+src_old/
+.env
+.env.test
+openapi.yaml
+database
+/test/
+public/images/books/*
+!public/images/books/default.png
+public/images/rooms/*
+!public/images/rooms/default.png
+public/images/users/*
+!public/images/users/default.png
+.vscode
+src/config/firebase-key.json
