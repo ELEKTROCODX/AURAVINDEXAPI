@@ -26,7 +26,7 @@ import { recent_book } from '../recent_book/recent_book.model.js';
  * @throws {ObjectAlreadyExists} - If a user with the same email already exists.
  */
 export const register = async (name, last_name, email, biography, gender, birthdate, user_img, address, password) => {
-    const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, null, null);
+    const user_exists = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, null, null, "createdAt", 1);
     const find_role = await role_repository.filter_roles({name: 'Client user'});
     const role = find_role[0]._id;
     if(user_exists.length != 0) {
@@ -34,7 +34,7 @@ export const register = async (name, last_name, email, biography, gender, birthd
     }
     if(!user_img) user_img = app_config.DEFAULT_USER_IMG_PATH;
     const new_user = await user_repository.create_user({name, last_name, email, biography, gender, birthdate, user_img, address, role, password});
-    const user_data = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
+    const user_data = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10, "createdAt", 1);
     await book_list_repository.create_book_list({title: 'Favorites', description: 'My favorite books.', owner: user_data[0]._id, books: []});
     await recent_book_repository.create_recent_book({user: user_data[0]._id, books: []});
     return new_user;
@@ -50,7 +50,7 @@ export const register = async (name, last_name, email, biography, gender, birthd
  * @throws {InvalidLogin} - If the email or password is incorrect, or user doesn't exist.
  */
 export const login = async (email, password, expires_in) => {
-    const user = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10);
+    const user = await user_repository.filter_users({['email']: new RegExp(email, 'i')}, 0, 10, "createdAt", 1);
     if(user.length != 1){
         throw new InvalidLogin();
     }
@@ -78,7 +78,7 @@ export const request_password_reset = async (email) => {
     if(!email) {
         throw new ObjectMissingParameters("user");
     }    
-    const user_data = await user_repository.filter_users({'email': new RegExp(email, 'i')}, 0, 10);
+    const user_data = await user_repository.filter_users({'email': new RegExp(email, 'i')}, 0, 10, "createdAt", 1);
     if(!user_data.length != 0) {
         throw new ObjectNotFound("user");
     }    

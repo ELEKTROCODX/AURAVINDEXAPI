@@ -54,19 +54,13 @@ export const get_all_users = async (page, limit, sort, sort_by) => {
     const sort_field = sort_by || 'createdAt';
     const sort_direction = sort === 'desc' ? -1 : 1;
     const users = await user_repository.find_all_users(null, null, sort_field, sort_direction);
-    const users_sanitized = users.map(user => {
-        const user_obj = user.toObject();
-        user_obj.fcm_token = null;
-        user_obj.password = null;
-        return user_obj;
-    });
-    const total_users = users_sanitized.length;
+    const total_users = users.length;
     if(limit == "none") limit = total_users;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const total_pages = Math.ceil(total_users / limit);
-    const paginated_users = users_sanitized.slice(skip, skip + limit);
+    const paginated_users = users.slice(skip, skip + limit);
     return {
         data: paginated_users,
         pagination: {
@@ -111,19 +105,13 @@ export const filter_users = async (filter_field, filter_value, page, limit, sort
     const sort_direction = sort === 'desc' ? -1 : 1;
     const filter = generate_filter(field_types, filter_field, filter_value);
     const users = await user_repository.filter_users(filter, null, null, sort_field, sort_direction);
-    const users_sanitized = users.map(user => {
-        const user_obj = user.toObject();
-        user_obj.fcm_token = null;
-        user_obj.password = null;
-        return user_obj;
-    });
-    const total_users = users_sanitized.length;
+    const total_users = users.length;
     if(limit == "none") limit = total_users;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
     const total_pages = Math.ceil(total_users / limit);
-    const paginated_users = users_sanitized.slice(skip, skip + limit);
+    const paginated_users = users.slice(skip, skip + limit);
     return {
         data: paginated_users,
         pagination: {
