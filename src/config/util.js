@@ -202,6 +202,13 @@ if (!fs.existsSync(LOG_DIR)) {
   fs.mkdirSync(LOG_DIR);
 }
 
+const getTimestamp = () => {
+  const now = new Date();
+  const utc6 = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+  const pad = (n) => n.toString().padStart(2, '0');
+  return `[${pad(utc6.getDate())}/${pad(utc6.getMonth() + 1)}/${utc6.getFullYear()} ${pad(utc6.getHours())}:${pad(utc6.getMinutes())}:${pad(utc6.getSeconds())}]`;
+};
+
 const getLogFileName = () => {
   const now = new Date();
   const utc6 = new Date(now.getTime() - 6 * 60 * 60 * 1000);
