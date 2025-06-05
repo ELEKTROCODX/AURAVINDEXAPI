@@ -201,6 +201,6 @@ export const apiLogger = {
     const pad = (n) => n.toString().padStart(2, '0');
     return `[${pad(utc6.getDate())}/${pad(utc6.getMonth() + 1)}/${utc6.getFullYear()} ${pad(utc6.getHours())}:${pad(utc6.getMinutes())}:${pad(utc6.getSeconds())}]`;
   },
-  info: (...args) => console.log(`${logger.timestamp()} [INFO]`, ...args),
-  error: (...args) => console.error(`${logger.timestamp()} [ERROR]`, ...args),
+  info: (...args) => console.log(`${apiLogger.timestamp()} [INFO]`, ...args),
+  error: (...args) => console.error(`${apiLogger.timestamp()} [ERROR]`, ...args),
 };
