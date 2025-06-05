@@ -127,7 +127,6 @@ export const update_recent_book = async (id, updates) => {
  * @throws {ObjectNotFound} - Throws if the recent book is not found.
  */
 export const add_book_to_list = async (user_id, book_id) => {
-    let recent_book_id = null;
     if(!user_id) {
         throw new ObjectMissingParameters("recent_book");
     }

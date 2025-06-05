@@ -161,9 +161,9 @@ export const send_email = async (to, subject, html) => {
     await sgMail.send(msg);
     return true;
   } catch (error) {
-    console.error('Error sending email:', error.message);
+    apiLogger.error('SendGrid Error: ', error.message);
     if (error.response) {
-        console.error('SendGrid Response:', error.response.body);
+        apiLogger.error('SendGrid Error Response: ', error.response.body);
     }
     throw new Error('Failed to send email');
   } 
@@ -193,3 +193,14 @@ export const send_email = async (to, subject, html) => {
         console.error('FCM error:', error.message);
     }
 }; */
+
+export const apiLogger = {
+  timestamp: () => {
+    const now = new Date();
+    const utc6 = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+    const pad = (n) => n.toString().padStart(2, '0');
+    return `[${pad(utc6.getDate())}/${pad(utc6.getMonth() + 1)}/${utc6.getFullYear()} ${pad(utc6.getHours())}:${pad(utc6.getMinutes())}:${pad(utc6.getSeconds())}]`;
+  },
+  info: (...args) => console.log(`${logger.timestamp()} [INFO]`, ...args),
+  error: (...args) => console.error(`${logger.timestamp()} [ERROR]`, ...args),
+};

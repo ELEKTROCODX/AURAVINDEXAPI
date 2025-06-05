@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as author_service from './author.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Controller method to create a new author.
  * 
@@ -22,6 +23,7 @@ export const create_author = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
+        apiLogger.error('Error creating author: ', error.message);
         res.status(500).json({message: 'Error creating author', error: error.message});
     }
 }
@@ -46,6 +48,7 @@ export const get_all_authors = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching authors: ', error.message);
         res.status(500).json({message: 'Error fetching authors', error: error.message});
     }
 }
@@ -68,6 +71,7 @@ export const get_author_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching author by ID: ', error.message);
         res.status(500).json({message: 'Error fetching author by ID', error: error.message});
     }
 }
@@ -96,7 +100,7 @@ export const update_author = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating author: ', error.message);
         res.status(500).json({message: 'Error updating author', error: error.message});
     }
 }
@@ -120,7 +124,7 @@ export const delete_author = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting author: ', error.message);
         res.status(500).json({message: 'Error deleting author', error: error.message});
     }
 }

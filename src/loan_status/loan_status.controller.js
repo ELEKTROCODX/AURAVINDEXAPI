@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as loan_status_service from './loan_status.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/logger.js';
 /**
  * Creates a new loan status by calling the loan status service.
  * 
@@ -19,6 +20,7 @@ export const create_loan_status = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating loan status: ', error.message);
         res.status(500).json({message: 'Error creating loan status', error: error.message});
     }
 }
@@ -44,6 +46,7 @@ export const get_all_loan_statuses = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching loan statuses: ', error.message);
         res.status(500).json({message: 'Error fetching loan statuses', error: error.message});
     }
 }
@@ -67,6 +70,7 @@ export const get_loan_status_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching loan status by ID: ', error.message);
         res.status(500).json({message: 'Error fetching loan status by ID', error: error.message});
     }
 }
@@ -95,7 +99,7 @@ export const update_loan_status = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating loan status: ', error.message);
         res.status(500).json({message: 'Error updating loan status', error: error.message});
     }
 }
@@ -119,7 +123,7 @@ export const delete_loan_status = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting loan status: ', error.message);
         res.status(500).json({message: 'Error deleting loan status', error: error.message});
     }
 }

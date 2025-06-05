@@ -4,7 +4,7 @@ import * as auth_service from './auth.service.js';
 import * as user_service from '../user/user.service.js';
 import * as book_list_service from '../book_list/book_list.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
-
+import { apiLogger } from '../config/util.js';
 /**
  * Controller action to register a new user by invoking the service layer.
  * 
@@ -27,6 +27,7 @@ export const register = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error requesting user: ', error.message);
         res.status(500).json({message: 'Error registering user', error: error.message});
     }
 }
@@ -51,6 +52,7 @@ export const login = async (req, res) => {
         if(error instanceof InvalidLogin) {
             return res.status(401).json({message: error.message});
         }
+        apiLogger.error('Error logging in user: ', error.message);
         res.status(500).json({message: 'Error logging in user', error: error.message});
     }
 }
@@ -85,6 +87,7 @@ export const request_password_reset = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
+        apiLogger.error('Error requesting password reset: ', error.message);
         res.status(500).json({message: 'Error requesting password reset', error: error.message});
     }
 }
@@ -119,6 +122,7 @@ export const reset_password = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
+        apiLogger.error('Error resetting password: ', error.message);
         res.status(500).json({message: 'Error resetting password', error: error.message});
     }
 }

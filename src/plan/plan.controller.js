@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as plan_service from './plan.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/logger.js';
 /**
  * Controller to handle the creation of a new plan.
  *
@@ -19,6 +20,7 @@ export const create_plan = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating plan: ', error.message);
         res.status(500).json({message: 'Error creating plan', error: error.message});
     }
 }
@@ -43,6 +45,7 @@ export const get_all_plans = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching plans: ', error.message);
         res.status(500).json({message: 'Error fetching plans', error: error.message});
     }
 }
@@ -65,6 +68,7 @@ export const get_plan_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching plan by ID: ', error.message);
         res.status(500).json({message: 'Error fetching plan by ID', error: error.message});
     }
 }
@@ -93,7 +97,7 @@ export const update_plan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating plan: ', error.message);
         res.status(500).json({message: 'Error updating plan', error: error.message});
     }
 }
@@ -117,7 +121,7 @@ export const delete_plan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting plan: ', error.message);
         res.status(500).json({message: 'Error deleting plan', error: error.message});
     }
 }

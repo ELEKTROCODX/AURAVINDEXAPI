@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as recent_book_service from './recent_book.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new recent book entry by calling the service.
  * 
@@ -22,6 +23,7 @@ export const create_recent_book = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating recent book: ', error.message);
         res.status(500).json({message: 'Error creating recent book', error: error.message});
     }
 }
@@ -48,6 +50,7 @@ export const get_all_recent_books = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching recent books: ', error.message);
         res.status(500).json({message: 'Error fetching recent book', error: error.message});
     }
 }
@@ -71,6 +74,7 @@ export const get_recent_book_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching recent book by ID: ', error.message);
         res.status(500).json({message: 'Error fetching recent book by ID', error: error.message});
     }
 }
