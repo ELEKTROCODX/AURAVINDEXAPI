@@ -217,7 +217,7 @@ const writeLog = (level, message) => {
   fs.appendFileSync(getLogFileName(), logMessage);
 };
 
-export const appiLogger = {
+export const apiLogger = {
   info: (msg) => writeLog('info', msg),
   warn: (msg) => writeLog('warn', msg),
   error: (msg) => writeLog('error', msg),
