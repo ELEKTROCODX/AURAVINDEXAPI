@@ -2,7 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as loan_status_service from './loan_status.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
-import { apiLogger } from '../config/logger.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new loan status by calling the loan status service.
  * 
