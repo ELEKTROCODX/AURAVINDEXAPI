@@ -143,10 +143,12 @@ export const add_book_to_list = async (user_id, book_id) => {
         throw new ObjectNotFound("book");
     }
     const current_list = recent_book[0].books || [];
-    const is_book_in_list = current_list.map(id => id.toString()).includes(book_id.toString());
+    const is_book_in_list = current_list
+        .map(book => book._id.toString())
+        .includes(book_id.toString());
     const updated_list = [...current_list];
     if (is_book_in_list) {
-        const index = updated_list.findIndex(id => id.toString() === book_id.toString());
+        const index = updated_list.findIndex(book => book._id.toString() === book_id.toString());
         updated_list.splice(index, 1);
     }
     updated_list.unshift(book_id);
