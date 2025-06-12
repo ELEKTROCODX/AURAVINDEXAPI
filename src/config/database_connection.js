@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 import {app_config} from './app.config.js';
+import { apiLogger } from './util.js';
 
 export const connectToDatabase = async () => {
     try{
         await mongoose.connect(app_config.mongoUri);
-        console.log('Successfully connected to database');
+        apiLogger.info('Successfully connected to database');
     } catch(e){
-        console.error("Failed to connect to database:", e);
+        apiLogger.error("Failed to connect to database:" + e);
         throw e;
     }
 }
@@ -14,9 +15,9 @@ export const connectToDatabase = async () => {
 export const disconnectFromDatabase = async () => {
     try {
         await mongoose.disconnect();
-        console.log("Successfully disconnected from MongoDB");        
+        apiLogger.info("Successfully disconnected from MongoDB");        
     } catch(e){
-        console.error("Failed to disconnect from database:", e);
+        apiLogger.error("Failed to disconnect from database:" + e);
         throw e;
     }
 }

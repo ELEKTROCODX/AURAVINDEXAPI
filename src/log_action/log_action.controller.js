@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as log_action_service from './log_action.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new log action from the provided request body.
  * @param {Object} req - The request object containing the log action data.
@@ -18,6 +19,7 @@ export const create_log_action = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating log action: ', error.message);
         res.status(500).json({message: 'Error creating log action', error: error.message});
     }
 }
@@ -42,6 +44,7 @@ export const get_all_log_actions = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching log actions: ', error.message);
         res.status(500).json({message: 'Error fetching log actions', error: error.message});
     }
 }
@@ -64,6 +67,7 @@ export const get_log_action_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching log action by ID: ', error.message);
         res.status(500).json({message: 'Error fetching log action by ID', error: error.message});
     }
 }
@@ -92,7 +96,7 @@ export const update_log_action = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating log action: ', error.message);
         res.status(500).json({message: 'Error updating log action', error: error.message});
     }
 }
@@ -116,7 +120,7 @@ export const delete_log_action = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting log action: ', error.message);
         res.status(500).json({message: 'Error deleting log action', error: error.message});
     }
 }

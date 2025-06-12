@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as book_collection_service from './book_collection.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Controller function to create a new book collection.
  * 
@@ -19,6 +20,7 @@ export const create_book_collection = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating book collection: ', error.message);
         res.status(500).json({message: 'Error creating book collection', error: error.message});
     }
 }
@@ -43,6 +45,7 @@ export const get_all_book_collections = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching book collections: ', error.message);
         res.status(500).json({message: 'Error fetching book collections', error: error.message});
     }
 }
@@ -66,6 +69,7 @@ export const get_book_collection_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching book collection by ID: ', error.message);
         res.status(500).json({message: 'Error fetching book collection by ID', error: error.message});
     }
 }
@@ -94,7 +98,7 @@ export const update_book_collection = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating book collection: ', error.message);
         res.status(500).json({message: 'Error updating book collection', error: error.message});
     }
 }
@@ -118,7 +122,7 @@ export const delete_book_collection = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting book collection: ', error.message);
         res.status(500).json({message: 'Error deleting book collection', error: error.message});
     }
 }

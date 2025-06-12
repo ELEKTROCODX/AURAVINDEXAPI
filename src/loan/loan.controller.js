@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, LoanExceededMaxRenewals, ObjectNotAvailable, ObjectInvalidQueryFilters, LoanReturnDateExceedsMaxAllowedDays, LoanAlreadyFinished, LoanAlreadyApproved, LoanCannotBeApproved } from '../config/errors.js';
 import * as loan_service from './loan.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new loan for a user and a book.
  * 
@@ -35,6 +36,7 @@ export const create_loan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
+        apiLogger.error('Error creating loan: ', error.message);
         res.status(500).json({message: 'Error creating loan', error: error.message});
     }
 }
@@ -62,6 +64,7 @@ export const get_all_loans = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching loans: ', error.message);
         res.status(500).json({message: 'Error fetching loans', error: error.message});
     }
 }
@@ -87,6 +90,7 @@ export const get_loan_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching loan by ID: ', error.message);
         res.status(500).json({message: 'Error fetching loan by ID', error: error.message});
     }
 }
@@ -126,7 +130,7 @@ export const update_loan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating loan: ', error.message);
         res.status(500).json({message: 'Error updating loan', error: error.message});
     }
 }
@@ -152,7 +156,7 @@ export const delete_loan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting loan: ', error.message);
         res.status(500).json({message: 'Error deleting loan', error: error.message});
     }
 }
@@ -192,7 +196,7 @@ export const approve_loan = async (req, res) => {
         if(error instanceof LoanCannotBeApproved) {
             return res.status(409).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error approving loan: ', error.message);
         res.status(500).json({message: 'Error finishing loan', error: error.message});
     }
 }
@@ -233,7 +237,7 @@ export const request_loan_renewal = async (req, res) => {
         if(error instanceof LoanAlreadyFinished) {
             return res.status(400).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error requesting loan renewal: ', error.message);
         res.status(500).json({message: 'Error reqesting loan renewal', error: error.message});
     }
 }
@@ -271,7 +275,7 @@ export const finish_loan = async (req, res) => {
         if(error instanceof LoanAlreadyFinished) {
             return res.status(400).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error finishing loan: ', error.message);
         res.status(500).json({message: 'Error finishing loan', error: error.message});
     }
 }

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { app_config } from "./app.config.js";
 import sgMail from '@sendgrid/mail';
+import fs from 'fs';
+import path from 'path';
 
 // Function to convert strings in cammel case
 export const convert_string_cammel_case = (string) => {
@@ -161,9 +163,9 @@ export const send_email = async (to, subject, html) => {
     await sgMail.send(msg);
     return true;
   } catch (error) {
-    console.error('Error sending email:', error.message);
+    apiLogger.error('SendGrid Error: ', error.message);
     if (error.response) {
-        console.error('SendGrid Response:', error.response.body);
+        apiLogger.error('SendGrid Error Response: ', error.response.body);
     }
     throw new Error('Failed to send email');
   } 
@@ -193,3 +195,37 @@ export const send_email = async (to, subject, html) => {
         console.error('FCM error:', error.message);
     }
 }; */
+
+
+const LOG_DIR = path.resolve('logs');
+if (!fs.existsSync(LOG_DIR)) {
+  fs.mkdirSync(LOG_DIR);
+}
+
+const getTimestamp = () => {
+  const now = new Date();
+  const utc6 = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+  const pad = (n) => n.toString().padStart(2, '0');
+  return `[${pad(utc6.getDate())}/${pad(utc6.getMonth() + 1)}/${utc6.getFullYear()} ${pad(utc6.getHours())}:${pad(utc6.getMinutes())}:${pad(utc6.getSeconds())}]`;
+};
+
+const getLogFileName = () => {
+  const now = new Date();
+  const utc6 = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+  const yyyy = utc6.getFullYear();
+  const mm = (utc6.getMonth() + 1).toString().padStart(2, '0');
+  const dd = utc6.getDate().toString().padStart(2, '0');
+  return path.join(LOG_DIR, `${yyyy}-${mm}-${dd}.log`);
+};
+
+const writeLog = (level, message) => {
+  const logMessage = `${getTimestamp()} [${level.toUpperCase()}] ${message}\n`;
+  console.log(logMessage.trim());
+  fs.appendFileSync(getLogFileName(), logMessage);
+};
+
+export const apiLogger = {
+  info: (msg) => writeLog('info', msg),
+  warn: (msg) => writeLog('warn', msg),
+  error: (msg) => writeLog('error', msg),
+};

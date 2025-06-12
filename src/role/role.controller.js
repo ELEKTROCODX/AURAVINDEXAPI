@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as role_service from './role.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new role.
  * @param {Object} req - The request object containing role data.
@@ -18,6 +19,7 @@ export const create_role = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating role: ', error.message);
         res.status(500).json({message: 'Error creating role', error: error.message});
     }
 }
@@ -41,6 +43,7 @@ export const get_all_roles = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching roles: ', error.message);
         res.status(500).json({message: 'Error fetching roles', error: error.message});
     }
 }
@@ -63,6 +66,7 @@ export const get_role_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching role by ID: ', error.message);
         res.status(500).json({message: 'Error fetching role by ID', error: error.message});
     }
 }
@@ -90,7 +94,7 @@ export const update_role = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating role: ', error.message);
         res.status(500).json({message: 'Error updating role', error: error.message});
     }
 }
@@ -117,6 +121,8 @@ export const add_permission_to_role = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
+        apiLogger.error('Error adding permission to role: ', error.message);
+        res.status(500).json({message: 'Error adding permission to role', error: error.message});
     }
 }
 /**
@@ -143,6 +149,8 @@ export const remove_permission_from_role = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
+        apiLogger.error('Error removing permission from role: ', error.message);
+        res.status(500).json({message: 'Error removing permission from role', error: error.message});
     }
 }
 /**
@@ -164,7 +172,7 @@ export const delete_role = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting role: ', error.message);
         res.status(500).json({message: 'Error deleting role', error: error.message});
     }
 }

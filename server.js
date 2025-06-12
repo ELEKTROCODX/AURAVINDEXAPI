@@ -1,6 +1,7 @@
 // Import packages and configs
 import app from './app.js';
 import { app_config } from './src/config/app.config.js';
+import { apiLogger } from './src/config/util.js';
 import 'dotenv/config';
 import {connectToDatabase, disconnectFromDatabase} from './src/config/database_connection.js';
 import http from 'http';
@@ -25,20 +26,20 @@ const startServer = async () => {
         await connectToDatabase();
 
         server.listen(app_config.port, () => {
-            console.log(`Server is running on port ${app_config.port}`);
+            apiLogger.info(`Server is running on port ${app_config.port}`);
             
         });
 
         process.on('SIGINT', async () => {
-            console.log("Gracefully shutting down");
+            apiLogger.info("Gracefully shutting down");
             await disconnectFromDatabase();
             server.close(() => {
-                console.log("Server closed");
+                apiLogger.info("Server closed");
                 process.exit(0);
             });
         });
     } catch (error) {
-        console.log("Failed to start server: ", error);
+        apiLogger.error("Failed to start server: " + error);
         process.exit(1);
     }
 }

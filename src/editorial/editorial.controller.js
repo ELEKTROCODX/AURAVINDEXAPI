@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as editorial_service from './editorial.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new editorial and returns the result.
  *
@@ -24,6 +25,10 @@ export const create_editorial = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        if(error instanceof ObjectNotFound) {
+            return res.status(404).json({message: error.message});
+        }
+        apiLogger.error('Error creating editorial: ', error.message);
         res.status(500).json({message: 'Error creating editorial', error: error.message});
     }
 }
@@ -54,6 +59,7 @@ export const get_all_editorials = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching editorials: ', error.message);
         res.status(500).json({message: 'Error fetching editorials', error: error.message});
     }
 }
@@ -79,6 +85,7 @@ export const get_editorial_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching editorial by ID: ', error.message);
         res.status(500).json({message: 'Error fetching editorial by ID', error: error.message});
     }
 }
@@ -112,7 +119,7 @@ export const update_editorial = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating editorial: ', error.message);
         res.status(500).json({message: 'Error updating editorial', error: error.message});
     }
 }
@@ -139,7 +146,7 @@ export const delete_editorial = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting editorial: ', error.message);
         res.status(500).json({message: 'Error deleting editorial', error: error.message});
     }
 }

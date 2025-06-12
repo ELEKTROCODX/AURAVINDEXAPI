@@ -2,6 +2,7 @@ import { app_config } from '../config/app.config.js';
 import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
 import * as fee_service from './fee.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
+import { apiLogger } from '../config/util.js';
 /**
  * Creates a new fee and sends a response with the result.
  * 
@@ -24,6 +25,7 @@ export const create_fee = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
+        apiLogger.error('Error creating fee: ', error.message);
         res.status(500).json({message: 'Error creating fee', error: error.message});
     }
 }
@@ -51,6 +53,7 @@ export const get_all_fees = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching fees: ', error.message);
         res.status(500).json({message: 'Error fetching fees', error: error.message});
     }
 }
@@ -77,6 +80,7 @@ export const get_fee_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
+        apiLogger.error('Error fetching fee by ID: ', error.message);
         res.status(500).json({message: 'Error fetching fee by ID', error: error.message});
     }
 }
@@ -108,7 +112,7 @@ export const update_fee = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error updating fee: ', error.message);
         res.status(500).json({message: 'Error updating fee', error: error.message});
     }
 }
@@ -134,7 +138,7 @@ export const delete_fee = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        // Internal error
+        apiLogger.error('Error deleting fee: ', error.message);
         res.status(500).json({message: 'Error deleting fee', error: error.message});
     }
 }
