@@ -13,3 +13,6 @@ public/images/users/*
 !public/images/users/default.png
 .vscode
 src/config/firebase-key.json
+
+deploy.sh
+webhook_server.py
