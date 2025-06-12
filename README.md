@@ -104,6 +104,16 @@ server {
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
     }
+    
+    # If configured, you can create a script to automatically pull changes and relaunch the API whenever pushes to the GitHub repository are made.
+    location /payload/ {
+        proxy_pass http://localhost:PAYLOAD_PORT/payload;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+
     location / {
         proxy_pass http://localhost:<SERVER_PORT>; # The port that the server listens to
         proxy_http_version 1.1;
