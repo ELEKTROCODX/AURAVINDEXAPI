@@ -43,13 +43,13 @@ export const create_active_plan = async (req, res) => {
  */
 export const get_all_active_plans = async (req, res) => {
     try {
-        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "createdAt" } = req.query;
+        const { filter_field, filter_value, page = 1, limit = app_config.DEFAULT_PAGINATION_LIMIT, sort = "asc", sort_by = "createdAt", is_active = false } = req.query;
         if(!filter_field || !filter_value) {
-            const active_plans = await active_plan_service.get_all_active_plans(page, limit, sort, sort_by);
+            const active_plans = await active_plan_service.get_all_active_plans(page, limit, sort, sort_by, is_active);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_ACTIVE_PLAN, 'ALL_ACTIVE_PLANS');
             res.json(active_plans);
         } else {
-            const active_plans = await active_plan_service.filter_active_plans(filter_field, filter_value, page, limit, sort, sort_by);
+            const active_plans = await active_plan_service.filter_active_plans(filter_field, filter_value, page, limit, sort, sort_by, is_active);
             await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.READ_ACTIVE_PLAN, 'FILTERED_ACTIVE_PLANS');
             res.json(active_plans);
         }
