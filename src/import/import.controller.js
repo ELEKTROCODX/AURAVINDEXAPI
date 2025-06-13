@@ -25,7 +25,7 @@ export const import_default_data = async (req, res) => {
             return res.status(401).json({message: error.message});
         }
         // Internal error
-        apiLogger.error('Error importing default data: ', error.message);
+        apiLogger.error('Error importing default data: ' + error.message);
         res.status(500).json({message: 'Error importing default data', error: error.message});
         
     }
