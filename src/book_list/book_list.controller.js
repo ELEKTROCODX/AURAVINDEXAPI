@@ -56,7 +56,7 @@ export const get_all_book_lists = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching book lists: ', error.message);
+        apiLogger.error('Error fetching book lists: ' + error.message);
         res.status(500).json({message: 'Error fetching book lists', error: error.message});
     }
 }
@@ -81,7 +81,7 @@ export const get_book_list_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching book list by ID: ', error.message);
+        apiLogger.error('Error fetching book list by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching book list by ID', error: error.message});
     }
 }
@@ -110,7 +110,7 @@ export const update_book_list = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating book list: ', error.message);
+        apiLogger.error('Error updating book list: ' + error.message);
         res.status(500).json({message: 'Error updating book list', error: error.message});
     }
 }
@@ -143,7 +143,7 @@ export const add_book_to_book_list = async (req, res) => {
         if(error instanceof ExceededMaxBooksPerList) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error adding book to book list: ', error.message);
+        apiLogger.error('Error adding book to book list: ' + error.message);
         res.status(500).json({message: 'Error adding book to book list', error: error.message});
     }
 }
@@ -170,7 +170,7 @@ export const remove_book_from_book_list = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error removing book from book list: ', error.message);
+        apiLogger.error('Error removing book from book list: ' + error.message);
         res.status(500).json({message: 'Error removing book from book list', error: error.message});
     }
 }
@@ -194,7 +194,7 @@ export const delete_book_list = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting book list: ', error.message);
+        apiLogger.error('Error deleting book list: ' + error.message);
         res.status(500).json({message: 'Error deleting book list', error: error.message});
     }
 }
