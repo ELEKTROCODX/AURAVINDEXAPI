@@ -13,7 +13,12 @@ export const find_all_book_lists = async (skip, limit) => {
     return await book_list_model.book_list.find().skip(skip).limit(limit)
     .populate([
         { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'books' },
+        { path: 'books', populate: [
+            { path: 'editorial' },
+            { path: 'book_status' },
+            { path: 'book_collection' },
+            { path: 'authors' },
+        ]},
     ]);
 }
 
@@ -21,7 +26,12 @@ export const find_all_book_lists = async (skip, limit) => {
 export const filter_book_lists = async (filter, skip, limit) => {
     return await book_list_model.book_list.find(filter).skip(skip).limit(limit).populate([
         { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'books' },
+        { path: 'books', populate: [
+            { path: 'editorial' },
+            { path: 'book_status' },
+            { path: 'book_collection' },
+            { path: 'authors' },
+        ]},
     ]);
 }
 
@@ -34,7 +44,12 @@ export const count_book_lists = async () => {
 export const find_book_list_by_id = async (id) => {
     return await book_list_model.book_list.findById(id).populate([
         { path: 'owner', populate: [{ path: 'gender' }, { path: 'role'} ]},
-        { path: 'books' },
+        { path: 'books', populate: [
+            { path: 'editorial' },
+            { path: 'book_status' },
+            { path: 'book_collection' },
+            { path: 'authors' },
+        ]},
     ]) || null;
 }
 
