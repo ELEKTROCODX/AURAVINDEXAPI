@@ -23,7 +23,7 @@ export const create_recent_book = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating recent book: ', error.message);
+        apiLogger.error('Error creating recent book: ' + error.message);
         res.status(500).json({message: 'Error creating recent book', error: error.message});
     }
 }
@@ -50,7 +50,7 @@ export const get_all_recent_books = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching recent books: ', error.message);
+        apiLogger.error('Error fetching recent books: ' + error.message);
         res.status(500).json({message: 'Error fetching recent book', error: error.message});
     }
 }
@@ -74,7 +74,7 @@ export const get_recent_book_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching recent book by ID: ', error.message);
+        apiLogger.error('Error fetching recent book by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching recent book by ID', error: error.message});
     }
 }

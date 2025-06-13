@@ -19,7 +19,7 @@ export const create_log_action = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating log action: ', error.message);
+        apiLogger.error('Error creating log action: ' + error.message);
         res.status(500).json({message: 'Error creating log action', error: error.message});
     }
 }
@@ -44,7 +44,7 @@ export const get_all_log_actions = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching log actions: ', error.message);
+        apiLogger.error('Error fetching log actions: ' + error.message);
         res.status(500).json({message: 'Error fetching log actions', error: error.message});
     }
 }
@@ -67,7 +67,7 @@ export const get_log_action_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching log action by ID: ', error.message);
+        apiLogger.error('Error fetching log action by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching log action by ID', error: error.message});
     }
 }
@@ -96,7 +96,7 @@ export const update_log_action = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating log action: ', error.message);
+        apiLogger.error('Error updating log action: ' + error.message);
         res.status(500).json({message: 'Error updating log action', error: error.message});
     }
 }
@@ -120,7 +120,7 @@ export const delete_log_action = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting log action: ', error.message);
+        apiLogger.error('Error deleting log action: ' + error.message);
         res.status(500).json({message: 'Error deleting log action', error: error.message});
     }
 }

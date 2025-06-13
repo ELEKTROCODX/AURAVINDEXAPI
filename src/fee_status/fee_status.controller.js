@@ -19,7 +19,7 @@ export const create_fee_status = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating fee status: ', error.message);
+        apiLogger.error('Error creating fee status: ' + error.message);
         res.status(500).json({message: 'Error creating fee status', error: error.message});
     }
 }
@@ -45,7 +45,7 @@ export const get_all_fee_statuses = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching fee statuses: ', error.message);
+        apiLogger.error('Error fetching fee statuses: ' + error.message);
         res.status(500).json({message: 'Error fetching fee statuses', error: error.message});
     }
 }
@@ -69,7 +69,7 @@ export const get_fee_status_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching fee status by ID: ', error.message);
+        apiLogger.error('Error fetching fee status by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching fee status by ID', error: error.message});
     }
 }
@@ -97,7 +97,7 @@ export const update_fee_status = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating fee status: ', error.message);
+        apiLogger.error('Error updating fee status: ' + error.message);
         res.status(500).json({message: 'Error updating fee status', error: error.message});
     }
 }
@@ -120,7 +120,7 @@ export const delete_fee_status = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting fee status: ', error.message);
+        apiLogger.error('Error deleting fee status: ' + error.message);
         res.status(500).json({message: 'Error deleting fee status', error: error.message});
     }
 }

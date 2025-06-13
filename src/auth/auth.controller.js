@@ -27,7 +27,7 @@ export const register = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error requesting user: ', error.message);
+        apiLogger.error('Error requesting user: ' + error.message);
         res.status(500).json({message: 'Error registering user', error: error.message});
     }
 }
@@ -52,7 +52,7 @@ export const login = async (req, res) => {
         if(error instanceof InvalidLogin) {
             return res.status(401).json({message: error.message});
         }
-        apiLogger.error('Error logging in user: ', error.message);
+        apiLogger.error('Error logging in user: ' + error.message);
         res.status(500).json({message: 'Error logging in user', error: error.message});
     }
 }
@@ -87,7 +87,7 @@ export const request_password_reset = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error requesting password reset: ', error.message);
+        apiLogger.error('Error requesting password reset: ' + error.message);
         res.status(500).json({message: 'Error requesting password reset', error: error.message});
     }
 }
@@ -122,7 +122,7 @@ export const reset_password = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error resetting password: ', error.message);
+        apiLogger.error('Error resetting password: ' + error.message);
         res.status(500).json({message: 'Error resetting password', error: error.message});
     }
 }

@@ -20,7 +20,7 @@ export const create_gender = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating gender: ', error.message);
+        apiLogger.error('Error creating gender: ' + error.message);
         res.status(500).json({message: 'Error creating gender', error: error.message});
     }
 }
@@ -45,7 +45,7 @@ export const get_all_genders = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching genders: ', error.message);
+        apiLogger.error('Error fetching genders: ' + error.message);
         res.status(500).json({message: 'Error fetching genders', error: error.message});
     }
 }
@@ -69,7 +69,7 @@ export const get_gender_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching gender by ID: ', error.message);
+        apiLogger.error('Error fetching gender by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching gender by ID', error: error.message});
     }
 }
@@ -98,7 +98,7 @@ export const update_gender = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating gender: ', error.message);
+        apiLogger.error('Error updating gender: ' + error.message);
         res.status(500).json({message: 'Error updating gender', error: error.message});
     }
 }
@@ -123,7 +123,7 @@ export const delete_gender = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting gender: ', error.message);
+        apiLogger.error('Error deleting gender: ' + error.message);
         res.status(500).json({message: 'Error deleting gender', error: error.message});
     }
 }

@@ -20,7 +20,7 @@ export const create_plan_status = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating plan status: ', error.message);
+        apiLogger.error('Error creating plan status: ' + error.message);
         res.status(500).json({message: 'Error creating plan status', error: error.message});
     }
 }
@@ -46,7 +46,7 @@ export const get_all_plan_statuses = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching plan statuses: ', error.message);
+        apiLogger.error('Error fetching plan statuses: ' + error.message);
         res.status(500).json({message: 'Error fetching plan statuses', error: error.message});
     }
 }
@@ -70,7 +70,7 @@ export const get_plan_status_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching plan status by ID: ', error.message);
+        apiLogger.error('Error fetching plan status by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching plan status by ID', error: error.message});
     }
 }
@@ -99,7 +99,7 @@ export const update_plan_status = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating plan status: ', error.message);
+        apiLogger.error('Error updating plan status: ' + error.message);
         res.status(500).json({message: 'Error updating plan status', error: error.message});
     }
 }
@@ -123,7 +123,7 @@ export const delete_plan_status = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting plan status: ', error.message);
+        apiLogger.error('Error deleting plan status: ' + error.message);
         res.status(500).json({message: 'Error deleting plan status', error: error.message});
     }
 }

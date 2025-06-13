@@ -28,7 +28,7 @@ export const create_editorial = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error creating editorial: ', error.message);
+        apiLogger.error('Error creating editorial: ' + error.message);
         res.status(500).json({message: 'Error creating editorial', error: error.message});
     }
 }
@@ -59,7 +59,7 @@ export const get_all_editorials = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching editorials: ', error.message);
+        apiLogger.error('Error fetching editorials: ' + error.message);
         res.status(500).json({message: 'Error fetching editorials', error: error.message});
     }
 }
@@ -85,7 +85,7 @@ export const get_editorial_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching editorial by ID: ', error.message);
+        apiLogger.error('Error fetching editorial by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching editorial by ID', error: error.message});
     }
 }
@@ -119,7 +119,7 @@ export const update_editorial = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating editorial: ', error.message);
+        apiLogger.error('Error updating editorial: ' + error.message);
         res.status(500).json({message: 'Error updating editorial', error: error.message});
     }
 }
@@ -146,7 +146,7 @@ export const delete_editorial = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting editorial: ', error.message);
+        apiLogger.error('Error deleting editorial: ' + error.message);
         res.status(500).json({message: 'Error deleting editorial', error: error.message});
     }
 }

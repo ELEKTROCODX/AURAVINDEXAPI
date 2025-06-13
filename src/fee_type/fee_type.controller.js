@@ -20,7 +20,7 @@ export const create_fee_type = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating fee type: ', error.message);
+        apiLogger.error('Error creating fee type: ' + error.message);
         res.status(500).json({message: 'Error creating fee type', error: error.message});
     }
 }
@@ -47,7 +47,7 @@ export const get_all_fee_types = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching fee types: ', error.message);
+        apiLogger.error('Error fetching fee types: ' + error.message);
         res.status(500).json({message: 'Error fetching fee types', error: error.message});
     }
 }
@@ -71,7 +71,7 @@ export const get_fee_type_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching fee type by ID: ', error.message);
+        apiLogger.error('Error fetching fee type by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching fee type by ID', error: error.message});
     }
 }
@@ -100,7 +100,7 @@ export const update_fee_type = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating fee type: ', error.message);
+        apiLogger.error('Error updating fee type: ' + error.message);
         res.status(500).json({message: 'Error updating fee type', error: error.message});
     }
 }
@@ -124,7 +124,7 @@ export const delete_fee_type = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting fee type: ', error.message);
+        apiLogger.error('Error deleting fee type: ' + error.message);
         res.status(500).json({message: 'Error deleting fee type', error: error.message});
     }
 }

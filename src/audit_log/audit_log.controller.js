@@ -22,7 +22,7 @@ export const create_audit_log = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating audit log: ', error.message);
+        apiLogger.error('Error creating audit log: ' + error.message);
         res.status(500).json({message: 'Error creating audit log', error: error.message});
     }
 }
@@ -49,7 +49,7 @@ export const get_all_audit_logs = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching audit logs: ', error.message);
+        apiLogger.error('Error fetching audit logs: ' + error.message);
         res.status(500).json({message: 'Error fetching audit logs', error: error.message});
     }
 }
@@ -73,7 +73,7 @@ export const get_audit_log_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching audit log by ID: ', error.message);
+        apiLogger.error('Error fetching audit log by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching audit log by ID', error: error.message});
     }
 }

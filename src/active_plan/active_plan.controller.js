@@ -29,7 +29,7 @@ export const create_active_plan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error creating active plan: ', error.message);
+        apiLogger.error('Error creating active plan: ' + error.message);
         res.status(500).json({message: 'Error creating active plan', error: error.message});
     }
 }
@@ -57,7 +57,7 @@ export const get_all_active_plans = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching active plans: ', error.message);
+        apiLogger.error('Error fetching active plans: ' + error.message);
         res.status(500).json({message: 'Error fetching active plans', error: error.message});
     }
 }
@@ -83,7 +83,7 @@ export const get_active_plan_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching active plan by ID: ', error.message);
+        apiLogger.error('Error fetching active plan by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching active plan by ID', error: error.message});
     }
 }
@@ -119,7 +119,7 @@ export const update_active_plan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating active plan: ', error.message);
+        apiLogger.error('Error updating active plan: ' + error.message);
         res.status(500).json({message: 'Error updating active plan', error: error.message});
     }
 }
@@ -145,7 +145,7 @@ export const delete_active_plan = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting active plan: ', error.message);
+        apiLogger.error('Error deleting active plan: ' + error.message);
         res.status(500).json({message: 'Error deleting active plan', error: error.message});
     }
 }
@@ -182,7 +182,7 @@ export const request_active_plan_renewal = async (req, res) => {
         if(error instanceof ActivePlanAlreadyFinished) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error requesting active plan renewal: ', error.message);
+        apiLogger.error('Error requesting active plan renewal: ' + error.message);
         res.status(500).json({message: 'Error reqesting active plan renewal', error: error.message});
     }
 }
@@ -220,7 +220,7 @@ export const finish_active_plan = async (req, res) => {
         if(error instanceof ActivePlanAlreadyFinished) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error finishing active plan: ', error.message);
+        apiLogger.error('Error finishing active plan: ' + error.message);
         res.status(500).json({message: 'Error finishing active plan', error: error.message});
     }
 }
@@ -258,7 +258,7 @@ export const cancel_active_plan = async (req, res) => {
         if(error instanceof ActivePlanAlreadyCancelled) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error cancelling active plan: ', error.message);
+        apiLogger.error('Error cancelling active plan: ' + error.message);
         res.status(500).json({message: 'Error cancelling active plan', error: error.message});
     }
 }

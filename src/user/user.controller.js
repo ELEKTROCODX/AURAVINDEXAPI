@@ -25,7 +25,7 @@ export const create_user = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating user: ', error.message);
+        apiLogger.error('Error creating user: ' + error.message);
         res.status(500).json({message: 'Error creating user', error: error.message});
     }
   
@@ -55,7 +55,7 @@ export const get_all_users = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching users: ', error.message);
+        apiLogger.error('Error fetching users: ' + error.message);
         res.status(500).json({message: 'Error fetching users', error: error.message});
     }
 }
@@ -82,7 +82,7 @@ export const get_user_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching user by ID: ', error.message);
+        apiLogger.error('Error fetching user by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching user by ID', error: error.message});
     }
 }
@@ -124,7 +124,7 @@ export const update_user = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating user: ', error.message);
+        apiLogger.error('Error updating user: ' + error.message);
         res.status(500).json({message: 'Error updating user', error: error.message});
     }
 }
@@ -151,7 +151,7 @@ export const delete_user = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting user: ', error.message);
+        apiLogger.error('Error deleting user: ' + error.message);
         res.status(500).json({message: 'Error deleting user', error: error.message});
     }
 }
@@ -181,7 +181,7 @@ export const save_fcm_token = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error saving FCM token: ', error.message);
+        apiLogger.error('Error saving FCM token: ' + error.message);
         res.status(500).json({message: 'Error saving FCM token', error: error.message});
     }
 }

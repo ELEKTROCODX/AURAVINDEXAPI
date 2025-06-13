@@ -20,7 +20,7 @@ export const create_notification = async (req, res) => {
         if(error instanceof ObjectAlreadyExists) {
             return res.status(409).json({message: error.message});
         }
-        apiLogger.error('Error creating notification: ', error.message);
+        apiLogger.error('Error creating notification: ' + error.message);
         res.status(500).json({message: 'Error creating notification', error: error.message});
     }
 }
@@ -47,7 +47,7 @@ export const get_all_notifications = async (req, res) => {
         if(error instanceof ObjectInvalidQueryFilters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching notifications: ', error.message);
+        apiLogger.error('Error fetching notifications: ' + error.message);
         res.status(500).json({message: 'Error fetching notifications', error: error.message});
     }
 }
@@ -71,7 +71,7 @@ export const get_notification_by_id = async (req, res) => {
         if(error instanceof ObjectMissingParameters) {
             return res.status(400).json({message: error.message});
         }
-        apiLogger.error('Error fetching notification by ID: ', error.message);
+        apiLogger.error('Error fetching notification by ID: ' + error.message);
         res.status(500).json({message: 'Error fetching notification by ID', error: error.message});
     }
 }
@@ -100,7 +100,7 @@ export const update_notification = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error updating notification: ', error.message);
+        apiLogger.error('Error updating notification: ' + error.message);
         res.status(500).json({message: 'Error updating notification', error: error.message});
     }
 }
@@ -124,7 +124,7 @@ export const delete_notification = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error deleting notification: ', error.message);
+        apiLogger.error('Error deleting notification: ' + error.message);
         res.status(500).json({message: 'Error deleting notification', error: error.message});
     }
 }
@@ -149,7 +149,7 @@ export const mark_notification_as_read = async (req, res) => {
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
         }
-        apiLogger.error('Error marking notification as read: ', error.message);
+        apiLogger.error('Error marking notification as read: ' + error.message);
         res.status(500).json({message: 'Error marking notification as read', error: error.message});
     }
 }
