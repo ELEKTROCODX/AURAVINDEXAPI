@@ -180,7 +180,7 @@ export const add_book_to_book_list = async (id, book_id) => {
     if(book_list_exists_id.books.includes(book_id)) {
         throw new BookAlreadyInBookList();
     }
-    if(book_list_exists_book.books.length > app_config.BOOK_LIST_MAX_BOOKS) {
+    if(book_list_exists_id.books.length > app_config.BOOK_LIST_MAX_BOOKS) {
         throw new ExceededMaxBooksPerList();
     }
     await book_list_repository.add_book_to_book_list(id, book_id);
