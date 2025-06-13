@@ -144,7 +144,8 @@ export const roles = [
       "READ_ROLE",
       "ADD_PERMISSION_TO_ROLE",
       "REMOVE_PERMISSION_FROM_ROLE",
-      "READ_USER"
+      "READ_USER",
+      "UPDATE_USER"
     ],
   },
   {
@@ -187,7 +188,8 @@ export const roles = [
       "READ_PLAN_STATUS",
       "READ_RECENT_BOOK",
       "READ_ROLE",
-      "READ_USER"
+      "READ_USER",
+      "UPDATE_USER"
     ],
   },
 ];
