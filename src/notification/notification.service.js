@@ -1,4 +1,4 @@
-import {ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters, ObjectNotFound } from '../config/errors.js';
+import {ObjectAlreadyExists, ObjectInvalidQueryFilters, ObjectMissingParameters, ObjectNotFound, NotificationAlreadyMarkedAsRed } from '../config/errors.js';
 import * as notification_repository from './notification.repository.js';
 import * as user_repository from '../user/user.repository.js';
 import { generate_filter } from '../config/util.js';

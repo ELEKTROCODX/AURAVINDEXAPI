@@ -1,5 +1,5 @@
 import { app_config } from '../config/app.config.js';
-import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters } from '../config/errors.js';
+import { ObjectNotFound, ObjectAlreadyExists, ObjectMissingParameters, ObjectInvalidQueryFilters, NotificationAlreadyMarkedAsRed} from '../config/errors.js';
 import * as notification_service from './notification.service.js';
 import * as audit_log_service from '../audit_log/audit_log.service.js';
 import { apiLogger } from '../config/util.js';
@@ -148,6 +148,9 @@ export const mark_notification_as_read = async (req, res) => {
         }
         if(error instanceof ObjectNotFound) {
             return res.status(404).json({message: error.message});
+        }
+        if(error instanceof NotificationAlreadyMarkedAsRed) {
+            return res.status(409).json({message: error.message});
         }
         apiLogger.error('Error marking notification as read: ' + error.message);
         res.status(500).json({message: 'Error marking notification as read', error: error.message});
