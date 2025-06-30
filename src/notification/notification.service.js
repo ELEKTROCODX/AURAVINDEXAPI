@@ -18,7 +18,7 @@ export const create_new_notification = async (receiver, title, message, notifica
     }
     const new_notification = await notification_repository.create_notification({receiver, title, message, notification_type, is_read});
     if(receiver_exists.fcm_token) {
-        await send_push_notification(receiver_exists.fcm_token, title, message);
+        await send_push_notification(receiver_exists.fcm_token, receiver_exists._id, title, message);
     }
     return new_notification;
 }
