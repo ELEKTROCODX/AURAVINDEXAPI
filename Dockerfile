@@ -1,5 +1,5 @@
-# Node.js image
-FROM node:18
+# Node.js imagenode:lts-alpine3.21
+FROM node:lts-alpine3.21
 # Working directory
 WORKDIR /app
 # Copy project files
