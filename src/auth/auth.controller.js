@@ -22,6 +22,7 @@ export const register = async (req, res) => {
         await auth_service.register(name, last_name, email, biography, gender, birthdate, user_img, address, password);
         const user_data = await user_service.filter_users('email', email, 1, 1);
         await audit_log_service.create_new_audit_log(user_data.data[0]._id, app_config.PERMISSIONS.SIGNUP, user_data.data[0].email);
+        apiLogger.info(`New user registered: ${name} ${last_name} (${email})`);
         res.status(201).json({message: 'User registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
