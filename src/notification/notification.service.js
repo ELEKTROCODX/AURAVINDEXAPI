@@ -23,6 +23,25 @@ export const create_new_notification = async (receiver, title, message, notifica
     return new_notification;
 }
 /**
+ * Creates notifications for all users in the system.
+ * @param {string} title - The notification title.
+ * @param {string} message - The notification message.
+ * @param {string} notification_type - The type of the notification.
+ * @param {boolean} is_read - Whether the notification is read or not.
+ */
+export const create_notifications_for_all_users = async (title, message, notification_type, is_read) => {
+      const all_users = await user_repository.find_all_users(null, null);
+    if (all_users.length === 0) {
+        throw new ObjectNotFound("users");
+    }
+    for (const user of all_users) {
+        await create_new_notification(user._id, title, message, notification_type, is_read);
+        if (user.fcm_token) {
+            await send_push_notification(user.fcm_token, title, message);
+        }
+    }
+}
+/**
  * Retrieves all notifications with pagi    nation.
  *
  * @param {number} page - The page number to retrieve.

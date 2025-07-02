@@ -60,5 +60,8 @@ export const notification_validation_rules_get_id = [id];
 // POST validation rules
 export const notification_validation_rules_post = [receiver, title, message , notification_type, is_read];
 
+// POST validation rules for creating notifications for all users
+export const notification_validation_rules_post_all = [title, message, notification_type, is_read];
+
 // PUT validation rules
 export const notification_validation_rules_update = [id, receiver, title, message, notification_type, is_read];

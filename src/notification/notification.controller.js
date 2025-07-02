@@ -25,6 +25,27 @@ export const create_notification = async (req, res) => {
     }
 }
 /**
+ * Controller to handle the creation of notifications for all users.
+ * This endpoint allows the creation of a notification that will be sent to all users in the system.
+ */
+export const create_notifications_for_all_users = async (req, res) => {
+    const {title, message, notification_type, is_read} = req.body;
+    try {
+        await notification_service.create_notifications_for_all_users(title, message, notification_type, is_read);
+        await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_NOTIFICATIONS_FOR_ALL_USERS, title);
+        res.status(201).json({message: 'Notifications for all users registered successfully'});
+    } catch (error) {
+        if(error instanceof ObjectAlreadyExists) {
+            return res.status(409).json({message: error.message});
+        }
+        if(error instanceof ObjectNotFound) {
+            return res.status(404).json({message: error.message});
+        }
+        apiLogger.error('Error creating notifications for all users: ' + error.message);
+        res.status(500).json({message: 'Error creating notifications for all users', error: error.message});
+    } 
+}
+/**
  * Controller to retrieve all notifications, with optional filtering and pagination.
  *
  * @param {Object} req - The HTTP request object containing filter_field, filter_value, page, and limit in the query.
