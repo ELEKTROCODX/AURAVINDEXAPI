@@ -36,9 +36,6 @@ export const create_notifications_for_all_users = async (title, message, notific
     }
     for (const user of all_users) {
         await create_new_notification(user._id, title, message, notification_type, is_read);
-        if (user.fcm_token) {
-            await send_push_notification(user.fcm_token, title, message);
-        }
     }
 }
 /**
