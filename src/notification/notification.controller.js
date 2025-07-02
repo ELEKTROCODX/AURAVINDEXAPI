@@ -33,6 +33,7 @@ export const create_notifications_for_all_users = async (req, res) => {
     try {
         await notification_service.create_notifications_for_all_users(title, message, notification_type, is_read);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_NOTIFICATIONS_FOR_ALL_USERS, title);
+        apiLogger.info(`Notifications for all users created by user ${req.user.id} with title: ${title}`);
         res.status(201).json({message: 'Notifications for all users registered successfully'});
     } catch (error) {
         if(error instanceof ObjectAlreadyExists) {
