@@ -9,7 +9,7 @@ export const users = [
     "biography": "Administrator of AURA VINDEX.",
     "gender": "Other",
     "birthdate": "2024-01-01",
-    "role": "Administrator",
+    "role": "Owner",
     "password": app_config.app_admin_password
 }
 ];
