@@ -15,7 +15,7 @@ export const create_recent_book = async (req, res) => {
     try {
         await recent_book_service.create_new_recent_book(user, books);
         await audit_log_service.create_new_audit_log(req.user.id, app_config.PERMISSIONS.CREATE_RECENT_BOOK, `${user}`);
-        res.status(201).json({message: 'Audit log registered successfully'});
+        res.status(201).json({message: 'Recent book created successfully'});
     } catch (error) {
         if(error instanceof ObjectNotFound) {
             return res.status(400).json({message: error.message});
